@@ -8,11 +8,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NuGet.config = NuGet.config
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NModbus4", "NModbus4\NModbus4.csproj", "{9B07ED72-3AD9-45EC-AAE9-295849B309AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NModbus", "NModbus\NModbus.csproj", "{9B07ED72-3AD9-45EC-AAE9-295849B309AA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NModbus4.UnitTests", "NModbus4.UnitTests\NModbus4.UnitTests.csproj", "{099155AF-8348-4829-B959-2F83AFCDD4E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NModbus.UnitTests", "NModbus.UnitTests\NModbus.UnitTests.csproj", "{099155AF-8348-4829-B959-2F83AFCDD4E3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NModbus4.Serial", "NModbus4.Serial\NModbus4.Serial.csproj", "{2246217D-D3C2-41CB-B866-D093DF087846}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NModbus.Serial", "NModbus.Serial\NModbus.Serial.csproj", "{2246217D-D3C2-41CB-B866-D093DF087846}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples", "Samples\Samples.csproj", "{24958647-C7E3-46C0-885D-89521C4811B8}"
 EndProject

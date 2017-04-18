@@ -16,8 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NModbus4\NModbus4.csproj" />
-    <ProjectReference Include="..\NModbus4.Serial\NModbus4.Serial.csproj" />
+    <ProjectReference Include="..\NModbus\NModbus.csproj" />
+    <ProjectReference Include="..\NModbus.Serial\NModbus.Serial.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">

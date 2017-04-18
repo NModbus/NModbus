@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NModbus4\NModbus4.csproj" />
+    <ProjectReference Include="..\NModbus\NModbus.csproj" />
   </ItemGroup>
 
   <ItemGroup>
