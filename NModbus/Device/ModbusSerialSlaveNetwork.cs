@@ -9,7 +9,7 @@ namespace NModbus.Device
 {
     public class ModbusSerialSlaveNetwork : ModbusSlaveNetwork
     {
-        protected ModbusSerialSlaveNetwork(ModbusTransport transport) 
+        protected ModbusSerialSlaveNetwork(ModbusSerialTransport transport) 
             : base(transport)
         {
         }
@@ -52,8 +52,11 @@ namespace NModbus.Device
 
                         // read request and build message
                         byte[] frame = SerialTransport.ReadRequest();
+
+                        //Create the request
                         IModbusMessage request = ModbusMessageFactory.CreateModbusRequest(frame);
 
+                        //Check the message
                         if (SerialTransport.CheckFrame && !SerialTransport.ChecksumsMatch(request, frame))
                         {
                             string msg = $"Checksums failed to match {string.Join(", ", request.MessageFrame)} != {string.Join(", ", frame)}.";
@@ -61,20 +64,8 @@ namespace NModbus.Device
                             throw new IOException(msg);
                         }
 
-                        ModbusSlave slave = GetSlave(request.SlaveAddress);
-
-                        // only service requests addressed to our slaves
-                        if (slave == null)
-                        {
-                            Debug.WriteLine($"NModbus Slave Network ignoring request intended for NModbus Slave {request.SlaveAddress}");
-                            continue;
-                        }
-
-                        // perform action
-                        IModbusMessage response = slave.ApplyRequest(request);
-
-                        // write response
-                        SerialTransport.Write(response);
+                        //Apply the request
+                        ApplyRequest(request);
                     }
                     catch (IOException ioe)
                     {

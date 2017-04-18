@@ -14,11 +14,16 @@ namespace NModbus.Device
     /// </summary>
     public class ModbusSlave : ModbusDevice
     {
+        private readonly byte _unitId;
+        private readonly DataStore _dataStore;
+
         internal ModbusSlave(byte unitId, ModbusTransport transport)
             : base(transport)
         {
-            DataStore = DataStoreFactory.CreateDefaultDataStore();
-            UnitId = unitId;
+            if (unitId == 0) throw new ArgumentOutOfRangeException(nameof(unitId));
+
+            _dataStore = DataStoreFactory.CreateDefaultDataStore();
+            _unitId = unitId;
         }
 
         /// <summary>
@@ -36,12 +41,18 @@ namespace NModbus.Device
         /// <summary>
         ///     Gets or sets the data store.
         /// </summary>
-        public DataStore DataStore { get; set; }
+        public DataStore DataStore
+        {
+            get {  return _dataStore; }
+        }
 
         /// <summary>
         ///     Gets or sets the unit ID.
         /// </summary>
-        public byte UnitId { get; set; }
+        public byte UnitId
+        {
+            get { return _unitId; }
+        }
 
         /// <summary>
         ///     Start slave listening for requests.
@@ -151,8 +162,6 @@ namespace NModbus.Device
             DataStore dataStore,
             ModbusDataCollection<ushort> dataSource)
         {
-            WriteMultipleRegistersResponse response;
-
             DataStore.WriteData(
                 dataStore,
                 request.Data,
@@ -160,12 +169,10 @@ namespace NModbus.Device
                 request.StartAddress,
                 dataStore.SyncRoot);
 
-            response = new WriteMultipleRegistersResponse(
+            return new WriteMultipleRegistersResponse(
                 request.SlaveAddress,
                 request.StartAddress,
                 request.NumberOfPoints);
-
-            return response;
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Cast is not unneccessary.")]

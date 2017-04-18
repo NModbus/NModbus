@@ -173,7 +173,6 @@ namespace Samples
                 var adapter = new SerialPortAdapter(slavePort);
                 // create modbus slave
                 ModbusSlave slave = ModbusSerialSlave.CreateAscii(unitId, adapter);
-                slave.DataStore = DataStoreFactory.CreateDefaultDataStore();
 
                 slave.ListenAsync().GetAwaiter().GetResult();
             }
@@ -198,7 +197,6 @@ namespace Samples
                 var adapter = new SerialPortAdapter(slavePort);
                 // create modbus slave
                 ModbusSlave slave = ModbusSerialSlave.CreateRtu(unitId, adapter);
-                slave.DataStore = DataStoreFactory.CreateDefaultDataStore();
 
                 slave.ListenAsync().GetAwaiter().GetResult();
             }
@@ -262,7 +260,6 @@ namespace Samples
             slaveTcpListener.Start();
 
             ModbusSlave slave = ModbusTcpSlave.CreateTcp(slaveId, slaveTcpListener);
-            slave.DataStore = DataStoreFactory.CreateDefaultDataStore();
 
             slave.ListenAsync().GetAwaiter().GetResult();
 
@@ -278,7 +275,6 @@ namespace Samples
             using (UdpClient client = new UdpClient(502))
             {
                 ModbusUdpSlave slave = ModbusUdpSlave.CreateUdp(client);
-                slave.DataStore = DataStoreFactory.CreateDefaultDataStore();
 
                 slave.ListenAsync().GetAwaiter().GetResult();
 
