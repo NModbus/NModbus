@@ -1,13 +1,18 @@
-NModbus4
+NModbus
 =======
-
-[![Join the chat at https://gitter.im/NModbus4/NModbus4](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/NModbus4/NModbus4?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build status](https://ci.appveyor.com/api/projects/status/9irkluk69cr0f5ed?svg=true)](https://ci.appveyor.com/project/Maxwe11/nmodbus4-ss8e4)
 
 NModbus is a C# implementation of the Modbus protocol.
 Provides connectivity to Modbus slave compatible devices and applications.
 Supports serial ASCII, serial RTU, TCP, and UDP protocols.
-NModbus4 it's a fork of NModbus(https://code.google.com/p/nmodbus).
+
+History
+=======
+
+The NModbus4 project appears to have gone quiet. This is a fork of that project.
+
+- NModbus is a fork of NModbus4 (https://github.com/NModbus4/NModbus4).
+- NModbus4 is fork of NModbus(https://code.google.com/p/nmodbus).
+
 NModbus4 differs from original NModbus in following:
 
 1. removed USB support(FtdAdapter.dll)
@@ -16,12 +21,16 @@ NModbus4 differs from original NModbus in following:
 4. assembly renamed to NModbus4.dll
 5. target framework changed to .NET 4
 
+Goals
+=======
+- Improve Modbus Slave support (e.g. support multiple slave devices on the same physical transport).
+
 Install
 =======
 
 To install NModbus4, run the following command in the Package Manager Console
 
-    PM> Install-Package NModbus4
+    PM> Install-Package NModbus
 
 Documentation
 =======

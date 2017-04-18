@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>CaptiveAire.NModbus4.Serial</id>
+        <version>1.0.0</version>
+        <authors>Dmitry Turin</authors>
+        <owners>Dmitry Turin</owners>
+        <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+        <projectUrl>https://github.com/NModbus/NModbus</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>NModbus Serial Class Library</description>
+        <tags>modbus nmodbus serial master slave</tags>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="NModbus" version="3.0.0" />
+            </group>
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="mscorlib" targetFramework=".NETFramework4.5" />
+            <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.5" />
+            <frameworkAssembly assemblyName="System.Core" targetFramework=".NETFramework4.5" />
+            <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework=".NETFramework4.5" />
+        </frameworkAssemblies>
+
+        <references>
+          <reference file ="NModbus.Serial.dll" />
+        </references>
+    </metadata>
+
+    <files>
+      <file src="bin\release\net45\NModbus4.Serial.*" target="lib\net45" />
+    </files>
+</package>

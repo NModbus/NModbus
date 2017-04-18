@@ -1,12 +1,21 @@
-version: '{branch}-{build}'
+version: 3.0.{build}
+branches:
+  only:
+  - portable-3.0
 os: Visual Studio 2015
 platform: Any CPU
 shallow_clone: true
 init:
 - git config --global core.autocrlf true
-before_build:
-- nuget restore
+install:
+- cmd: >-
+    dotnet restore
 build:
+  project: NModbus4.sln
   verbosity: minimal
-cache:
-- packages -> **\packages.config
+test_script:
+- cd NModbus4.UnitTests
+- "SET PATH=C:/Users/appveyor/.nuget/packages/OpenCover/4.6.166/tools;C:/Python34;C:/Python34/Scripts;%PATH%"
+- OpenCover.Console.exe -oldStyle -register:user -target:"dotnet.exe" -targetargs:"test" -returntargetcode -filter:"+[NModbus4]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -output:./opencover_report.xml
+- pip install codecov
+- codecov -f "./opencover_report.xml"

@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2006 Scott Alexander, 2014 Dmitry Turin
+Copyright (c) 2006 Scott Alexander, 2015 Dmitry Turin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
