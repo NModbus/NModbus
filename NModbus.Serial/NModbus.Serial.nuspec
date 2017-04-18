@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
-        <id>CaptiveAire.NModbus4.Serial</id>
+        <id>NModbus.Serial</id>
         <version>1.0.0</version>
         <authors>Dmitry Turin</authors>
         <owners>Dmitry Turin</owners>
@@ -28,6 +28,6 @@
     </metadata>
 
     <files>
-      <file src="bin\release\net45\NModbus4.Serial.*" target="lib\net45" />
+      <file src="bin\release\net45\NModbus.Serial.*" target="lib\net45" />
     </files>
 </package>

@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
-        <id>CaptiveAire.NModbus4</id>
+        <id>NModbus</id>
         <version>3.0.0</version>
         <authors>Dmitry Turin</authors>
         <owners>Dmitry Turin</owners>
         <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
         <projectUrl>https://github.com/NModbus/NModbus</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>NModbus is a C# implementation of the Modbus protocol. Provides connectivity to Modbus slave compatible devices and applications. Supports TCP, and UDP protocols. NModbus4 it's a fork of NModbus(https://code.google.com/p/nmodbus)</description>
+        <description>NModbus is a C# implementation of the Modbus protocol. Provides connectivity to Modbus slave compatible devices and applications. Supports TCP, and UDP protocols. NModbus it's a fork of NModbus(https://code.google.com/p/nmodbus)</description>
         <tags>modbus nmodbus tcp udp master slave coreclr</tags>
         <dependencies>
             <group targetFramework=".NETFramework4.5" />
