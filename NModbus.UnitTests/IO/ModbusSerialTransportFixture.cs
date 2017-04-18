@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
-using Modbus.Data;
-using Modbus.IO;
-using Modbus.Message;
-using Modbus.UnitTests.Message;
-using Modbus.Utility;
 using Moq;
+using NModbus.Data;
+using NModbus.IO;
+using NModbus.Message;
+using NModbus.UnitTests.Message;
+using NModbus.Utility;
 using Xunit;
 
-namespace Modbus.UnitTests.IO
+namespace NModbus.UnitTests.IO
 {
     public class ModbusSerialTransportFixture
     {

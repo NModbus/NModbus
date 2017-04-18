@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Modbus.Data;
-using Modbus.UnitTests.Message;
-using Modbus.Unme.Common;
+using NModbus.Data;
+using NModbus.UnitTests.Message;
+using NModbus.Unme.Common;
 using Xunit;
 
-namespace Modbus.UnitTests.Utility
+namespace NModbus.UnitTests.Utility
 {
     public class CollectionUtilityFixture
     {

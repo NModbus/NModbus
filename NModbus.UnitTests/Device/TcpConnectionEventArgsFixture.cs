@@ -1,8 +1,8 @@
 ﻿using System;
-using Modbus.Device;
+using NModbus.Device;
 using Xunit;
 
-namespace Modbus.UnitTests.Device
+namespace NModbus.UnitTests.Device
 {
     public class TcpConnectionEventArgsFixture
     {

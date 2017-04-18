@@ -1,14 +1,12 @@
-﻿namespace Modbus.IO
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
+using NModbus.Message;
+using NModbus.Unme.Common;
+
+namespace NModbus.IO
 {
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Threading.Tasks;
-
-    using Message;
-
-    using Unme.Common;
-
     /// <summary>
     /// Modbus transport.
     /// Abstraction - http://en.wikipedia.org/wiki/Bridge_Pattern

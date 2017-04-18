@@ -1,12 +1,11 @@
-﻿namespace Modbus.IO
+﻿using System.Diagnostics;
+using System.IO;
+using System.Text;
+using NModbus.Message;
+using NModbus.Utility;
+
+namespace NModbus.IO
 {
-    using System.Diagnostics;
-    using System.IO;
-    using System.Text;
-
-    using Message;
-    using Utility;
-
     /// <summary>
     ///     Refined Abstraction - http://en.wikipedia.org/wiki/Bridge_Pattern
     /// </summary>

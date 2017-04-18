@@ -1,10 +1,10 @@
-﻿namespace Modbus.Utility
-{
-    using System;
-    using System.Linq;
-    using System.Net;
-    using System.Text;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Text;
 
+namespace NModbus.Utility
+{
     /// <summary>
     ///     Modbus utility methods.
     /// </summary>

@@ -1,9 +1,8 @@
-﻿namespace Modbus.Device
+﻿using System;
+using NModbus.Message;
+
+namespace NModbus.Device
 {
-    using System;
-
-    using Message;
-
     /// <summary>
     ///     Modbus Slave request event args containing information on the message.
     /// </summary>

@@ -1,9 +1,9 @@
 ﻿using System;
-using Modbus.Message;
-using Modbus.Utility;
+using NModbus.Message;
+using NModbus.Utility;
 using Xunit;
 
-namespace Modbus.UnitTests.Utility
+namespace NModbus.UnitTests.Utility
 {
     public class ModbusUtilityFixture
     {

@@ -1,10 +1,10 @@
-﻿namespace Modbus.Message
-{
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Net;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
 
+namespace NModbus.Message
+{
     public class ReadHoldingInputRegistersRequest : AbstractModbusMessage, IModbusRequest
     {
         public ReadHoldingInputRegistersRequest()

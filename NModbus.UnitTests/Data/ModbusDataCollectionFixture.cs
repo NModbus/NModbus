@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Modbus.Data;
+using NModbus.Data;
 using Xunit;
 
-namespace Modbus.UnitTests.Data
+namespace NModbus.UnitTests.Data
 {
     public abstract class ModbusDataCollectionFixture<TData>
     {

@@ -1,11 +1,10 @@
-﻿namespace Modbus.Serial
+﻿using System;
+using System.Diagnostics;
+using System.IO.Ports;
+using NModbus.IO;
+
+namespace NModbus.Serial
 {
-    using System;
-    using System.Diagnostics;
-    using System.IO.Ports;
-
-    using Modbus.IO;
-
     /// <summary>
     ///     Concrete Implementor - http://en.wikipedia.org/wiki/Bridge_Pattern
     /// </summary>

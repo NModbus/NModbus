@@ -1,4 +1,4 @@
-﻿namespace Modbus.Message
+﻿namespace NModbus.Message
 {
     /// <summary>
     ///     Methods specific to a modbus request message.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Modbus.UnitTests.Message
+namespace NModbus.UnitTests.Message
 {
     public static class MessageUtility
     {

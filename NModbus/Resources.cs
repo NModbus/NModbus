@@ -1,4 +1,4 @@
-﻿namespace Modbus
+﻿namespace NModbus
 {
     internal static class Resources
     {

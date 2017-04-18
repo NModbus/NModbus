@@ -1,14 +1,15 @@
-﻿namespace Modbus.Device
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
+using NModbus.IO;
+using NModbus.Message;
+
+namespace NModbus.Device
 {
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Threading.Tasks;
 #if SERIAL
     using System.IO.Ports;
 #endif
-    using IO;
-    using Message;
 
     /// <summary>
     ///     Modbus serial slave device.

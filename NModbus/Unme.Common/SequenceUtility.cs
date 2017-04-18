@@ -1,9 +1,9 @@
-﻿namespace Modbus.Unme.Common
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
+namespace NModbus.Unme.Common
+{
     internal static class SequenceUtility
     {
         public static IEnumerable<T> Slice<T>(this IEnumerable<T> source, int startIndex, int size)

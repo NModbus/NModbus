@@ -2,16 +2,14 @@ using System;
 using System.IO.Ports;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Modbus.Data;
-using Modbus.Device;
-using Modbus.IO;
-using Modbus.Utility;
-using Modbus.Serial;
+using NModbus.Data;
+using NModbus.Device;
+using NModbus.Serial;
+using NModbus.Utility;
 
-namespace MySample
+namespace Samples
 {
     /// <summary>
     ///     Demonstration of NModbus

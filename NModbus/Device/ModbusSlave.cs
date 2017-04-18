@@ -1,15 +1,14 @@
-﻿namespace Modbus.Device
+﻿using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
+using NModbus.Data;
+using NModbus.IO;
+using NModbus.Message;
+
+namespace NModbus.Device
 {
-    using System;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using Data;
-    using IO;
-    using Message;
-
     /// <summary>
     ///     Modbus slave device.
     /// </summary>
@@ -67,23 +66,18 @@
             DataStore dataStore,
             ModbusDataCollection<bool> dataSource)
         {
-            DiscreteCollection data;
-            ReadCoilsInputsResponse response;
-
-            data = DataStore.ReadData<DiscreteCollection, bool>(
+            var data = DataStore.ReadData<DiscreteCollection, bool>(
                 dataStore,
                 dataSource,
                 request.StartAddress,
                 request.NumberOfPoints,
                 dataStore.SyncRoot);
 
-            response = new ReadCoilsInputsResponse(
+            return new ReadCoilsInputsResponse(
                 request.FunctionCode,
                 request.SlaveAddress,
                 data.ByteCount,
                 data);
-
-            return response;
         }
 
         internal static ReadHoldingInputRegistersResponse ReadRegisters(
@@ -91,22 +85,17 @@
             DataStore dataStore,
             ModbusDataCollection<ushort> dataSource)
         {
-            RegisterCollection data;
-            ReadHoldingInputRegistersResponse response;
-
-            data = DataStore.ReadData<RegisterCollection, ushort>(
+            var data = DataStore.ReadData<RegisterCollection, ushort>(
                 dataStore,
                 dataSource,
                 request.StartAddress,
                 request.NumberOfPoints,
                 dataStore.SyncRoot);
 
-            response = new ReadHoldingInputRegistersResponse(
+            return new ReadHoldingInputRegistersResponse(
                 request.FunctionCode,
                 request.SlaveAddress,
                 data);
-
-            return response;
         }
 
         internal static WriteSingleCoilRequestResponse WriteSingleCoil(
@@ -129,8 +118,6 @@
             DataStore dataStore,
             ModbusDataCollection<bool> dataSource)
         {
-            WriteMultipleCoilsResponse response;
-
             DataStore.WriteData(
                 dataStore,
                 request.Data.Take(request.NumberOfPoints),
@@ -138,12 +125,10 @@
                 request.StartAddress,
                 dataStore.SyncRoot);
 
-            response = new WriteMultipleCoilsResponse(
+            return new WriteMultipleCoilsResponse(
                 request.SlaveAddress,
                 request.StartAddress,
                 request.NumberOfPoints);
-
-            return response;
         }
 
         internal static WriteSingleRegisterRequestResponse WriteSingleRegister(

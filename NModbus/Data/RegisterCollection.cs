@@ -1,14 +1,13 @@
-﻿namespace Modbus.Data
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Net;
+using NModbus.Utility;
+
+namespace NModbus.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-
-    using Utility;
-
     /// <summary>
     ///     Collection of 16 bit registers.
     /// </summary>

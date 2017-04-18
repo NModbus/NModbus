@@ -1,6 +1,7 @@
-﻿namespace Modbus
+﻿using System;
+
+namespace NModbus
 {
-    using System;
 #if NET46
     using System.Runtime.Serialization;
 #endif

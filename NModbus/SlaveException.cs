@@ -1,12 +1,13 @@
-﻿namespace Modbus
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using NModbus.Message;
+
+namespace NModbus
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
 #if NET46
     using System.Runtime.Serialization;
     using System.Security.Permissions;
 #endif
-    using Message;
 
     /// <summary>
     ///     Represents slave errors that occur during communication.

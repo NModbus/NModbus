@@ -1,8 +1,8 @@
-﻿namespace Modbus.Message
-{
-    using System;
-    using System.Net;
+﻿using System;
+using System.Net;
 
+namespace NModbus.Message
+{
     public class WriteMultipleCoilsResponse : AbstractModbusMessage, IModbusMessage
     {
         public WriteMultipleCoilsResponse()

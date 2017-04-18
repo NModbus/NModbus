@@ -1,14 +1,12 @@
-﻿namespace Modbus.Message
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Net;
+using NModbus.Data;
+using NModbus.Unme.Common;
+
+namespace NModbus.Message
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-
-    using Data;
-
-    using Unme.Common;
-
     public class WriteMultipleRegistersRequest : AbstractModbusMessageWithData<RegisterCollection>, IModbusRequest
     {
         public WriteMultipleRegistersRequest()

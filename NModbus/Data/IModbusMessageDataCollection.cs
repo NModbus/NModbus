@@ -1,7 +1,7 @@
-﻿namespace Modbus.Data
-{
-    using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace NModbus.Data
+{
     /// <summary>
     ///     Modbus message containing data.
     /// </summary>

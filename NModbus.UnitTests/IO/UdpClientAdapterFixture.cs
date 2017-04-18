@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net.Sockets;
-using Modbus.IO;
+using NModbus.IO;
 using Xunit;
 
-namespace Modbus.UnitTests.IO
+namespace NModbus.UnitTests.IO
 {
     public class UdpClientAdapterFixture
     {

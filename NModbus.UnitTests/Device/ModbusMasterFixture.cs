@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Modbus.Device;
-using Modbus.IO;
 using Moq;
+using NModbus.Device;
+using NModbus.IO;
 using Xunit;
 
-namespace Modbus.UnitTests.Device
+namespace NModbus.UnitTests.Device
 {
     public class ModbusMasterFixture
     {

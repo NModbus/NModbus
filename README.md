@@ -1,4 +1,4 @@
-NModbus4
+NModbus
 =======
 
 NModbus is a C# implementation of the Modbus protocol.

@@ -2,10 +2,10 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using Modbus.IO;
-using Modbus.Message;
+using NModbus.IO;
+using NModbus.Message;
 
-namespace Modbus.Device
+namespace NModbus.Device
 {
     public class ModbusSerialSlaveNetwork : ModbusSlaveNetwork
     {

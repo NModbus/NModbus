@@ -6,7 +6,7 @@
     <Authors>Dmitry Turin</Authors>
     <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <AssemblyName>NModbus4</AssemblyName>
+    <AssemblyName>NModbus</AssemblyName>
     <PackageId>NModbus4</PackageId>
     <PackageTags>modbus;nmodbus;tcp;udp;master;slave;coreclr</PackageTags>
     <PackageProjectUrl>https://github.com/NModbus4/NModbus4</PackageProjectUrl>

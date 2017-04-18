@@ -1,12 +1,11 @@
-﻿namespace Modbus.Data
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using NModbus.Unme.Common;
+
+namespace NModbus.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Linq;
-
-    using Unme.Common;
-
     /// <summary>
     ///     Object simulation of device memory map.
     ///     The underlying collections are thread safe when using the ModbusMaster API to read/write values.

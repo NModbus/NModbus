@@ -1,11 +1,11 @@
 ﻿using System.IO;
 using System.Text;
-using Modbus.IO;
-using Modbus.Message;
 using Moq;
+using NModbus.IO;
+using NModbus.Message;
 using Xunit;
 
-namespace Modbus.UnitTests.IO
+namespace NModbus.UnitTests.IO
 {
     public class ModbusAsciiTransportFixture
     {

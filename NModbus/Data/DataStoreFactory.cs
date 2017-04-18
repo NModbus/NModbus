@@ -1,4 +1,4 @@
-﻿namespace Modbus.Data
+﻿namespace NModbus.Data
 {
     /// <summary>
     ///     Data story factory.

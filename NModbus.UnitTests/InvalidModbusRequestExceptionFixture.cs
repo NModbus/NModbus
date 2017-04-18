@@ -1,10 +1,10 @@
 ﻿using System.IO;
+using Xunit;
 #if NET46
 using System.Runtime.Serialization.Formatters.Binary;
 #endif
-using Xunit;
 
-namespace Modbus.UnitTests
+namespace NModbus.UnitTests
 {
     public class InvalidModbusRequestExceptionFixture
     {

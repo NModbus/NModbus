@@ -1,4 +1,4 @@
-﻿namespace Modbus.Data
+﻿namespace NModbus.Data
 {
     /// <summary>
     ///     Types of data supported by the Modbus protocol.

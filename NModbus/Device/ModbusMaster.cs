@@ -1,14 +1,13 @@
-﻿namespace Modbus.Device
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
+using NModbus.Data;
+using NModbus.IO;
+using NModbus.Message;
+
+namespace NModbus.Device
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using Data;
-    using IO;
-    using Message;
-
     /// <summary>
     ///     Modbus master device.
     /// </summary>

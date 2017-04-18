@@ -1,7 +1,7 @@
-﻿using Modbus.Data;
+﻿using NModbus.Data;
 using Xunit;
 
-namespace Modbus.UnitTests.Data
+namespace NModbus.UnitTests.Data
 {
     public class RegisterCollectionFixture
     {

@@ -1,14 +1,14 @@
-﻿namespace Modbus.Device
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Net.Sockets;
+using System.Threading.Tasks;
+using NModbus.IO;
+
+namespace NModbus.Device
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
 #if SERIAL
     using System.IO.Ports;
 #endif
-    using System.Net.Sockets;
-    using System.Threading.Tasks;
-
-    using IO;
 
     /// <summary>
     ///    Modbus IP master device.

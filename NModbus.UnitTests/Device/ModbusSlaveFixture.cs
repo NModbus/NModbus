@@ -2,14 +2,14 @@
 using System.IO.Ports;
 #endif
 using System.Linq;
-using Modbus.Data;
-using Modbus.Device;
-using Modbus.Message;
-using Modbus.UnitTests.Message;
-using Modbus.Unme.Common;
+using NModbus.Data;
+using NModbus.Device;
+using NModbus.Message;
+using NModbus.UnitTests.Message;
+using NModbus.Unme.Common;
 using Xunit;
 
-namespace Modbus.UnitTests.Device
+namespace NModbus.UnitTests.Device
 {
     public class ModbusSlaveFixture
     {

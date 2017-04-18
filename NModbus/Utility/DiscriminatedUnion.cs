@@ -1,8 +1,8 @@
-﻿namespace Modbus.Utility
-{
-    using System;
-    using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
+namespace NModbus.Utility
+{
     /// <summary>
     ///     Possible options for DiscriminatedUnion type.
     /// </summary>

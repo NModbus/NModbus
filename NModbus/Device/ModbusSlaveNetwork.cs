@@ -2,9 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Modbus.IO;
+using NModbus.IO;
 
-namespace Modbus.Device
+namespace NModbus.Device
 {
     public abstract class ModbusSlaveNetwork : ModbusDevice
     {

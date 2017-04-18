@@ -6,7 +6,7 @@
     <Authors>Dmitry Turin</Authors>
     <TargetFramework>net45</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <AssemblyName>NModbus4.Serial</AssemblyName>
+    <AssemblyName>NModbus.Serial</AssemblyName>
     <PackageId>NModbus4.Serial</PackageId>
     <PackageTags>modbus;nmodbus;serial;master;slave</PackageTags>
     <PackageProjectUrl>https://github.com/NModbus4/NModbus4</PackageProjectUrl>

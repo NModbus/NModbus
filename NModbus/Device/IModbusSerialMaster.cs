@@ -1,7 +1,7 @@
-﻿namespace Modbus.Device
-{
-    using IO;
+﻿using NModbus.IO;
 
+namespace NModbus.Device
+{
     /// <summary>
     ///     Modbus Serial Master device.
     /// </summary>

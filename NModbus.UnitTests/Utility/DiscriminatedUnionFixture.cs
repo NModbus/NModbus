@@ -1,8 +1,8 @@
 ﻿using System;
-using Modbus.Utility;
+using NModbus.Utility;
 using Xunit;
 
-namespace Modbus.UnitTests.Utility
+namespace NModbus.UnitTests.Utility
 {
     public class DiscriminatedUnionFixture
     {

@@ -1,4 +1,4 @@
-﻿namespace Modbus
+﻿namespace NModbus
 {
     /// <summary>
     ///     Defines constants related to the Modbus protocol.

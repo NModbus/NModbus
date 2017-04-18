@@ -1,16 +1,17 @@
-﻿namespace Modbus.Device
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Net.Sockets;
+using System.Threading.Tasks;
+using NModbus.IO;
+
+namespace NModbus.Device
 {
-    using System;
-    using System.Collections.Concurrent;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Net.Sockets;
-    using System.Threading.Tasks;
 #if TIMER
     using System.Timers;
 #endif
-    using IO;
 
     /// <summary>
     ///     Modbus TCP slave device.

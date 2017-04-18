@@ -1,11 +1,11 @@
-﻿namespace Modbus.Data
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics;
-    using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
 
+namespace NModbus.Data
+{
     /// <summary>
     ///     Collection of discrete values.
     /// </summary>

@@ -1,7 +1,7 @@
-﻿using Modbus.Message;
+﻿using NModbus.Message;
 using Xunit;
 
-namespace Modbus.UnitTests.Message
+namespace NModbus.UnitTests.Message
 {
     public class WriteSingleCoilRequestResponseFixture
     {

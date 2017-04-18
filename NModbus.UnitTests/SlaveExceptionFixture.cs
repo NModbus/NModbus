@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
+using NModbus.Message;
+using Xunit;
 #if NET46
 using System.Runtime.Serialization.Formatters.Binary;
 #endif
-using Modbus.Message;
-using Xunit;
 
-namespace Modbus.UnitTests
+namespace NModbus.UnitTests
 {
     public class SlaveExceptionFixture
     {

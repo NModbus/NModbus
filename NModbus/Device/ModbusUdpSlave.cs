@@ -1,17 +1,15 @@
-﻿namespace Modbus.Device
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
+using NModbus.IO;
+using NModbus.Message;
+using NModbus.Unme.Common;
+
+namespace NModbus.Device
 {
-    using System;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Sockets;
-    using System.Threading.Tasks;
-
-    using IO;
-    using Message;
-
-    using Unme.Common;
-
     /// <summary>
     ///     Modbus UDP slave device.
     /// </summary>

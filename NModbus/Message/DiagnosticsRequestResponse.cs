@@ -1,15 +1,13 @@
-﻿namespace Modbus.Message
+﻿using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Net;
+using NModbus.Data;
+using NModbus.Unme.Common;
+
+namespace NModbus.Message
 {
-    using System;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Net;
-
-    using Data;
-
-    using Unme.Common;
-
     internal class DiagnosticsRequestResponse : AbstractModbusMessageWithData<RegisterCollection>, IModbusMessage
     {
         public DiagnosticsRequestResponse()

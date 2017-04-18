@@ -23,7 +23,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyInformationalVersion("3.0.0-dev")]
 
 #if !SIGNED
-[assembly: InternalsVisibleTo("NModbus4.UnitTests")]
-[assembly: InternalsVisibleTo("NModbus4.IntegrationTests")]
+[assembly: InternalsVisibleTo("NModbus.UnitTests")]
+[assembly: InternalsVisibleTo("NModbus.IntegrationTests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 #endif

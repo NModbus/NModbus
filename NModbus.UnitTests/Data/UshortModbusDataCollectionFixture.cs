@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-using Modbus.Data;
+using NModbus.Data;
 using Xunit;
 
-namespace Modbus.UnitTests.Data
+namespace NModbus.UnitTests.Data
 {
     public class UshortModbusDataCollectionFixture : ModbusDataCollectionFixture<ushort>
     {
