@@ -11,16 +11,16 @@ namespace NModbus.UnitTests.Message
         [Fact]
         public void ProtocolDataUnitReadCoilsRequest()
         {
-            AbstractModbusMessage message = new ReadCoilsInputsRequest(Modbus.ReadCoils, 1, 100, 9);
-            byte[] expectedResult = { Modbus.ReadCoils, 0, 100, 0, 9 };
+            AbstractModbusMessage message = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 100, 9);
+            byte[] expectedResult = { ModbusFunctionCodes.ReadCoils, 0, 100, 0, 9 };
             Assert.Equal(expectedResult, message.ProtocolDataUnit);
         }
 
         [Fact]
         public void MessageFrameReadCoilsRequest()
         {
-            AbstractModbusMessage message = new ReadCoilsInputsRequest(Modbus.ReadCoils, 1, 2, 3);
-            byte[] expectedMessageFrame = { 1, Modbus.ReadCoils, 0, 2, 0, 3 };
+            AbstractModbusMessage message = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 2, 3);
+            byte[] expectedMessageFrame = { 1, ModbusFunctionCodes.ReadCoils, 0, 2, 0, 3 };
             Assert.Equal(expectedMessageFrame, message.MessageFrame);
         }
 

@@ -15,7 +15,7 @@ namespace NModbus.Message
         }
 
         public DiagnosticsRequestResponse(ushort subFunctionCode, byte slaveAddress, RegisterCollection data)
-            : base(slaveAddress, Modbus.Diagnostics)
+            : base(slaveAddress, ModbusFunctionCodes.Diagnostics)
         {
             SubFunctionCode = subFunctionCode;
             Data = data;
@@ -36,7 +36,7 @@ namespace NModbus.Message
         public override string ToString()
         {
             Debug.Assert(
-                SubFunctionCode == Modbus.DiagnosticsReturnQueryData,
+                SubFunctionCode == ModbusFunctionCodes.DiagnosticsReturnQueryData,
                 "Need to add support for additional sub-function.");
 
             return $"Diagnostics message, sub-function return query data - {Data}.";            

@@ -15,7 +15,7 @@ namespace NModbus.UnitTests.IO
         public void BuildMessageFrame()
         {
             byte[] expected = { 58, 48, 50, 48, 49, 48, 48, 48, 48, 48, 48, 48, 49, 70, 67, 13, 10 };
-            var request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 2, 0, 1);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 2, 0, 1);
             var actual = new ModbusAsciiTransport(StreamResource)
                 .BuildMessageFrame(request);
 
@@ -66,8 +66,8 @@ namespace NModbus.UnitTests.IO
         public void ChecksumsMatchSucceed()
         {
             var transport = new ModbusAsciiTransport(StreamResource);
-            var message = new ReadCoilsInputsRequest(Modbus.ReadCoils, 17, 19, 37);
-            byte[] frame = { 17, Modbus.ReadCoils, 0, 19, 0, 37, 182 };
+            var message = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 17, 19, 37);
+            byte[] frame = { 17, ModbusFunctionCodes.ReadCoils, 0, 19, 0, 37, 182 };
 
             Assert.True(transport.ChecksumsMatch(message, frame));
         }
@@ -76,8 +76,8 @@ namespace NModbus.UnitTests.IO
         public void ChecksumsMatchFail()
         {
             var transport = new ModbusAsciiTransport(StreamResource);
-            var message = new ReadCoilsInputsRequest(Modbus.ReadCoils, 17, 19, 37);
-            byte[] frame = { 17, Modbus.ReadCoils, 0, 19, 0, 37, 181 };
+            var message = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 17, 19, 37);
+            byte[] frame = { 17, ModbusFunctionCodes.ReadCoils, 0, 19, 0, 37, 181 };
 
             Assert.False(transport.ChecksumsMatch(message, frame));
         }

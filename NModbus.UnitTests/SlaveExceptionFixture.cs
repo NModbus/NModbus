@@ -47,11 +47,11 @@ namespace NModbus.UnitTests
         [Fact]
         public void ConstructorWithSlaveExceptionResponse()
         {
-            var response = new SlaveExceptionResponse(12, Modbus.ReadCoils, 1);
+            var response = new SlaveExceptionResponse(12, ModbusFunctionCodes.ReadCoils, 1);
             var e = new SlaveException(response);
 
             Assert.Equal(12, e.SlaveAddress);
-            Assert.Equal(Modbus.ReadCoils, e.FunctionCode);
+            Assert.Equal(ModbusFunctionCodes.ReadCoils, e.FunctionCode);
             Assert.Equal(1, e.SlaveExceptionCode);
             Assert.Null(e.InnerException);
 
@@ -63,12 +63,12 @@ namespace NModbus.UnitTests
         [Fact]
         public void ConstructorWithCustomMessageAndSlaveExceptionResponse()
         {
-            var response = new SlaveExceptionResponse(12, Modbus.ReadCoils, 2);
+            var response = new SlaveExceptionResponse(12, ModbusFunctionCodes.ReadCoils, 2);
             string customMessage = "custom message";
             var e = new SlaveException(customMessage, response);
 
             Assert.Equal(12, e.SlaveAddress);
-            Assert.Equal(Modbus.ReadCoils, e.FunctionCode);
+            Assert.Equal(ModbusFunctionCodes.ReadCoils, e.FunctionCode);
             Assert.Equal(2, e.SlaveExceptionCode);
             Assert.Null(e.InnerException);
 

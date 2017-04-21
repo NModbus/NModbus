@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using NModbus.Interfaces;
 using NModbus.Message;
 using NModbus.Utility;
 
@@ -10,15 +11,18 @@ namespace NModbus.IO
     /// <summary>
     ///     Refined Abstraction - http://en.wikipedia.org/wiki/Bridge_Pattern
     /// </summary>
-    internal class ModbusRtuTransport : ModbusSerialTransport
+    internal class ModbusRtuTransport : ModbusSerialTransport, IModbusRtuTransport
     {
+        private readonly IModbusFactory _modbusFactory;
         public const int RequestFrameStartLength = 7;
 
         public const int ResponseFrameStartLength = 4;
 
-        internal ModbusRtuTransport(IStreamResource streamResource)
+        internal ModbusRtuTransport(IStreamResource streamResource, IModbusFactory modbusFactory)
             : base(streamResource)
         {
+            if (modbusFactory == null) throw new ArgumentNullException(nameof(modbusFactory));
+            _modbusFactory = modbusFactory;
             Debug.Assert(streamResource != null, "Argument streamResource cannot be null.");
         }
 
@@ -29,17 +33,17 @@ namespace NModbus.IO
 
             switch (functionCode)
             {
-                case Modbus.ReadCoils:
-                case Modbus.ReadInputs:
-                case Modbus.ReadHoldingRegisters:
-                case Modbus.ReadInputRegisters:
-                case Modbus.WriteSingleCoil:
-                case Modbus.WriteSingleRegister:
-                case Modbus.Diagnostics:
+                case ModbusFunctionCodes.ReadCoils:
+                case ModbusFunctionCodes.ReadInputs:
+                case ModbusFunctionCodes.ReadHoldingRegisters:
+                case ModbusFunctionCodes.ReadInputRegisters:
+                case ModbusFunctionCodes.WriteSingleCoil:
+                case ModbusFunctionCodes.WriteSingleRegister:
+                case ModbusFunctionCodes.Diagnostics:
                     numBytes = 1;
                     break;
-                case Modbus.WriteMultipleCoils:
-                case Modbus.WriteMultipleRegisters:
+                case ModbusFunctionCodes.WriteMultipleCoils:
+                case ModbusFunctionCodes.WriteMultipleRegisters:
                     byte byteCount = frameStart[6];
                     numBytes = byteCount + 2;
                     break;
@@ -65,17 +69,17 @@ namespace NModbus.IO
             int numBytes;
             switch (functionCode)
             {
-                case Modbus.ReadCoils:
-                case Modbus.ReadInputs:
-                case Modbus.ReadHoldingRegisters:
-                case Modbus.ReadInputRegisters:
+                case ModbusFunctionCodes.ReadCoils:
+                case ModbusFunctionCodes.ReadInputs:
+                case ModbusFunctionCodes.ReadHoldingRegisters:
+                case ModbusFunctionCodes.ReadInputRegisters:
                     numBytes = frameStart[2] + 1;
                     break;
-                case Modbus.WriteSingleCoil:
-                case Modbus.WriteSingleRegister:
-                case Modbus.WriteMultipleCoils:
-                case Modbus.WriteMultipleRegisters:
-                case Modbus.Diagnostics:
+                case ModbusFunctionCodes.WriteSingleCoil:
+                case ModbusFunctionCodes.WriteSingleRegister:
+                case ModbusFunctionCodes.WriteMultipleCoils:
+                case ModbusFunctionCodes.WriteMultipleRegisters:
+                case ModbusFunctionCodes.Diagnostics:
                     numBytes = 4;
                     break;
                 default:
@@ -100,7 +104,7 @@ namespace NModbus.IO
             return frameBytes;
         }
 
-        internal override byte[] BuildMessageFrame(IModbusMessage message)
+        public override byte[] BuildMessageFrame(IModbusMessage message)
         {
             var messageFrame = message.MessageFrame;
             var crc = ModbusUtility.CalculateCrc(messageFrame);
@@ -118,21 +122,21 @@ namespace NModbus.IO
                 BitConverter.ToUInt16(ModbusUtility.CalculateCrc(message.MessageFrame), 0);
         }
 
-        internal override IModbusMessage ReadResponse<T>()
+        public override IModbusMessage ReadResponse<T>()
         {
             byte[] frameStart = Read(ResponseFrameStartLength);
             byte[] frameEnd = Read(ResponseBytesToRead(frameStart));
-            byte[] frame = Enumerable.Concat(frameStart, frameEnd).ToArray();
+            byte[] frame = frameStart.Concat(frameEnd).ToArray();
             Debug.WriteLine($"RX: {string.Join(", ", frame)}");
 
             return CreateResponse<T>(frame);
         }
 
-        internal override byte[] ReadRequest()
+        public override byte[] ReadRequest()
         {
             byte[] frameStart = Read(RequestFrameStartLength);
             byte[] frameEnd = Read(RequestBytesToRead(frameStart));
-            byte[] frame = Enumerable.Concat(frameStart, frameEnd).ToArray();
+            byte[] frame = frameStart.Concat(frameEnd).ToArray();
             Debug.WriteLine($"RX: {string.Join(", ", frame)}");
 
             return frame;

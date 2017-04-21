@@ -45,30 +45,30 @@ namespace NModbus.Message
 
             switch (functionCode)
             {
-                case Modbus.ReadCoils:
-                case Modbus.ReadInputs:
+                case ModbusFunctionCodes.ReadCoils:
+                case ModbusFunctionCodes.ReadInputs:
                     request = CreateModbusMessage<ReadCoilsInputsRequest>(frame);
                     break;
-                case Modbus.ReadHoldingRegisters:
-                case Modbus.ReadInputRegisters:
+                case ModbusFunctionCodes.ReadHoldingRegisters:
+                case ModbusFunctionCodes.ReadInputRegisters:
                     request = CreateModbusMessage<ReadHoldingInputRegistersRequest>(frame);
                     break;
-                case Modbus.WriteSingleCoil:
+                case ModbusFunctionCodes.WriteSingleCoil:
                     request = CreateModbusMessage<WriteSingleCoilRequestResponse>(frame);
                     break;
-                case Modbus.WriteSingleRegister:
+                case ModbusFunctionCodes.WriteSingleRegister:
                     request = CreateModbusMessage<WriteSingleRegisterRequestResponse>(frame);
                     break;
-                case Modbus.Diagnostics:
+                case ModbusFunctionCodes.Diagnostics:
                     request = CreateModbusMessage<DiagnosticsRequestResponse>(frame);
                     break;
-                case Modbus.WriteMultipleCoils:
+                case ModbusFunctionCodes.WriteMultipleCoils:
                     request = CreateModbusMessage<WriteMultipleCoilsRequest>(frame);
                     break;
-                case Modbus.WriteMultipleRegisters:
+                case ModbusFunctionCodes.WriteMultipleRegisters:
                     request = CreateModbusMessage<WriteMultipleRegistersRequest>(frame);
                     break;
-                case Modbus.ReadWriteMultipleRegisters:
+                case ModbusFunctionCodes.ReadWriteMultipleRegisters:
                     request = CreateModbusMessage<ReadWriteMultipleRegistersRequest>(frame);
                     break;
                 default:

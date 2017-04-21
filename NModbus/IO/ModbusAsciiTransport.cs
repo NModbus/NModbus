@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Text;
+using NModbus.Interfaces;
 using NModbus.Message;
 using NModbus.Utility;
 
@@ -9,7 +10,7 @@ namespace NModbus.IO
     /// <summary>
     ///     Refined Abstraction - http://en.wikipedia.org/wiki/Bridge_Pattern
     /// </summary>
-    internal class ModbusAsciiTransport : ModbusSerialTransport
+    internal class ModbusAsciiTransport : ModbusSerialTransport, IModbusAsciiTransport
     {
         internal ModbusAsciiTransport(IStreamResource streamResource)
             : base(streamResource)
@@ -17,7 +18,7 @@ namespace NModbus.IO
             Debug.Assert(streamResource != null, "Argument streamResource cannot be null.");
         }
 
-        internal override byte[] BuildMessageFrame(IModbusMessage message)
+        public override byte[] BuildMessageFrame(IModbusMessage message)
         {
             var msgFrame = message.MessageFrame;
 
@@ -39,12 +40,12 @@ namespace NModbus.IO
             return ModbusUtility.CalculateLrc(message.MessageFrame) == messageFrame[messageFrame.Length - 1];
         }
 
-        internal override byte[] ReadRequest()
+        public override byte[] ReadRequest()
         {
             return ReadRequestResponse();
         }
 
-        internal override IModbusMessage ReadResponse<T>()
+        public override IModbusMessage ReadResponse<T>()
         {
             return CreateResponse<T>(ReadRequestResponse());
         }

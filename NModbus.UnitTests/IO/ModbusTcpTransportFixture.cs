@@ -18,7 +18,7 @@ namespace NModbus.UnitTests.IO
         public void BuildMessageFrame()
         {
             var mock = new Mock<ModbusIpTransport>(StreamResourceMock) { CallBase = true };
-            var message = new ReadCoilsInputsRequest(Modbus.ReadCoils, 2, 10, 5);
+            var message = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 2, 10, 5);
 
             byte[] result = mock.Object.BuildMessageFrame(message);
             Assert.Equal(new byte[] { 0, 0, 0, 0, 0, 6, 2, 1, 0, 10, 0, 5 }, result);
@@ -38,7 +38,7 @@ namespace NModbus.UnitTests.IO
         {
             var streamMock = new Mock<IStreamResource>(MockBehavior.Strict);
             var mock = new Mock<ModbusIpTransport>(streamMock.Object) { CallBase = true };
-            var request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 1, 1, 3);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 3);
 
             streamMock.Setup(s => s.Write(It.IsNotNull<byte[]>(), 0, 12));
 
@@ -56,7 +56,7 @@ namespace NModbus.UnitTests.IO
         public void ReadRequestResponse()
         {
             var mock = new Mock<IStreamResource>(MockBehavior.Strict);
-            var request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 1, 1, 3);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 3);
             int calls = 0;
             byte[][] source =
             {
@@ -115,8 +115,8 @@ namespace NModbus.UnitTests.IO
         public void OnShouldRetryResponse_ReturnsTrue_IfWithinThreshold()
         {
             var transport = new ModbusIpTransport(StreamResourceMock);
-            var request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 1, 1, 1);
-            var response = new ReadCoilsInputsResponse(Modbus.ReadCoils, 1, 1, null);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 1);
+            var response = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 1, 1, null);
 
             request.TransactionId = 5;
             response.TransactionId = 4;
@@ -129,8 +129,8 @@ namespace NModbus.UnitTests.IO
         public void OnShouldRetryResponse_ReturnsFalse_IfThresholdDisabled()
         {
             var transport = new ModbusIpTransport(StreamResourceMock);
-            var request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 1, 1, 1);
-            var response = new ReadCoilsInputsResponse(Modbus.ReadCoils, 1, 1, null);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 1);
+            var response = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 1, 1, null);
 
             request.TransactionId = 5;
             response.TransactionId = 4;
@@ -143,8 +143,8 @@ namespace NModbus.UnitTests.IO
         public void OnShouldRetryResponse_ReturnsFalse_IfEqualTransactionId()
         {
             var transport = new ModbusIpTransport(StreamResourceMock);
-            var request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 1, 1, 1);
-            var response = new ReadCoilsInputsResponse(Modbus.ReadCoils, 1, 1, null);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 1);
+            var response = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 1, 1, null);
 
             request.TransactionId = 5;
             response.TransactionId = 5;
@@ -157,8 +157,8 @@ namespace NModbus.UnitTests.IO
         public void OnShouldRetryResponse_ReturnsFalse_IfOutsideThreshold()
         {
             var transport = new ModbusIpTransport(StreamResourceMock);
-            var request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 1, 1, 1);
-            var response = new ReadCoilsInputsResponse(Modbus.ReadCoils, 1, 1, null);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 1);
+            var response = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 1, 1, null);
 
             request.TransactionId = 5;
             response.TransactionId = 2;
@@ -172,9 +172,9 @@ namespace NModbus.UnitTests.IO
         {
             var transport = new ModbusIpTransport(StreamResourceMock);
 
-            var request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 1, 1, 1);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 1);
             request.TransactionId = 5;
-            var response = new ReadCoilsInputsResponse(Modbus.ReadCoils, 1, 1, null);
+            var response = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 1, 1, null);
             response.TransactionId = 6;
 
             Assert.Throws<IOException>(() => transport.ValidateResponse(request, response));
@@ -185,9 +185,9 @@ namespace NModbus.UnitTests.IO
         {
             var transport = new ModbusIpTransport(StreamResourceMock);
 
-            var request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 1, 1, 1);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 1);
             request.TransactionId = 5;
-            var response = new ReadCoilsInputsResponse(Modbus.ReadCoils, 1, 1, null);
+            var response = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 1, 1, null);
             response.TransactionId = 5;
 
             // no exception is thrown

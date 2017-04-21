@@ -12,7 +12,7 @@ namespace NModbus.UnitTests.Message
         {
             DiscreteCollection col = new DiscreteCollection(true, false, true, false, true, true, true, false, false);
             WriteMultipleCoilsRequest request = new WriteMultipleCoilsRequest(34, 45, col);
-            Assert.Equal(Modbus.WriteMultipleCoils, request.FunctionCode);
+            Assert.Equal(ModbusFunctionCodes.WriteMultipleCoils, request.FunctionCode);
             Assert.Equal(34, request.SlaveAddress);
             Assert.Equal(45, request.StartAddress);
             Assert.Equal(9, request.NumberOfPoints);

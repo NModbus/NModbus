@@ -14,7 +14,7 @@ namespace NModbus.Message
         }
 
         public WriteMultipleRegistersRequest(byte slaveAddress, ushort startAddress, RegisterCollection data)
-            : base(slaveAddress, Modbus.WriteMultipleRegisters)
+            : base(slaveAddress, ModbusFunctionCodes.WriteMultipleRegisters)
         {
             StartAddress = startAddress;
             NumberOfPoints = (ushort)data.Count;

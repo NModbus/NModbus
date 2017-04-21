@@ -15,7 +15,7 @@ namespace NModbus.Message
         }
 
         public WriteSingleCoilRequestResponse(byte slaveAddress, ushort startAddress, bool coilState)
-            : base(slaveAddress, Modbus.WriteSingleCoil)
+            : base(slaveAddress, ModbusFunctionCodes.WriteSingleCoil)
         {
             StartAddress = startAddress;
             Data = new RegisterCollection(coilState ? Modbus.CoilOn : Modbus.CoilOff);

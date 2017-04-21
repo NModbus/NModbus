@@ -1,5 +1,5 @@
 ﻿using System;
-using NModbus.IO;
+using NModbus.Interfaces;
 using NModbus.Unme.Common;
 
 namespace NModbus.Device
@@ -9,9 +9,9 @@ namespace NModbus.Device
     /// </summary>
     public abstract class ModbusDevice : IDisposable
     {
-        private ModbusTransport _transport;
+        private IModbusTransport _transport;
 
-        internal ModbusDevice(ModbusTransport transport)
+        internal ModbusDevice(IModbusTransport transport)
         {
             _transport = transport;
         }
@@ -19,7 +19,7 @@ namespace NModbus.Device
         /// <summary>
         ///     Gets the Modbus Transport.
         /// </summary>
-        public ModbusTransport Transport
+        public IModbusTransport Transport
         {
             get { return _transport; }
         }

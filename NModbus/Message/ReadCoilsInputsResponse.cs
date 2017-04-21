@@ -31,7 +31,7 @@ namespace NModbus.Message
 
         public override string ToString()
         {
-            string msg = $"Read {Data.Count()} {(FunctionCode == Modbus.ReadInputs ? "inputs" : "coils")} - {Data}.";
+            string msg = $"Read {Data.Count()} {(FunctionCode == ModbusFunctionCodes.ReadInputs ? "inputs" : "coils")} - {Data}.";
             return msg;
         }
 

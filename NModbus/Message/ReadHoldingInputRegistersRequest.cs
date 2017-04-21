@@ -50,7 +50,7 @@ namespace NModbus.Message
 
         public override string ToString()
         {
-            string msg = $"Read {NumberOfPoints} {(FunctionCode == Modbus.ReadHoldingRegisters ? "holding" : "input")} registers starting at address {StartAddress}.";
+            string msg = $"Read {NumberOfPoints} {(FunctionCode == ModbusFunctionCodes.ReadHoldingRegisters ? "holding" : "input")} registers starting at address {StartAddress}.";
             return msg;
         }
 

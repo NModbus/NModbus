@@ -10,7 +10,7 @@ namespace NModbus.UnitTests.Message
         public void CreateWriteMultipleRegistersResponse()
         {
             WriteMultipleRegistersResponse response = new WriteMultipleRegistersResponse(12, 39, 2);
-            Assert.Equal(Modbus.WriteMultipleRegisters, response.FunctionCode);
+            Assert.Equal(ModbusFunctionCodes.WriteMultipleRegisters, response.FunctionCode);
             Assert.Equal(12, response.SlaveAddress);
             Assert.Equal(39, response.StartAddress);
             Assert.Equal(2, response.NumberOfPoints);

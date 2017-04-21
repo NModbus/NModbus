@@ -30,7 +30,7 @@ namespace NModbus.Device
             ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 2000);
 
             var request = new ReadCoilsInputsRequest(
-                Modbus.ReadCoils,
+                ModbusFunctionCodes.ReadCoils,
                 slaveAddress,
                 startAddress,
                 numberOfPoints);
@@ -50,7 +50,7 @@ namespace NModbus.Device
             ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 2000);
 
             var request = new ReadCoilsInputsRequest(
-                Modbus.ReadCoils,
+                ModbusFunctionCodes.ReadCoils,
                 slaveAddress,
                 startAddress,
                 numberOfPoints);
@@ -70,7 +70,7 @@ namespace NModbus.Device
             ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 2000);
 
             var request = new ReadCoilsInputsRequest(
-                Modbus.ReadInputs,
+                ModbusFunctionCodes.ReadInputs,
                 slaveAddress,
                 startAddress,
                 numberOfPoints);
@@ -90,7 +90,7 @@ namespace NModbus.Device
             ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 2000);
 
             var request = new ReadCoilsInputsRequest(
-                Modbus.ReadInputs,
+                ModbusFunctionCodes.ReadInputs,
                 slaveAddress,
                 startAddress,
                 numberOfPoints);
@@ -110,7 +110,7 @@ namespace NModbus.Device
             ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 125);
 
             var request = new ReadHoldingInputRegistersRequest(
-                Modbus.ReadHoldingRegisters,
+                ModbusFunctionCodes.ReadHoldingRegisters,
                 slaveAddress,
                 startAddress,
                 numberOfPoints);
@@ -130,7 +130,7 @@ namespace NModbus.Device
             ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 125);
 
             var request = new ReadHoldingInputRegistersRequest(
-                Modbus.ReadHoldingRegisters,
+                ModbusFunctionCodes.ReadHoldingRegisters,
                 slaveAddress,
                 startAddress,
                 numberOfPoints);
@@ -150,7 +150,7 @@ namespace NModbus.Device
             ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 125);
 
             var request = new ReadHoldingInputRegistersRequest(
-                Modbus.ReadInputRegisters,
+                ModbusFunctionCodes.ReadInputRegisters,
                 slaveAddress,
                 startAddress,
                 numberOfPoints);
@@ -170,7 +170,7 @@ namespace NModbus.Device
             ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 125);
 
             var request = new ReadHoldingInputRegistersRequest(
-                Modbus.ReadInputRegisters,
+                ModbusFunctionCodes.ReadInputRegisters,
                 slaveAddress,
                 startAddress,
                 numberOfPoints);

@@ -10,7 +10,7 @@ namespace NModbus.Message
         }
 
         public WriteMultipleCoilsResponse(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
-            : base(slaveAddress, Modbus.WriteMultipleCoils)
+            : base(slaveAddress, ModbusFunctionCodes.WriteMultipleCoils)
         {
             StartAddress = startAddress;
             NumberOfPoints = numberOfPoints;

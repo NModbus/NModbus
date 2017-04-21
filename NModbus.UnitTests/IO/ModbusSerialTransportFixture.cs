@@ -18,9 +18,9 @@ namespace NModbus.UnitTests.IO
         public void CreateResponse()
         {
             var transport = new ModbusAsciiTransport(StreamResource);
-            var expectedResponse = new ReadCoilsInputsResponse(Modbus.ReadCoils, 2, 1, new DiscreteCollection(true, false, false, false, false, false, false, true));
+            var expectedResponse = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 2, 1, new DiscreteCollection(true, false, false, false, false, false, false, true));
             byte lrc = ModbusUtility.CalculateLrc(expectedResponse.MessageFrame);
-            var response = transport.CreateResponse<ReadCoilsInputsResponse>(new byte[] { 2, Modbus.ReadCoils, 1, 129, lrc });
+            var response = transport.CreateResponse<ReadCoilsInputsResponse>(new byte[] { 2, ModbusFunctionCodes.ReadCoils, 1, 129, lrc });
 
             Assert.IsType<ReadCoilsInputsResponse>(response);
             ModbusMessageFixture.AssertModbusMessagePropertiesAreEqual(expectedResponse, response);
@@ -30,7 +30,7 @@ namespace NModbus.UnitTests.IO
         public void CreateResponseErroneousLrc()
         {
             var transport = new ModbusAsciiTransport(StreamResource) { CheckFrame = true };
-            var frame = new byte[] { 19, Modbus.ReadCoils, 0, 0, 0, 2, 115 };
+            var frame = new byte[] { 19, ModbusFunctionCodes.ReadCoils, 0, 0, 0, 2, 115 };
 
             Assert.Throws<IOException>(
                 () => transport.CreateResponse<ReadCoilsInputsResponse>(frame));
@@ -41,7 +41,7 @@ namespace NModbus.UnitTests.IO
         {
             var transport = new ModbusAsciiTransport(StreamResource) { CheckFrame = false };
 
-            transport.CreateResponse<ReadCoilsInputsResponse>(new byte[] { 19, Modbus.ReadCoils, 0, 0, 0, 2, 115 });
+            transport.CreateResponse<ReadCoilsInputsResponse>(new byte[] { 19, ModbusFunctionCodes.ReadCoils, 0, 0, 0, 2, 115 });
         }
 
         /// <summary>
@@ -53,7 +53,8 @@ namespace NModbus.UnitTests.IO
         {
             var mock = new Mock<IStreamResource>(MockBehavior.Strict);
             IStreamResource serialResource = mock.Object;
-            var transport = new ModbusRtuTransport(serialResource);
+            var factory = new ModbusFactory();
+            var transport = new ModbusRtuTransport(serialResource, factory);
 
             mock.Setup(s => s.DiscardInBuffer());
             mock.Setup(s => s.Write(It.IsAny<byte[]>(), 0, 0));
@@ -68,7 +69,7 @@ namespace NModbus.UnitTests.IO
             serialResource.Write(null, 0, 0);
 
             // normal response
-            var response = new ReadCoilsInputsResponse(Modbus.ReadCoils, 2, 1, new DiscreteCollection(true, false, true, false, false, false, false, false));
+            var response = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 2, 1, new DiscreteCollection(true, false, true, false, false, false, false, false));
 
             // write request
             mock.Setup(s => s.Write(It.Is<byte[]>(x => x.Length == 8), 0, 8));
@@ -89,7 +90,7 @@ namespace NModbus.UnitTests.IO
                     return 2;
                 });
 
-            var request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 2, 3, 4);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 2, 3, 4);
             var actualResponse = transport.UnicastMessage<ReadCoilsInputsResponse>(request);
 
             ModbusMessageFixture.AssertModbusMessagePropertiesAreEqual(response, actualResponse);

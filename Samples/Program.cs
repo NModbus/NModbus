@@ -4,8 +4,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using NModbus;
 using NModbus.Data;
 using NModbus.Device;
+using NModbus.Interfaces;
 using NModbus.Serial;
 using NModbus.Utility;
 
@@ -31,7 +33,7 @@ namespace Samples
                 //StartModbusTcpSlave();
                 //StartModbusUdpSlave();
                 //StartModbusAsciiSlave();
-                //StartModbusSerialSlaveNetwork().GetAwaiter().GetResult();
+                StartModbusSerialSlaveNetwork().GetAwaiter().GetResult();
             }
             catch (Exception e)
             {
@@ -204,29 +206,32 @@ namespace Samples
 
         public static async Task StartModbusSerialSlaveNetwork()
         {
-            using (SerialPort slavePort = new SerialPort("COM2"))
+            using (SerialPort slavePort = new SerialPort("COM5"))
             {
                 // configure serial port
-                slavePort.BaudRate = 9600;
+                slavePort.BaudRate = 19200;
                 slavePort.DataBits = 8;
-                slavePort.Parity = Parity.None;
+                slavePort.Parity = Parity.Even;
                 slavePort.StopBits = StopBits.One;
                 slavePort.Open();
 
+                IModbusFactory factory = new ModbusFactory();
+
                 var adapter = new SerialPortAdapter(slavePort);
 
-                ModbusSlaveNetwork modbusSlaveNetwork = ModbusSerialSlaveNetwork.CreateRtu(adapter);
+                IModbusRtuTransport transport = factory.CreateRtuTransport(adapter);
 
-                ModbusSlave slave1 = ModbusSlave.Create(1);
-                ModbusSlave slave2 = ModbusSlave.Create(2);
+                IModbusSlaveNetwork modbusSlaveNetwork = factory.CreateSlaveNetwork(transport);
 
-                slave1.DataStore.HoldingRegisters[1] = 1;
-                slave2.DataStore.HoldingRegisters[1] = 2;
+                IModbusSlave slave1 = factory.CreateSlave(1);
+                IModbusSlave slave2 = factory.CreateSlave(2);
 
-                await modbusSlaveNetwork.AddSlaveAsync(slave1);
-                await modbusSlaveNetwork.AddSlaveAsync(slave2);
+                modbusSlaveNetwork.AddSlave(slave1);
+                modbusSlaveNetwork.AddSlave(slave2);
 
                 await modbusSlaveNetwork.ListenAsync();
+
+                await Task.Delay(1);
             }
         }
 

@@ -12,7 +12,7 @@ namespace NModbus.UnitTests.Message
         {
             RegisterCollection col = new RegisterCollection(10, 20, 30, 40, 50);
             WriteMultipleRegistersRequest request = new WriteMultipleRegistersRequest(11, 34, col);
-            Assert.Equal(Modbus.WriteMultipleRegisters, request.FunctionCode);
+            Assert.Equal(ModbusFunctionCodes.WriteMultipleRegisters, request.FunctionCode);
             Assert.Equal(11, request.SlaveAddress);
             Assert.Equal(34, request.StartAddress);
             Assert.Equal(10, request.ByteCount);

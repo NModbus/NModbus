@@ -91,7 +91,7 @@ namespace NModbus.UnitTests.Utility
         [Fact]
         public void CalculateLrc()
         {
-            ReadCoilsInputsRequest request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 1, 1, 10);
+            ReadCoilsInputsRequest request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 10);
             Assert.Equal(243, ModbusUtility.CalculateLrc(new byte[] { 1, 1, 0, 1, 0, 10 }));
         }
 
@@ -99,7 +99,7 @@ namespace NModbus.UnitTests.Utility
         public void CalculateLrc2()
         {
             // : 02 01 0000 0001 FC
-            ReadCoilsInputsRequest request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 2, 0, 1);
+            ReadCoilsInputsRequest request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 2, 0, 1);
             Assert.Equal(252, ModbusUtility.CalculateLrc(new byte[] { 2, 1, 0, 0, 0, 1 }));
         }
 

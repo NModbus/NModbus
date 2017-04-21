@@ -23,7 +23,7 @@ namespace NModbus.Message
         ///     Write Multiple Coils request.
         /// </summary>
         public WriteMultipleCoilsRequest(byte slaveAddress, ushort startAddress, DiscreteCollection data)
-            : base(slaveAddress, Modbus.WriteMultipleCoils)
+            : base(slaveAddress, ModbusFunctionCodes.WriteMultipleCoils)
         {
             StartAddress = startAddress;
             NumberOfPoints = (ushort)data.Count;

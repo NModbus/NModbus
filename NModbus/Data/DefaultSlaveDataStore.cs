@@ -9,7 +9,7 @@ namespace NModbus.Data
         private readonly IPointSource<bool> _coilDiscretes = new DefaultPointSource<bool>();
         private readonly IPointSource<bool> _coilInputs = new DefaultPointSource<bool>();
 
-        public IPointSource<ushort> HoldingRegsiters
+        public IPointSource<ushort> HoldingRegisters
         {
             get { return _holdingRegisters; }
         }

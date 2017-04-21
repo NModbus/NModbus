@@ -49,7 +49,7 @@ namespace NModbus.Message
 
         public override string ToString()
         {
-            string msg = $"Read {NumberOfPoints} {(FunctionCode == Modbus.ReadCoils ? "coils" : "inputs")} starting at address {StartAddress}.";
+            string msg = $"Read {NumberOfPoints} {(FunctionCode == ModbusFunctionCodes.ReadCoils ? "coils" : "inputs")} starting at address {StartAddress}.";
             return msg;
         }
 

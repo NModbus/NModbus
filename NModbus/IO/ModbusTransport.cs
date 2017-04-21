@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using NModbus.Interfaces;
 using NModbus.Message;
 using NModbus.Unme.Common;
 
@@ -11,7 +12,7 @@ namespace NModbus.IO
     /// Modbus transport.
     /// Abstraction - http://en.wikipedia.org/wiki/Bridge_Pattern
     /// </summary>
-    public abstract class ModbusTransport : IDisposable
+    public abstract class ModbusTransport : IModbusTransport
     {
         private readonly object _syncLock = new object();
         private int _retries = Modbus.DefaultRetries;
@@ -97,7 +98,7 @@ namespace NModbus.IO
         /// <summary>
         ///     Gets the stream resource.
         /// </summary>
-        internal IStreamResource StreamResource
+        public IStreamResource StreamResource
         {
             get { return _streamResource; }
         }
@@ -111,7 +112,7 @@ namespace NModbus.IO
             GC.SuppressFinalize(this);
         }
 
-        internal virtual T UnicastMessage<T>(IModbusMessage message)
+        public virtual T UnicastMessage<T>(IModbusMessage message)
             where T : IModbusMessage, new()
         {
             IModbusMessage response = null;
@@ -199,7 +200,7 @@ namespace NModbus.IO
             return (T)response;
         }
 
-        internal virtual IModbusMessage CreateResponse<T>(byte[] frame)
+        public virtual IModbusMessage CreateResponse<T>(byte[] frame)
             where T : IModbusMessage, new()
         {
             byte functionCode = frame[1];
@@ -218,7 +219,7 @@ namespace NModbus.IO
             return response;
         }
 
-        internal void ValidateResponse(IModbusMessage request, IModbusMessage response)
+        public void ValidateResponse(IModbusMessage request, IModbusMessage response)
         {
             // always check the function code and slave address, regardless of transport protocol
             if (request.FunctionCode != response.FunctionCode)
@@ -247,7 +248,7 @@ namespace NModbus.IO
         /// <summary>
         ///     Check whether we need to attempt to read another response before processing it (e.g. response was from previous request)
         /// </summary>
-        internal bool ShouldRetryResponse(IModbusMessage request, IModbusMessage response)
+        public bool ShouldRetryResponse(IModbusMessage request, IModbusMessage response)
         {
             // These checks are enforced in ValidateRequest, we don't want to retry for these
             if (request.FunctionCode != response.FunctionCode)
@@ -266,7 +267,7 @@ namespace NModbus.IO
         /// <summary>
         ///     Provide hook to check whether receiving a response should be retried
         /// </summary>
-        internal virtual bool OnShouldRetryResponse(IModbusMessage request, IModbusMessage response)
+        public virtual bool OnShouldRetryResponse(IModbusMessage request, IModbusMessage response)
         {
             return false;
         }
@@ -276,14 +277,14 @@ namespace NModbus.IO
         /// </summary>
         internal abstract void OnValidateResponse(IModbusMessage request, IModbusMessage response);
 
-        internal abstract byte[] ReadRequest();
+        public abstract byte[] ReadRequest();
 
-        internal abstract IModbusMessage ReadResponse<T>()
+        public abstract IModbusMessage ReadResponse<T>()
             where T : IModbusMessage, new();
 
-        internal abstract byte[] BuildMessageFrame(IModbusMessage message);
+        public abstract byte[] BuildMessageFrame(IModbusMessage message);
 
-        internal abstract void Write(IModbusMessage message);
+        public abstract void Write(IModbusMessage message);
 
         /// <summary>
         ///     Releases unmanaged and - optionally - managed resources

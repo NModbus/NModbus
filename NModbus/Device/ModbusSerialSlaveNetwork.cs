@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using NModbus.Interfaces;
 using NModbus.IO;
 using NModbus.Message;
 
@@ -9,20 +10,20 @@ namespace NModbus.Device
 {
     public class ModbusSerialSlaveNetwork : ModbusSlaveNetwork
     {
-        protected ModbusSerialSlaveNetwork(ModbusSerialTransport transport) 
+        public ModbusSerialSlaveNetwork(IModbusRtuTransport transport) 
             : base(transport)
         {
         }
 
-        public static ModbusSerialSlaveNetwork CreateRtu(IStreamResource streamResource)
-        {
-            if (streamResource == null)
-            {
-                throw new ArgumentNullException(nameof(streamResource));
-            }
+        //public static ModbusSerialSlaveNetwork CreateRtu(IStreamResource streamResource)
+        //{
+        //    if (streamResource == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(streamResource));
+        //    }
 
-            return new ModbusSerialSlaveNetwork(new ModbusRtuTransport(streamResource));
-        }
+        //    return new ModbusSerialSlaveNetwork(new ModbusRtuTransport(streamResource));
+        //}
 
         private ModbusSerialTransport SerialTransport
         {

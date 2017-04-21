@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using NModbus.Interfaces;
 using NModbus.Message;
 
 namespace NModbus.IO
@@ -8,7 +9,7 @@ namespace NModbus.IO
     ///     Transport for Serial protocols.
     ///     Refined Abstraction - http://en.wikipedia.org/wiki/Bridge_Pattern
     /// </summary>
-    public abstract class ModbusSerialTransport : ModbusTransport
+    public abstract class ModbusSerialTransport : ModbusTransport, IModbusSerialTransport
     {
         private bool _checkFrame = true;
 
@@ -32,7 +33,7 @@ namespace NModbus.IO
             StreamResource.DiscardInBuffer();
         }
 
-        internal override void Write(IModbusMessage message)
+        public override void Write(IModbusMessage message)
         {
             DiscardInBuffer();
 
@@ -41,7 +42,7 @@ namespace NModbus.IO
             StreamResource.Write(frame, 0, frame.Length);
         }
 
-        internal override IModbusMessage CreateResponse<T>(byte[] frame)
+        public override IModbusMessage CreateResponse<T>(byte[] frame)
         {
             IModbusMessage response = base.CreateResponse<T>(frame);
 

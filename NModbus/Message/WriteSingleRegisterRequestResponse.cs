@@ -14,7 +14,7 @@ namespace NModbus.Message
         }
 
         public WriteSingleRegisterRequestResponse(byte slaveAddress, ushort startAddress, ushort registerValue)
-            : base(slaveAddress, Modbus.WriteSingleRegister)
+            : base(slaveAddress, ModbusFunctionCodes.WriteSingleRegister)
         {
             StartAddress = startAddress;
             Data = new RegisterCollection(registerValue);

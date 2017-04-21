@@ -36,7 +36,7 @@ namespace NModbus.Message
 
         public override string ToString()
         {
-            string msg = $"Read {Data.Count} {(FunctionCode == Modbus.ReadHoldingRegisters ? "holding" : "input")} registers.";
+            string msg = $"Read {Data.Count} {(FunctionCode == ModbusFunctionCodes.ReadHoldingRegisters ? "holding" : "input")} registers.";
             return msg;
         }
 

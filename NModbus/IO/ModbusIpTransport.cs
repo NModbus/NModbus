@@ -108,7 +108,7 @@ namespace NModbus.IO
             return response;
         }
 
-        internal override byte[] BuildMessageFrame(IModbusMessage message)
+        public override byte[] BuildMessageFrame(IModbusMessage message)
         {
             byte[] header = GetMbapHeader(message);
             byte[] pdu = message.ProtocolDataUnit;
@@ -120,7 +120,7 @@ namespace NModbus.IO
             return messageBody.ToArray();
         }
 
-        internal override void Write(IModbusMessage message)
+        public override void Write(IModbusMessage message)
         {
             message.TransactionId = GetNewTransactionId();
             byte[] frame = BuildMessageFrame(message);
@@ -128,12 +128,12 @@ namespace NModbus.IO
             StreamResource.Write(frame, 0, frame.Length);
         }
 
-        internal override byte[] ReadRequest()
+        public override byte[] ReadRequest()
         {
             return ReadRequestResponse(StreamResource);
         }
 
-        internal override IModbusMessage ReadResponse<T>()
+        public override IModbusMessage ReadResponse<T>()
         {
             return CreateMessageAndInitializeTransactionId<T>(ReadRequestResponse(StreamResource));
         }
@@ -147,7 +147,7 @@ namespace NModbus.IO
             }
         }
 
-        internal override bool OnShouldRetryResponse(IModbusMessage request, IModbusMessage response)
+        public override bool OnShouldRetryResponse(IModbusMessage request, IModbusMessage response)
         {
             if (request.TransactionId > response.TransactionId && request.TransactionId - response.TransactionId < RetryOnOldResponseThreshold)
             {

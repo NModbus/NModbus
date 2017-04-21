@@ -12,7 +12,7 @@ namespace NModbus.UnitTests.Message
             RegisterCollection writeCollection = new RegisterCollection(255, 255, 255);
             ReadWriteMultipleRegistersRequest request = new ReadWriteMultipleRegistersRequest(5, 3, 6, 14,
                 writeCollection);
-            Assert.Equal(Modbus.ReadWriteMultipleRegisters, request.FunctionCode);
+            Assert.Equal(ModbusFunctionCodes.ReadWriteMultipleRegisters, request.FunctionCode);
             Assert.Equal(5, request.SlaveAddress);
 
             // test read

@@ -19,10 +19,10 @@ namespace NModbus.Message
             ushort numberOfPointsToRead,
             ushort startWriteAddress,
             RegisterCollection writeData)
-            : base(slaveAddress, Modbus.ReadWriteMultipleRegisters)
+            : base(slaveAddress, ModbusFunctionCodes.ReadWriteMultipleRegisters)
         {
             _readRequest = new ReadHoldingInputRegistersRequest(
-                Modbus.ReadHoldingRegisters,
+                ModbusFunctionCodes.ReadHoldingRegisters,
                 slaveAddress,
                 startReadAddress,
                 numberOfPointsToRead);

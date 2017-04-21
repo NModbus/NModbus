@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using NModbus.Extensions;
+using NModbus.Interfaces;
 using NModbus.IO;
 using NModbus.Message;
 
 namespace NModbus.Device
 {
-    public abstract class ModbusSlaveNetwork : ModbusDevice
+    public abstract class ModbusSlaveNetwork : ModbusDevice, IModbusSlaveNetwork
     {
-        private readonly IDictionary<byte, ModbusSlave> _slaves = new ConcurrentDictionary<byte, ModbusSlave>();
+        private readonly IDictionary<byte, IModbusSlave> _slaves = new ConcurrentDictionary<byte, IModbusSlave>();
 
-        protected ModbusSlaveNetwork(ModbusTransport transport) 
+        protected ModbusSlaveNetwork(IModbusTransport transport) 
             : base(transport)
         {
         }
@@ -29,7 +30,7 @@ namespace NModbus.Device
         /// <param name="request"></param>
         protected void ApplyRequest(IModbusMessage request)
         {
-            ModbusSlave slave = GetSlave(request.SlaveAddress);
+            IModbusSlave slave = GetSlave(request.SlaveAddress);
 
             // only service requests addressed to our slaves
             if (slave == null)
@@ -46,23 +47,19 @@ namespace NModbus.Device
             }
         }
 
-        public Task AddSlaveAsync(ModbusSlave slave)
+        public void AddSlave(IModbusSlave slave)
         {
             if (slave == null) throw new ArgumentNullException(nameof(slave));
 
             _slaves.Add(slave.UnitId, slave);
-
-            return Task.FromResult(0);
         }
 
-        public Task RemoveSlaveAsync(byte unitId)
+        public void RemoveSlave(byte unitId)
         {
             _slaves.Remove(unitId);
-
-            return Task.FromResult(0);
         }
 
-        private ModbusSlave GetSlave(byte unitId)
+        private IModbusSlave GetSlave(byte unitId)
         {
             return _slaves.GetValueOrDefault(unitId);
         }

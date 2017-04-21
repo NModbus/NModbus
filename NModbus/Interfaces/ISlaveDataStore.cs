@@ -18,7 +18,7 @@
         /// <summary>
         /// Gets the holding registers.
         /// </summary>
-        IPointSource<ushort> HoldingRegsiters { get; }
+        IPointSource<ushort> HoldingRegisters { get; }
 
         /// <summary>
         /// Gets the input registers.

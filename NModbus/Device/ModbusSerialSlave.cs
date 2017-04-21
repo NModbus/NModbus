@@ -84,12 +84,14 @@ namespace NModbus.Device
         /// </summary>
         public static ModbusSerialSlave CreateRtu(byte unitId, IStreamResource streamResource)
         {
-            if (streamResource == null)
-            {
-                throw new ArgumentNullException(nameof(streamResource));
-            }
+            //if (streamResource == null)
+            //{
+            //    throw new ArgumentNullException(nameof(streamResource));
+            //}
 
-            return new ModbusSerialSlave(unitId, new ModbusRtuTransport(streamResource));
+            //return new ModbusSerialSlave(unitId, new ModbusRtuTransport(streamResource));
+
+            throw new NotImplementedException();
         }
 
         /// <summary>

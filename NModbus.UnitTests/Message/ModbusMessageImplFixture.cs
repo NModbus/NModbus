@@ -9,9 +9,9 @@ namespace NModbus.UnitTests.Message
         [Fact]
         public void ModbusMessageCtorInitializesProperties()
         {
-            ModbusMessageImpl messageImpl = new ModbusMessageImpl(5, Modbus.ReadCoils);
+            ModbusMessageImpl messageImpl = new ModbusMessageImpl(5, ModbusFunctionCodes.ReadCoils);
             Assert.Equal(5, messageImpl.SlaveAddress);
-            Assert.Equal(Modbus.ReadCoils, messageImpl.FunctionCode);
+            Assert.Equal(ModbusFunctionCodes.ReadCoils, messageImpl.FunctionCode);
         }
 
         [Fact]
@@ -40,16 +40,16 @@ namespace NModbus.UnitTests.Message
         [Fact]
         public void ProtocolDataUnit()
         {
-            ModbusMessageImpl messageImpl = new ModbusMessageImpl(11, Modbus.ReadCoils);
-            byte[] expectedResult = { Modbus.ReadCoils };
+            ModbusMessageImpl messageImpl = new ModbusMessageImpl(11, ModbusFunctionCodes.ReadCoils);
+            byte[] expectedResult = { ModbusFunctionCodes.ReadCoils };
             Assert.Equal(expectedResult, messageImpl.ProtocolDataUnit);
         }
 
         [Fact]
         public void MessageFrame()
         {
-            ModbusMessageImpl messageImpl = new ModbusMessageImpl(11, Modbus.ReadHoldingRegisters);
-            byte[] expectedMessageFrame = { 11, Modbus.ReadHoldingRegisters };
+            ModbusMessageImpl messageImpl = new ModbusMessageImpl(11, ModbusFunctionCodes.ReadHoldingRegisters);
+            byte[] expectedMessageFrame = { 11, ModbusFunctionCodes.ReadHoldingRegisters };
             Assert.Equal(expectedMessageFrame, messageImpl.MessageFrame);
         }
     }

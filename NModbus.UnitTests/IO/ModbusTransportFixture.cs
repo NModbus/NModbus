@@ -77,11 +77,11 @@ namespace NModbus.UnitTests.IO
 
             mock.Setup(t => t.Write(It.IsNotNull<IModbusMessage>()));
             mock.Setup(t => t.ReadResponse<ReadCoilsInputsResponse>())
-                .Returns(new ReadCoilsInputsResponse(Modbus.ReadCoils, 2, 1, data));
+                .Returns(new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 2, 1, data));
             mock.Setup(t => t.OnValidateResponse(It.IsNotNull<IModbusMessage>(), It.IsNotNull<IModbusMessage>()));
 
-            var request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 2, 3, 4);
-            var expectedResponse = new ReadCoilsInputsResponse(Modbus.ReadCoils, 2, 1, data);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 2, 3, 4);
+            var expectedResponse = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 2, 1, data);
             var response = transport.UnicastMessage<ReadCoilsInputsResponse>(request);
 
             Assert.Equal(expectedResponse.MessageFrame, response.MessageFrame);
@@ -91,7 +91,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void UnicastMessage_WrongResponseFunctionCode()
         {
-            var request = new ReadCoilsInputsRequest(Modbus.ReadInputs, 2, 3, 4);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadInputs, 2, 3, 4);
             var mock = new Mock<ModbusTransport>() { CallBase = true };
             var transport = mock.Object;
             int writeCallsCount = 0;
@@ -100,7 +100,7 @@ namespace NModbus.UnitTests.IO
             mock.Setup(t => t.Write(It.IsNotNull<IModbusMessage>())).Callback(() => ++writeCallsCount);
 
             mock.Setup(t => t.ReadResponse<ReadCoilsInputsResponse>())
-                .Returns(new ReadCoilsInputsResponse(Modbus.ReadCoils, 2, 0, new DiscreteCollection()))
+                .Returns(new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 2, 0, new DiscreteCollection()))
                 .Callback(() => ++readResponseCallsCount);
 
             Assert.Throws<IOException>(() => transport.UnicastMessage<ReadCoilsInputsResponse>(request));
@@ -114,7 +114,7 @@ namespace NModbus.UnitTests.IO
         public void UnicastMessage_ErrorSlaveException()
         {
             var mock = new Mock<ModbusTransport>() { CallBase = true };
-            var request = new ReadCoilsInputsRequest(Modbus.ReadInputs, 2, 3, 4);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadInputs, 2, 3, 4);
             var transport = mock.Object;
 
             mock.Setup(t => t.Write(It.IsNotNull<IModbusMessage>()));
@@ -147,16 +147,16 @@ namespace NModbus.UnitTests.IO
                     if (callsCount < transport.Retries + 1)
                     {
                         ++callsCount;
-                        return new SlaveExceptionResponse(1, Modbus.ReadHoldingRegisters + Modbus.ExceptionOffset, Modbus.Acknowledge);
+                        return new SlaveExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, Modbus.Acknowledge);
                     }
 
-                    return new ReadHoldingInputRegistersResponse(Modbus.ReadHoldingRegisters, 1, new RegisterCollection(1));
+                    return new ReadHoldingInputRegistersResponse(ModbusFunctionCodes.ReadHoldingRegisters, 1, new RegisterCollection(1));
                 });
 
             mock.Setup(t => t.OnValidateResponse(It.IsNotNull<IModbusMessage>(), It.IsNotNull<IModbusMessage>()));
 
-            var request = new ReadHoldingInputRegistersRequest(Modbus.ReadHoldingRegisters, 1, 1, 1);
-            var expectedResponse = new ReadHoldingInputRegistersResponse(Modbus.ReadHoldingRegisters, 1, new RegisterCollection(1));
+            var request = new ReadHoldingInputRegistersRequest(ModbusFunctionCodes.ReadHoldingRegisters, 1, 1, 1);
+            var expectedResponse = new ReadHoldingInputRegistersResponse(ModbusFunctionCodes.ReadHoldingRegisters, 1, new RegisterCollection(1));
             var response = transport.UnicastMessage<ReadHoldingInputRegistersResponse>(request);
 
             Assert.Equal(transport.Retries + 1, callsCount);
@@ -187,19 +187,19 @@ namespace NModbus.UnitTests.IO
                 {
                     if (readResponseCallsCount == 0)
                     {
-                        return new SlaveExceptionResponse(1, Modbus.ReadHoldingRegisters + Modbus.ExceptionOffset, Modbus.SlaveDeviceBusy);
+                        return new SlaveExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, Modbus.SlaveDeviceBusy);
                     }
                     else
                     {
-                        return new ReadHoldingInputRegistersResponse(Modbus.ReadHoldingRegisters, 1, new RegisterCollection(1));
+                        return new ReadHoldingInputRegistersResponse(ModbusFunctionCodes.ReadHoldingRegisters, 1, new RegisterCollection(1));
                     }
                 })
                 .Callback(() => ++readResponseCallsCount);
 
             mock.Setup(t => t.OnValidateResponse(It.IsNotNull<IModbusMessage>(), It.IsNotNull<IModbusMessage>()));
 
-            var request = new ReadHoldingInputRegistersRequest(Modbus.ReadHoldingRegisters, 1, 1, 1);
-            var expectedResponse = new ReadHoldingInputRegistersResponse(Modbus.ReadHoldingRegisters, 1, new RegisterCollection(1));
+            var request = new ReadHoldingInputRegistersRequest(ModbusFunctionCodes.ReadHoldingRegisters, 1, 1, 1);
+            var expectedResponse = new ReadHoldingInputRegistersResponse(ModbusFunctionCodes.ReadHoldingRegisters, 1, new RegisterCollection(1));
             var response = transport.UnicastMessage<ReadHoldingInputRegistersResponse>(request);
 
             Assert.Equal(2, writeCallsCount);
@@ -232,17 +232,17 @@ namespace NModbus.UnitTests.IO
                 {
                     if (readResponseCallsCount < transport.Retries)
                     {
-                        return new SlaveExceptionResponse(1, Modbus.ReadHoldingRegisters + Modbus.ExceptionOffset, Modbus.SlaveDeviceBusy);
+                        return new SlaveExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, Modbus.SlaveDeviceBusy);
                     }
 
-                    return new ReadHoldingInputRegistersResponse(Modbus.ReadHoldingRegisters, 1, new RegisterCollection(1));
+                    return new ReadHoldingInputRegistersResponse(ModbusFunctionCodes.ReadHoldingRegisters, 1, new RegisterCollection(1));
                 })
                 .Callback(() => ++readResponseCallsCount);
 
             mock.Setup(t => t.OnValidateResponse(It.IsNotNull<IModbusMessage>(), It.IsNotNull<IModbusMessage>()));
 
-            var request = new ReadHoldingInputRegistersRequest(Modbus.ReadHoldingRegisters, 1, 1, 1);
-            var expectedResponse = new ReadHoldingInputRegistersResponse(Modbus.ReadHoldingRegisters, 1, new RegisterCollection(1));
+            var request = new ReadHoldingInputRegistersRequest(ModbusFunctionCodes.ReadHoldingRegisters, 1, 1, 1);
+            var expectedResponse = new ReadHoldingInputRegistersResponse(ModbusFunctionCodes.ReadHoldingRegisters, 1, new RegisterCollection(1));
             var response = transport.UnicastMessage<ReadHoldingInputRegistersResponse>(request);
 
             Assert.Equal(transport.Retries + 1, writeCallsCount);
@@ -303,7 +303,7 @@ namespace NModbus.UnitTests.IO
                 .Callback(() => ++readResponseCallsCount)
                 .Throws((Exception)Activator.CreateInstance(exceptionType));
 
-            var request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 2, 3, 4);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 2, 3, 4);
 
             Assert.Throws(exceptionType, () => transport.UnicastMessage<ReadCoilsInputsResponse>(request));
             Assert.Equal(transport.Retries + 1, writeCallsCount);
@@ -326,7 +326,7 @@ namespace NModbus.UnitTests.IO
                 .Callback(() => ++readResponseCallsCount)
                 .Throws<TimeoutException>();
 
-            var request = new ReadCoilsInputsRequest(Modbus.ReadInputs, 2, 3, 4);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadInputs, 2, 3, 4);
             Assert.Throws<TimeoutException>(() => transport.UnicastMessage<ReadCoilsInputsResponse>(request));
             Assert.Equal(Modbus.DefaultRetries + 1, writeCallsCount);
             Assert.Equal(Modbus.DefaultRetries + 1, readResponseCallsCount);
@@ -349,7 +349,7 @@ namespace NModbus.UnitTests.IO
                 .Callback(() => ++readResponseCallsCount)
                 .Throws<TimeoutException>();
 
-            var request = new ReadCoilsInputsRequest(Modbus.ReadInputs, 2, 3, 4);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadInputs, 2, 3, 4);
 
             Assert.Throws<TimeoutException>(() => transport.UnicastMessage<ReadCoilsInputsResponse>(request));
             Assert.Equal(transport.Retries + 1, writeCallsCount);
@@ -362,7 +362,7 @@ namespace NModbus.UnitTests.IO
         {
             var mock = new Mock<ModbusTransport>() { CallBase = true };
             var transport = mock.Object;
-            var expectedResponse = new ReadHoldingInputRegistersResponse(Modbus.ReadHoldingRegisters, 1, new RegisterCollection(1));
+            var expectedResponse = new ReadHoldingInputRegistersResponse(ModbusFunctionCodes.ReadHoldingRegisters, 1, new RegisterCollection(1));
             int readResponseCallsCount = 0;
             int onShouldRetryResponseCallsCount = 0;
             bool[] expectedReturn = { true, false };
@@ -381,7 +381,7 @@ namespace NModbus.UnitTests.IO
                 .Returns(expectedResponse)
                 .Callback(() => ++readResponseCallsCount);
 
-            var request = new ReadHoldingInputRegistersRequest(Modbus.ReadHoldingRegisters, 1, 1, 1);
+            var request = new ReadHoldingInputRegistersRequest(ModbusFunctionCodes.ReadHoldingRegisters, 1, 1, 1);
             var response = transport.UnicastMessage<ReadHoldingInputRegistersResponse>(request);
 
             Assert.Equal(2, readResponseCallsCount);
@@ -408,8 +408,8 @@ namespace NModbus.UnitTests.IO
             var mock = new Mock<ModbusTransport>(MockBehavior.Strict) { CallBase = true };
             var transport = mock.Object;
 
-            IModbusMessage request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 2, 1, 1);
-            IModbusMessage response = new ReadCoilsInputsResponse(Modbus.ReadCoils, 1, 1, null);
+            IModbusMessage request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 2, 1, 1);
+            IModbusMessage response = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 1, 1, null);
 
             Assert.False(transport.ShouldRetryResponse(request, response));
         }
@@ -420,8 +420,8 @@ namespace NModbus.UnitTests.IO
             var mock = new Mock<ModbusTransport>(MockBehavior.Strict) { CallBase = true };
             var transport = mock.Object;
 
-            IModbusMessage request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 1, 1, 1);
-            IModbusMessage response = new ReadHoldingInputRegistersResponse(Modbus.ReadHoldingRegisters, 1, new RegisterCollection());
+            IModbusMessage request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 1);
+            IModbusMessage response = new ReadHoldingInputRegistersResponse(ModbusFunctionCodes.ReadHoldingRegisters, 1, new RegisterCollection());
 
             Assert.Throws<IOException>(() => transport.ValidateResponse(request, response));
         }
@@ -432,8 +432,8 @@ namespace NModbus.UnitTests.IO
             var mock = new Mock<ModbusTransport>(MockBehavior.Strict) { CallBase = true };
             var transport = mock.Object;
 
-            IModbusMessage request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 42, 1, 1);
-            IModbusMessage response = new ReadHoldingInputRegistersResponse(Modbus.ReadCoils, 33, new RegisterCollection());
+            IModbusMessage request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 42, 1, 1);
+            IModbusMessage response = new ReadHoldingInputRegistersResponse(ModbusFunctionCodes.ReadCoils, 33, new RegisterCollection());
 
             Assert.Throws<IOException>(() => transport.ValidateResponse(request, response));
         }
@@ -446,8 +446,8 @@ namespace NModbus.UnitTests.IO
 
             mock.Setup(t => t.OnValidateResponse(It.IsNotNull<IModbusMessage>(), It.IsNotNull<IModbusMessage>()));
 
-            IModbusMessage request = new ReadCoilsInputsRequest(Modbus.ReadCoils, 1, 1, 1);
-            IModbusMessage response = new ReadCoilsInputsResponse(Modbus.ReadCoils, 1, 1, new DiscreteCollection());
+            IModbusMessage request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 1);
+            IModbusMessage response = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 1, 1, new DiscreteCollection());
 
             transport.ValidateResponse(request, response);
             mock.VerifyAll();

@@ -10,7 +10,7 @@ namespace NModbus.UnitTests.Message
         public void CreateWriteMultipleCoilsResponse()
         {
             WriteMultipleCoilsResponse response = new WriteMultipleCoilsResponse(17, 19, 45);
-            Assert.Equal(Modbus.WriteMultipleCoils, response.FunctionCode);
+            Assert.Equal(ModbusFunctionCodes.WriteMultipleCoils, response.FunctionCode);
             Assert.Equal(17, response.SlaveAddress);
             Assert.Equal(19, response.StartAddress);
             Assert.Equal(45, response.NumberOfPoints);

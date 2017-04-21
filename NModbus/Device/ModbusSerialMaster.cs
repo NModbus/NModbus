@@ -140,12 +140,14 @@ namespace NModbus.Device
         /// </summary>
         public static ModbusSerialMaster CreateRtu(IStreamResource streamResource)
         {
-            if (streamResource == null)
-            {
-                throw new ArgumentNullException(nameof(streamResource));
-            }
+            //if (streamResource == null)
+            //{
+            //    throw new ArgumentNullException(nameof(streamResource));
+            //}
 
-            return new ModbusSerialMaster(new ModbusRtuTransport(streamResource));
+            //return new ModbusSerialMaster(new ModbusRtuTransport(streamResource));
+
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -160,7 +162,7 @@ namespace NModbus.Device
         public bool ReturnQueryData(byte slaveAddress, ushort data)
         {
             DiagnosticsRequestResponse request = new DiagnosticsRequestResponse(
-                Modbus.DiagnosticsReturnQueryData,
+                ModbusFunctionCodes.DiagnosticsReturnQueryData,
                 slaveAddress,
                 new RegisterCollection(data));
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using NModbus.Interfaces;
 using NModbus.IO;
 
 namespace NModbus.Device
@@ -12,7 +13,7 @@ namespace NModbus.Device
         /// <summary>
         ///     Transport used by this master.
         /// </summary>
-        ModbusTransport Transport { get; }
+        IModbusTransport Transport { get; }
 
         /// <summary>
         ///    Reads from 1 to 2000 contiguous coils status.

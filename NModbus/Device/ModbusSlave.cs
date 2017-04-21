@@ -188,62 +188,62 @@ namespace NModbus.Device
 
                 switch (request.FunctionCode)
                 {
-                    case Modbus.ReadCoils:
+                    case ModbusFunctionCodes.ReadCoils:
                         response = ReadDiscretes(
                             (ReadCoilsInputsRequest)request,
                             DataStore,
                             DataStore.CoilDiscretes);
                         break;
-                    case Modbus.ReadInputs:
+                    case ModbusFunctionCodes.ReadInputs:
                         response = ReadDiscretes(
                             (ReadCoilsInputsRequest)request,
                             DataStore,
                             DataStore.InputDiscretes);
                         break;
-                    case Modbus.ReadHoldingRegisters:
+                    case ModbusFunctionCodes.ReadHoldingRegisters:
                         response = ReadRegisters(
                             (ReadHoldingInputRegistersRequest)request,
                             DataStore,
                             DataStore.HoldingRegisters);
                         break;
-                    case Modbus.ReadInputRegisters:
+                    case ModbusFunctionCodes.ReadInputRegisters:
                         response = ReadRegisters(
                             (ReadHoldingInputRegistersRequest)request,
                             DataStore,
                             DataStore.InputRegisters);
                         break;
-                    case Modbus.Diagnostics:
+                    case ModbusFunctionCodes.Diagnostics:
                         response = request;
                         break;
-                    case Modbus.WriteSingleCoil:
+                    case ModbusFunctionCodes.WriteSingleCoil:
                         response = WriteSingleCoil(
                             (WriteSingleCoilRequestResponse)request,
                             DataStore,
                             DataStore.CoilDiscretes);
                         WriteComplete?.Invoke(this, eventArgs);
                         break;
-                    case Modbus.WriteSingleRegister:
+                    case ModbusFunctionCodes.WriteSingleRegister:
                         response = WriteSingleRegister(
                             (WriteSingleRegisterRequestResponse)request,
                             DataStore,
                             DataStore.HoldingRegisters);
                         WriteComplete?.Invoke(this, eventArgs);
                         break;
-                    case Modbus.WriteMultipleCoils:
+                    case ModbusFunctionCodes.WriteMultipleCoils:
                         response = WriteMultipleCoils(
                             (WriteMultipleCoilsRequest)request,
                             DataStore,
                             DataStore.CoilDiscretes);
                         WriteComplete?.Invoke(this, eventArgs);
                         break;
-                    case Modbus.WriteMultipleRegisters:
+                    case ModbusFunctionCodes.WriteMultipleRegisters:
                         response = WriteMultipleRegisters(
                             (WriteMultipleRegistersRequest)request,
                             DataStore,
                             DataStore.HoldingRegisters);
                         WriteComplete?.Invoke(this, eventArgs);
                         break;
-                    case Modbus.ReadWriteMultipleRegisters:
+                    case ModbusFunctionCodes.ReadWriteMultipleRegisters:
                         ReadWriteMultipleRegistersRequest readWriteRequest = (ReadWriteMultipleRegistersRequest)request;
                         WriteMultipleRegisters(
                             readWriteRequest.WriteRequest,
