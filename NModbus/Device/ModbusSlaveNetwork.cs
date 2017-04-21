@@ -28,7 +28,7 @@ namespace NModbus.Device
         /// Apply the request.
         /// </summary>
         /// <param name="request"></param>
-        protected void ApplyRequest(IModbusMessage request)
+        protected IModbusMessage ApplyRequest(IModbusMessage request)
         {
             IModbusSlave slave = GetSlave(request.SlaveAddress);
 
@@ -40,11 +40,10 @@ namespace NModbus.Device
             else
             {
                 // perform action
-                IModbusMessage response = slave.ApplyRequest(request);
-
-                // write response
-                Transport.Write(response);
+                return slave.ApplyRequest(request);
             }
+
+            return null;
         }
 
         public void AddSlave(IModbusSlave slave)
@@ -59,7 +58,7 @@ namespace NModbus.Device
             _slaves.Remove(unitId);
         }
 
-        private IModbusSlave GetSlave(byte unitId)
+        public IModbusSlave GetSlave(byte unitId)
         {
             return _slaves.GetValueOrDefault(unitId);
         }

@@ -20,7 +20,7 @@ namespace NModbus.IO
         }
 
         /// <summary>
-        ///     Gets or sets a value indicating whether LRC/CRC frame checking is performed on messages.
+        /// Gets or sets a value indicating whether LRC/CRC frame checking is performed on messages.
         /// </summary>
         public bool CheckFrame
         {
@@ -28,7 +28,7 @@ namespace NModbus.IO
             set { _checkFrame = value; }
         }
 
-        internal void DiscardInBuffer()
+        public void DiscardInBuffer()
         {
             StreamResource.DiscardInBuffer();
         }
@@ -57,7 +57,7 @@ namespace NModbus.IO
             return response;
         }
 
-        internal abstract bool ChecksumsMatch(IModbusMessage message, byte[] messageFrame);
+        public abstract bool ChecksumsMatch(IModbusMessage message, byte[] messageFrame);
 
         internal override void OnValidateResponse(IModbusMessage request, IModbusMessage response)
         {

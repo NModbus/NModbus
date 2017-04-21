@@ -10,9 +10,18 @@ namespace NModbus.Device
 {
     public class ModbusSerialSlaveNetwork : ModbusSlaveNetwork
     {
-        public ModbusSerialSlaveNetwork(IModbusRtuTransport transport) 
+        private readonly IModbusSerialTransport _serialTransport;
+
+        public ModbusSerialSlaveNetwork(IModbusSerialTransport transport) 
             : base(transport)
         {
+            if (transport == null) throw new ArgumentNullException(nameof(transport));
+            _serialTransport = transport;
+        }
+
+        private IModbusSerialTransport SerialTransport
+        {
+            get { return _serialTransport; }
         }
 
         //public static ModbusSerialSlaveNetwork CreateRtu(IStreamResource streamResource)
@@ -25,20 +34,22 @@ namespace NModbus.Device
         //    return new ModbusSerialSlaveNetwork(new ModbusRtuTransport(streamResource));
         //}
 
-        private ModbusSerialTransport SerialTransport
-        {
-            get
-            {
-                var transport = Transport as ModbusSerialTransport;
+            
 
-                if (transport == null)
-                {
-                    throw new ObjectDisposedException("SerialTransport");
-                }
+        //private ModbusSerialTransport SerialTransport
+        //{
+        //    get
+        //    {
+        //        var transport = Transport as ModbusSerialTransport;
 
-                return transport;
-            }
-        }
+        //        if (transport == null)
+        //        {
+        //            throw new ObjectDisposedException("SerialTransport");
+        //        }
+
+        //        return transport;
+        //    }
+        //}
 
         public override async Task ListenAsync()
         {
@@ -66,7 +77,12 @@ namespace NModbus.Device
                         }
 
                         //Apply the request
-                        ApplyRequest(request);
+                        IModbusMessage response =  ApplyRequest(request);
+
+                        if (response != null)
+                        {
+                            Transport.Write(response);
+                        }
                     }
                     catch (IOException ioe)
                     {

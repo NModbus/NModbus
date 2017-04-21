@@ -1,4 +1,5 @@
-﻿using NModbus.IO;
+﻿using System.Net.Sockets;
+using NModbus.IO;
 
 namespace NModbus.Interfaces
 {
@@ -20,6 +21,8 @@ namespace NModbus.Interfaces
         /// <returns></returns>
         IModbusFunctionService[] GetAllFunctionServices();
 
+        #region Slave
+
         /// <summary>
         /// Creates a Modbus Slave.
         /// </summary>
@@ -28,6 +31,9 @@ namespace NModbus.Interfaces
         /// <returns></returns>
         IModbusSlave CreateSlave(byte unitId, ISlaveDataStore dataStore = null);
 
+        #endregion
+
+        #region Slave Networks
 
         /// <summary>
         /// Creates a slave network based on the RTU transport.
@@ -35,6 +41,31 @@ namespace NModbus.Interfaces
         /// <param name="transport"></param>
         /// <returns></returns>
         IModbusSlaveNetwork CreateSlaveNetwork(IModbusRtuTransport transport);
+
+        /// <summary>
+        /// Creates an ascii slave network.
+        /// </summary>
+        /// <param name="transport">The ascii transport to base this on.</param>
+        /// <returns></returns>
+        IModbusSlaveNetwork CreateSlaveNetwork(IModbusAsciiTransport transport);
+
+        /// <summary>
+        /// Create a slave network based on TCP.
+        /// </summary>
+        /// <param name="tcpListener"></param>
+        /// <returns></returns>
+        IModbusSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener);
+
+        /// <summary>
+        /// Creates a UDP modbus slave network.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        IModbusSlaveNetwork CreateSlaveNetwork(UdpClient client);
+
+        #endregion
+
+        #region Transport
 
         /// <summary>
         /// Creates an RTU transpoort. 
@@ -50,5 +81,7 @@ namespace NModbus.Interfaces
         /// <param name="streamResource"></param>
         /// <returns></returns>
         IModbusAsciiTransport CreateAsciiTransport(IStreamResource streamResource);
+
+        #endregion  
     }
 }

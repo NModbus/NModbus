@@ -35,7 +35,7 @@ namespace NModbus.IO
             return frame.ToArray();
         }
 
-        internal override bool ChecksumsMatch(IModbusMessage message, byte[] messageFrame)
+        public override bool ChecksumsMatch(IModbusMessage message, byte[] messageFrame)
         {
             return ModbusUtility.CalculateLrc(message.MessageFrame) == messageFrame[messageFrame.Length - 1];
         }

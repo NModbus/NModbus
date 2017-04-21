@@ -8,6 +8,8 @@ namespace NModbus.Interfaces
 
         void AddSlave(IModbusSlave slave);
 
+        IModbusSlave GetSlave(byte unitId);
+
         void RemoveSlave(byte unitId);
     }
 }

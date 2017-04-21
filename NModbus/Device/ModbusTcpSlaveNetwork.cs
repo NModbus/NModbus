@@ -16,7 +16,7 @@ namespace NModbus.Device
     /// <summary>
     ///     Modbus TCP slave device.
     /// </summary>
-    public class ModbusTcpSlave : ModbusSlave
+    public class ModbusTcpSlaveNetwork : ModbusSlaveNetwork
     {
         private const int TimeWaitResponse = 1000;
         private readonly object _serverLock = new object();
@@ -28,8 +28,8 @@ namespace NModbus.Device
 #if TIMER
         private Timer _timer;
 #endif
-        private ModbusTcpSlave(byte unitId, TcpListener tcpListener)
-            : base(unitId, new EmptyTransport())
+        internal ModbusTcpSlaveNetwork(TcpListener tcpListener)
+            : base(new EmptyTransport())
         {
             if (tcpListener == null)
             {
@@ -86,13 +86,13 @@ namespace NModbus.Device
             }
         }
 
-        /// <summary>
-        ///     Modbus TCP slave factory method.
-        /// </summary>
-        public static ModbusTcpSlave CreateTcp(byte unitId, TcpListener tcpListener)
-        {
-            return new ModbusTcpSlave(unitId, tcpListener);
-        }
+        ///// <summary>
+        /////     Modbus TCP slave factory method.
+        ///// </summary>
+        //public static ModbusTcpSlave CreateTcp(byte unitId, TcpListener tcpListener)
+        //{
+        //    return new ModbusTcpSlave(unitId, tcpListener);
+        //}
 
 #if TIMER
         /// <summary>

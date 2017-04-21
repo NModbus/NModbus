@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using NModbus.Interfaces;
 using NModbus.IO;
 using NModbus.Message;
 
@@ -18,13 +19,13 @@ namespace NModbus.Device
         private readonly TcpClient _client;
         private readonly string _endPoint;
         private readonly Stream _stream;
-        private readonly ModbusTcpSlave _slave;
+        private readonly IModbusSlaveNetwork _slaveNetwork;
         private readonly Task _requestHandlerTask;
 
         private readonly byte[] _mbapHeader = new byte[6];
         private byte[] _messageFrame;
 
-        public ModbusMasterTcpConnection(TcpClient client, ModbusTcpSlave slave)
+        public ModbusMasterTcpConnection(TcpClient client, IModbusSlaveNetwork slaveNetwork)
             : base(new ModbusIpTransport(new TcpClientAdapter(client)))
         {
             if (client == null)
@@ -32,15 +33,15 @@ namespace NModbus.Device
                 throw new ArgumentNullException(nameof(client));
             }
 
-            if (slave == null)
+            if (slaveNetwork == null)
             {
-                throw new ArgumentNullException(nameof(slave));
+                throw new ArgumentNullException(nameof(slaveNetwork));
             }
 
             _client = client;
             _endPoint = client.Client.RemoteEndPoint.ToString();
             _stream = client.GetStream();
-            _slave = slave;
+            _slaveNetwork = slaveNetwork;
             _requestHandlerTask = Task.Run((Func<Task>)HandleRequestAsync);
         }
 
@@ -107,14 +108,21 @@ namespace NModbus.Device
                 var request = ModbusMessageFactory.CreateModbusRequest(_messageFrame);
                 request.TransactionId = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(frame, 0));
 
-                // perform action and build response
-                IModbusMessage response = _slave.ApplyRequest(request);
-                response.TransactionId = request.TransactionId;
+                IModbusSlave slave = _slaveNetwork.GetSlave(request.SlaveAddress);
 
-                // write response
-                byte[] responseFrame = Transport.BuildMessageFrame(response);
-                Debug.WriteLine($"TX to Master at {EndPoint}: {string.Join(", ", responseFrame)}");
-                await Stream.WriteAsync(responseFrame, 0, responseFrame.Length).ConfigureAwait(false);
+                if (slave != null)
+                {
+                    //TODO: Determine if this is appropriate
+
+                    // perform action and build response
+                    IModbusMessage response = slave.ApplyRequest(request);
+                    response.TransactionId = request.TransactionId;
+
+                    // write response
+                    byte[] responseFrame = Transport.BuildMessageFrame(response);
+                    Debug.WriteLine($"TX to Master at {EndPoint}: {string.Join(", ", responseFrame)}");
+                    await Stream.WriteAsync(responseFrame, 0, responseFrame.Length).ConfigureAwait(false);
+                }
             }
         }
     }

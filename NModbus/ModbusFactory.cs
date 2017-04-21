@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NModbus.Device.MessageHandlers;
 using NModbus.Interfaces;
 using System.Linq;
+using System.Net.Sockets;
 using NModbus.Extensions;
 using NModbus.Data;
 using NModbus.Device;
@@ -47,6 +48,21 @@ namespace NModbus
         public IModbusSlaveNetwork CreateSlaveNetwork(IModbusRtuTransport transport)
         {
             return new ModbusSerialSlaveNetwork(transport);
+        }
+
+        public IModbusSlaveNetwork CreateSlaveNetwork(IModbusAsciiTransport transport)
+        {
+            return new ModbusSerialSlaveNetwork(transport);
+        }
+
+        public IModbusSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener)
+        {
+            return new ModbusTcpSlaveNetwork(tcpListener);
+        }
+
+        public IModbusSlaveNetwork CreateSlaveNetwork(UdpClient client)
+        {
+            return new ModbusUdpSlaveNetwork(client);
         }
 
         public IModbusRtuTransport CreateRtuTransport(IStreamResource streamResource)

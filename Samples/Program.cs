@@ -5,7 +5,6 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using NModbus;
-using NModbus.Data;
 using NModbus.Device;
 using NModbus.Interfaces;
 using NModbus.Serial;
@@ -33,7 +32,7 @@ namespace Samples
                 //StartModbusTcpSlave();
                 //StartModbusUdpSlave();
                 //StartModbusAsciiSlave();
-                StartModbusSerialSlaveNetwork().GetAwaiter().GetResult();
+                StartModbusSerialRtuSlaveNetwork().GetAwaiter().GetResult();
             }
             catch (Exception e)
             {
@@ -170,13 +169,22 @@ namespace Samples
                 slavePort.StopBits = StopBits.One;
                 slavePort.Open();
 
-                byte unitId = 1;
+                var factory = new ModbusFactory();
 
                 var adapter = new SerialPortAdapter(slavePort);
-                // create modbus slave
-                ModbusSlave slave = ModbusSerialSlave.CreateAscii(unitId, adapter);
 
-                slave.ListenAsync().GetAwaiter().GetResult();
+                var transport = factory.CreateAsciiTransport(adapter);
+
+                // create modbus slave
+                IModbusSlaveNetwork slaveNetwork = factory.CreateSlaveNetwork(transport);
+
+                IModbusSlave slave1 = factory.CreateSlave(1);
+                IModbusSlave slave2 = factory.CreateSlave(2);
+
+                slaveNetwork.AddSlave(slave1);
+                slaveNetwork.AddSlave(slave2);
+
+                slaveNetwork.ListenAsync().GetAwaiter().GetResult();
             }
         }
 
@@ -194,17 +202,26 @@ namespace Samples
                 slavePort.StopBits = StopBits.One;
                 slavePort.Open();
 
-                byte unitId = 1;
-
                 var adapter = new SerialPortAdapter(slavePort);
-                // create modbus slave
-                ModbusSlave slave = ModbusSerialSlave.CreateRtu(unitId, adapter);
 
-                slave.ListenAsync().GetAwaiter().GetResult();
+                var factory = new ModbusFactory();
+
+                var transport = factory.CreateRtuTransport(adapter);
+
+                // create modbus slave
+                var slaveNetwork = factory.CreateSlaveNetwork(transport);
+
+                IModbusSlave slave1 = factory.CreateSlave(1);
+                IModbusSlave slave2 = factory.CreateSlave(2);
+
+                slaveNetwork.AddSlave(slave1);
+                slaveNetwork.AddSlave(slave2);
+
+                slaveNetwork.ListenAsync().GetAwaiter().GetResult();
             }
         }
 
-        public static async Task StartModbusSerialSlaveNetwork()
+        public static async Task StartModbusSerialRtuSlaveNetwork()
         {
             using (SerialPort slavePort = new SerialPort("COM5"))
             {
@@ -256,7 +273,6 @@ namespace Samples
         /// </summary>
         public static void StartModbusTcpSlave()
         {
-            byte slaveId = 1;
             int port = 502;
             IPAddress address = new IPAddress(new byte[] { 127, 0, 0, 1 });
 
@@ -264,9 +280,18 @@ namespace Samples
             TcpListener slaveTcpListener = new TcpListener(address, port);
             slaveTcpListener.Start();
 
-            ModbusSlave slave = ModbusTcpSlave.CreateTcp(slaveId, slaveTcpListener);
+            IModbusFactory factory = new ModbusFactory();
 
-            slave.ListenAsync().GetAwaiter().GetResult();
+            IModbusSlaveNetwork network = factory.CreateSlaveNetwork(slaveTcpListener);
+
+
+            IModbusSlave slave1 = factory.CreateSlave(1);
+            IModbusSlave slave2 = factory.CreateSlave(2);
+
+            network.AddSlave(slave1);
+            network.AddSlave(slave2);
+
+            network.ListenAsync().GetAwaiter().GetResult();
 
             // prevent the main thread from exiting
             Thread.Sleep(Timeout.Infinite);
@@ -279,9 +304,17 @@ namespace Samples
         {
             using (UdpClient client = new UdpClient(502))
             {
-                ModbusUdpSlave slave = ModbusUdpSlave.CreateUdp(client);
+                var factory = new ModbusFactory();
 
-                slave.ListenAsync().GetAwaiter().GetResult();
+                IModbusSlaveNetwork network = factory.CreateSlaveNetwork(client);
+
+                IModbusSlave slave1 = factory.CreateSlave(1);
+                IModbusSlave slave2 = factory.CreateSlave(2);
+
+                network.AddSlave(slave1);
+                network.AddSlave(slave2);
+
+                network.ListenAsync().GetAwaiter().GetResult();
 
                 // prevent the main thread from exiting
                 Thread.Sleep(Timeout.Infinite);
@@ -300,8 +333,13 @@ namespace Samples
             // create and start the TCP slave
             TcpListener slaveTcpListener = new TcpListener(address, port);
             slaveTcpListener.Start();
-            ModbusSlave slave = ModbusTcpSlave.CreateTcp(slaveId, slaveTcpListener);
-            var listenTask = slave.ListenAsync();
+
+            var factory = new ModbusFactory();
+
+            var network = factory.CreateSlaveNetwork(slaveTcpListener);
+
+            IModbusSlave slave = factory.CreateSlave(slaveId);
+            var listenTask = network.ListenAsync();
 
             // create the master
             TcpClient masterTcpClient = new TcpClient(address.ToString(), port);
@@ -349,8 +387,16 @@ namespace Samples
                 var slaveAdapter = new SerialPortAdapter(slavePort);
                 // create modbus slave on seperate thread
                 byte slaveId = 1;
-                ModbusSlave slave = ModbusSerialSlave.CreateAscii(slaveId, slaveAdapter);
-                var listenTask = slave.ListenAsync();
+
+                var factory = new ModbusFactory();
+
+                var transport = factory.CreateAsciiTransport(slaveAdapter);
+
+                var network = factory.CreateSlaveNetwork(transport);
+
+                var slave = factory.CreateSlave(slaveId);
+
+                var listenTask = network.ListenAsync();
 
                 var masterAdapter = new SerialPortAdapter(masterPort);
                 // create modbus master
