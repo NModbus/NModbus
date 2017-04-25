@@ -1,6 +1,13 @@
 NModbus
 =======
 
+
+
+
+|           |Build Status|Code Coverage|
+|-----------|:----------:|:-----------:|
+|**MS .NET**|[![Build status](https://ci.appveyor.com/api/projects/status/a4r06a0owl6xf9ar/branch/NetworkedSlave?svg=true)](https://ci.appveyor.com/project/nmodbus/nmodbus/branch/NetworkedSlave)|[![codecov.io](https://codecov.io/github/NModbus4/NModbus4/coverage.svg?branch=portable-3.0)](https://codecov.io/github/NModbus/NModbus?branch=NetworkedSlave)|
+
 NModbus is a C# implementation of the Modbus protocol.
 Provides connectivity to Modbus slave compatible devices and applications.
 Supports serial ASCII, serial RTU, TCP, and UDP protocols.

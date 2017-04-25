@@ -16,8 +16,8 @@ install:
 - sudo apt-key adv --keyserver apt-mo.trafficmanager.net --recv-keys 417A0893
 - sudo apt-get update
 - sudo apt-get --assume-yes install dotnet-dev-1.0.0-preview2-003121
-solution: NModbus4.sln
+solution: NModbus.sln
 script:
 - dotnet restore
-- cd NModbus4.UnitTests
+- cd NModbus.UnitTests
 - dotnet test
