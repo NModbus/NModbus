@@ -8,7 +8,7 @@
         <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
         <projectUrl>https://github.com/NModbus/NModbus</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>NModbus is a C# implementation of the Modbus protocol. Provides connectivity to Modbus slave compatible devices and applications. Supports TCP, and UDP protocols. NModbus it's a fork of NModbus(https://code.google.com/p/nmodbus)</description>
+        <description>NModbus is a C# implementation of the Modbus protocol. Provides connectivity to Modbus slave compatible devices and applications. Supports TCP, and UDP protocols. NModbus it's a fork of NModbus4(https://github.com/NModbus4/NModbus4)</description>
         <tags>modbus nmodbus tcp udp master slave coreclr</tags>
         <dependencies>
             <group targetFramework=".NETFramework4.5" />

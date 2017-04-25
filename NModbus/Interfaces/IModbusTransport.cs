@@ -1,5 +1,4 @@
 ﻿using System;
-using NModbus.IO;
 using NModbus.Message;
 
 namespace NModbus.Interfaces
@@ -17,8 +16,6 @@ namespace NModbus.Interfaces
         int ReadTimeout { get; set; }
 
         int WriteTimeout { get; set; }
-
-        IStreamResource StreamResource { get; }
 
         T UnicastMessage<T>(IModbusMessage message) where T : IModbusMessage, new();
 

@@ -16,7 +16,7 @@ namespace NModbus
         /// <summary>
         /// The "built-in" message handlers.
         /// </summary>
-        private static readonly IModbusFunctionService[] BuiltInFunctionServices = new IModbusFunctionService[]
+        private static readonly IModbusFunctionService[] BuiltInFunctionServices = 
         {
             new ReadCoilsService(),
             new ReadInputsService(),
@@ -32,9 +32,40 @@ namespace NModbus
 
         private readonly IDictionary<byte, IModbusFunctionService> _functionServices;
 
+        /// <summary>
+        /// Create a factory which uses the built in standard slave function handlers.
+        /// </summary>
         public ModbusFactory()
         {
             _functionServices = BuiltInFunctionServices.ToDictionary(s => s.FunctionCode, s => s);
+        }
+
+        /// <summary>
+        /// Create a factory which optionally uses the built in function services and allows custom services to be added.
+        /// </summary>
+        /// <param name="functionServices"></param>
+        /// <param name="includeBuiltIn"></param>
+        public ModbusFactory(IEnumerable<IModbusFunctionService> functionServices, bool includeBuiltIn)
+        {
+            //Determine if we're including the built in services
+            if (includeBuiltIn)
+            {
+                //Make a dictionary out of the built in services
+                _functionServices = BuiltInFunctionServices
+                    .ToDictionary(s => s.FunctionCode, s => s);
+            }
+            else
+            {
+                //Create an empty dictionary
+                _functionServices = new Dictionary<byte, IModbusFunctionService>();
+            }
+
+            //Add and replace the provided function services as necessary.
+            foreach (IModbusFunctionService service in functionServices)
+            {
+                //This will add or replace the service.
+                _functionServices[service.FunctionCode] = service;
+            }
         }
 
         public IModbusSlave CreateSlave(byte unitId, ISlaveDataStore dataStore = null)
@@ -75,11 +106,6 @@ namespace NModbus
             return new ModbusAsciiTransport(streamResource);
         }
 
-        public IModbusIpTransport CreateIpTransport(IStreamResource streamResource)
-        {
-            throw new NotImplementedException();
-        }
-
         public IModbusFunctionService[] GetAllFunctionServices()
         {
             return _functionServices
@@ -87,14 +113,9 @@ namespace NModbus
                 .ToArray();
         }
 
-        public IModbusSerialMaster CreateMaster(IModbusRtuTransport transport)
+        public IModbusSerialMaster CreateMaster(IModbusSerialTransport transport)
         {
-            throw new NotImplementedException();
-        }
-
-        public IModbusSerialMaster CreateMaster(IModbusAsciiTransport transport)
-        {
-            throw new NotImplementedException();
+            return new ModbusSerialMaster(transport);
         }
 
         public IModbusMaster CreateMaster(UdpClient client)

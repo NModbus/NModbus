@@ -5,7 +5,6 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using NModbus;
-using NModbus.Device;
 using NModbus.Interfaces;
 using NModbus.Serial;
 using NModbus.Utility;
@@ -60,9 +59,7 @@ namespace Samples
                 // create modbus master
                 var factory = new ModbusFactory();
 
-                var transport = factory.CreateRtuTransport(adapter);
-
-                IModbusMaster master = factory.CreateMaster(transport);
+                IModbusMaster master = factory.CreateRtuMaster(adapter);
 
                 byte slaveId = 1;
                 ushort startAddress = 100;
@@ -91,10 +88,8 @@ namespace Samples
 
                 var factory = new ModbusFactory();
 
-                IModbusAsciiTransport transport = factory.CreateAsciiTransport(adapter);
-
                 // create modbus master
-                IModbusSerialMaster master = factory.CreateMaster(transport);
+                IModbusSerialMaster master = factory.CreateAsciiMaster(adapter);
 
                 byte slaveId = 1;
                 ushort startAddress = 1;
@@ -186,10 +181,8 @@ namespace Samples
 
                 var adapter = new SerialPortAdapter(slavePort);
 
-                var transport = factory.CreateAsciiTransport(adapter);
-
                 // create modbus slave
-                IModbusSlaveNetwork slaveNetwork = factory.CreateSlaveNetwork(transport);
+                IModbusSlaveNetwork slaveNetwork = factory.CreateAsciiSlaveNetwork(adapter);
 
                 IModbusSlave slave1 = factory.CreateSlave(1);
                 IModbusSlave slave2 = factory.CreateSlave(2);
@@ -219,10 +212,8 @@ namespace Samples
 
                 var factory = new ModbusFactory();
 
-                var transport = factory.CreateRtuTransport(adapter);
-
                 // create modbus slave
-                var slaveNetwork = factory.CreateSlaveNetwork(transport);
+                var slaveNetwork = factory.CreateRtuSlaveNetwork(adapter);
 
                 IModbusSlave slave1 = factory.CreateSlave(1);
                 IModbusSlave slave2 = factory.CreateSlave(2);
@@ -249,9 +240,7 @@ namespace Samples
 
                 var adapter = new SerialPortAdapter(slavePort);
 
-                IModbusRtuTransport transport = factory.CreateRtuTransport(adapter);
-
-                IModbusSlaveNetwork modbusSlaveNetwork = factory.CreateSlaveNetwork(transport);
+                IModbusSlaveNetwork modbusSlaveNetwork = factory.CreateRtuSlaveNetwork(adapter);
 
                 IModbusSlave slave1 = factory.CreateSlave(1);
                 IModbusSlave slave2 = factory.CreateSlave(2);
@@ -296,7 +285,6 @@ namespace Samples
             IModbusFactory factory = new ModbusFactory();
 
             IModbusSlaveNetwork network = factory.CreateSlaveNetwork(slaveTcpListener);
-
 
             IModbusSlave slave1 = factory.CreateSlave(1);
             IModbusSlave slave2 = factory.CreateSlave(2);

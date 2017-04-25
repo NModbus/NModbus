@@ -152,11 +152,12 @@
 //        [Fact]
 //        public void WriteMultipCoils_MakeSureWeDoNotWriteRemainder()
 //        {
-//            // 0, false initialized data store
-//            var dataStore = DataStoreFactory.CreateDefaultDataStore();
+//            0, false initialized data store
+//           var dataStore = DataStoreFactory.CreateDefaultDataStore();
 
 //            var request = new WriteMultipleCoilsRequest(1, 0,
-//                new DiscreteCollection(Enumerable.Repeat(true, 8).ToArray())) { NumberOfPoints = 2 };
+//                new DiscreteCollection(Enumerable.Repeat(true, 8).ToArray()))
+//            { NumberOfPoints = 2 };
 //            ModbusSlave.WriteMultipleCoils(request, dataStore, dataStore.CoilDiscretes);
 
 //            Assert.Equal(dataStore.CoilDiscretes.Slice(1, 8).ToArray(),

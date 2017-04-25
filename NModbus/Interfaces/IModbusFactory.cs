@@ -1,5 +1,4 @@
 ﻿using System.Net.Sockets;
-using NModbus.Device;
 using NModbus.IO;
 
 namespace NModbus.Interfaces
@@ -29,14 +28,7 @@ namespace NModbus.Interfaces
         /// </summary>
         /// <param name="transport"></param>
         /// <returns></returns>
-        IModbusSerialMaster CreateMaster(IModbusRtuTransport transport);
-
-        /// <summary>
-        /// Create an ascii master.
-        /// </summary>
-        /// <param name="transport"></param>
-        /// <returns></returns>
-        IModbusSerialMaster CreateMaster(IModbusAsciiTransport transport);
+        IModbusSerialMaster CreateMaster(IModbusSerialTransport transport);
 
         /// <summary>
         /// Create a TCP master.
@@ -103,7 +95,6 @@ namespace NModbus.Interfaces
         /// <summary>
         /// Creates an RTU transpoort. 
         /// </summary>
-        /// <param name=""></param>
         /// <param name="streamResource"></param>
         /// <returns></returns>
         IModbusRtuTransport CreateRtuTransport(IStreamResource streamResource);
@@ -114,13 +105,6 @@ namespace NModbus.Interfaces
         /// <param name="streamResource"></param>
         /// <returns></returns>
         IModbusAsciiTransport CreateAsciiTransport(IStreamResource streamResource);
-
-        /// <summary>
-        /// Create an IP transport.
-        /// </summary>
-        /// <param name="streamResource"></param>
-        /// <returns></returns>
-        IModbusIpTransport CreateIpTransport(IStreamResource streamResource);
 
         #endregion
 
