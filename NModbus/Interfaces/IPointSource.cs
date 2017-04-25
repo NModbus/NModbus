@@ -1,4 +1,4 @@
-﻿namespace NModbus.Interfaces
+﻿namespace NModbus
 {
     /// <summary>
     /// Represents a memory map.

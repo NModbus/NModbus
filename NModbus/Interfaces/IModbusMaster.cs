@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace NModbus.Interfaces
+namespace NModbus
 {
     /// <summary>
     ///     Modbus master device.

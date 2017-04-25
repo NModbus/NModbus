@@ -1,5 +1,4 @@
 ﻿using NModbus.Data;
-using NModbus.Interfaces;
 using Xunit;
 
 namespace NModbus.UnitTests.Data

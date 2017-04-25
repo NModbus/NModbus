@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using NModbus.Interfaces;
-using NModbus.Message;
 using NModbus.Utility;
 
 namespace NModbus.IO

@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using NModbus.Interfaces;
 using NModbus.Message;
 
 namespace NModbus.Device

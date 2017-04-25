@@ -1,7 +1,7 @@
 ﻿using System.Net.Sockets;
 using NModbus.IO;
 
-namespace NModbus.Interfaces
+namespace NModbus
 {
     /// <summary>
     /// Container for modbus function services.

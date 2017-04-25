@@ -1,6 +1,4 @@
 ﻿using System;
-using NModbus.Message;
-
 namespace NModbus.IO
 {
     internal class EmptyTransport : ModbusTransport
@@ -15,7 +13,7 @@ namespace NModbus.IO
             throw new NotImplementedException();
         }
 
-        public override byte[] BuildMessageFrame(Message.IModbusMessage message)
+        public override byte[] BuildMessageFrame(IModbusMessage message)
         {
             throw new NotImplementedException();
         }

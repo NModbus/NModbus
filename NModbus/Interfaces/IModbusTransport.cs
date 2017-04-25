@@ -1,7 +1,6 @@
 ﻿using System;
-using NModbus.Message;
 
-namespace NModbus.Interfaces
+namespace NModbus
 {
     public interface IModbusTransport : IDisposable
     {

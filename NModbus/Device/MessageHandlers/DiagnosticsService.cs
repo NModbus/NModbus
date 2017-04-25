@@ -1,7 +1,4 @@
-﻿using NModbus.Interfaces;
-using NModbus.Message;
-
-namespace NModbus.Device.MessageHandlers
+﻿namespace NModbus.Device.MessageHandlers
 {
     internal class DiagnosticsService : ModbusFunctionServiceBase<IModbusMessage>
     {

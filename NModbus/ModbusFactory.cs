@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NModbus.Device.MessageHandlers;
-using NModbus.Interfaces;
 using System.Linq;
 using System.Net.Sockets;
 using NModbus.Extensions;
@@ -43,8 +42,8 @@ namespace NModbus
         /// <summary>
         /// Create a factory which optionally uses the built in function services and allows custom services to be added.
         /// </summary>
-        /// <param name="functionServices"></param>
-        /// <param name="includeBuiltIn"></param>
+        /// <param name="functionServices">User provided function services.</param>
+        /// <param name="includeBuiltIn">If true, the built in function services are included. Otherwise, all function services will come from the functionService parameter.</param>
         public ModbusFactory(IEnumerable<IModbusFunctionService> functionServices, bool includeBuiltIn)
         {
             //Determine if we're including the built in services

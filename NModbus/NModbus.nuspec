@@ -3,8 +3,8 @@
     <metadata>
         <id>NModbus</id>
         <version>$version$</version>
-        <authors>Dmitry Turin</authors>
-        <owners>Dmitry Turin</owners>
+        <authors>Rich Quackenbush</authors>
+        <owners>Rich Quackenbush</owners>
         <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
         <projectUrl>https://github.com/NModbus/NModbus</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>

@@ -1,6 +1,4 @@
-﻿using NModbus.Interfaces;
-
-namespace NModbus.Data
+﻿namespace NModbus.Data
 {
     internal class DefaultSlaveDataStore : ISlaveDataStore
     {

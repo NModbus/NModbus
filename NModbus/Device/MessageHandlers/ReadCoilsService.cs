@@ -1,5 +1,4 @@
 ﻿using NModbus.Data;
-using NModbus.Interfaces;
 using NModbus.Message;
 
 namespace NModbus.Device.MessageHandlers

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NModbus.Interfaces;
 using NModbus.Utility;
 
 namespace NModbus.Extensions.Enron

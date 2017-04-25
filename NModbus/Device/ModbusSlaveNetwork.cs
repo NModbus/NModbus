@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using NModbus.Extensions;
-using NModbus.Interfaces;
-using NModbus.Message;
 
 namespace NModbus.Device
 {

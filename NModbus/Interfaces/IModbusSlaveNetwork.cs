@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
-namespace NModbus.Interfaces
+namespace NModbus
 {
     /// <summary>
     /// A network of slave devices on a single transport.
     /// </summary>
-    public interface IModbusSlaveNetwork 
+    public interface IModbusSlaveNetwork : IDisposable
     {
         /// <summary>
         /// Listen for incoming requests.

@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using NModbus.Interfaces;
-using NModbus.Message;
 
 namespace NModbus.IO
 {

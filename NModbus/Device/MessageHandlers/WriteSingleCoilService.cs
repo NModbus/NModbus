@@ -1,5 +1,4 @@
-﻿using NModbus.Interfaces;
-using NModbus.Message;
+﻿using NModbus.Message;
 
 namespace NModbus.Device.MessageHandlers
 {

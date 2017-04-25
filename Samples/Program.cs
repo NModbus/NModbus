@@ -5,7 +5,6 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using NModbus;
-using NModbus.Interfaces;
 using NModbus.Serial;
 using NModbus.Utility;
 

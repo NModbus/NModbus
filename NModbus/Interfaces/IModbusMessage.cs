@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace NModbus.Message
+namespace NModbus
 {
     /// <summary>
     ///     A message built by the master (client) that initiates a Modbus transaction.

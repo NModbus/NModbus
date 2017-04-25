@@ -1,4 +1,4 @@
-﻿namespace NModbus.Interfaces
+﻿namespace NModbus
 {
     /// <summary>
     /// Object simulation of a device memory map.

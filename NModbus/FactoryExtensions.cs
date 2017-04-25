@@ -1,5 +1,4 @@
 ﻿using NModbus.Device;
-using NModbus.Interfaces;
 using NModbus.IO;
 
 namespace NModbus

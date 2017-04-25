@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NModbus.Extensions;
-using NModbus.Interfaces;
 using NModbus.Message;
 
 namespace NModbus.Device

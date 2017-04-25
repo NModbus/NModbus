@@ -1,6 +1,4 @@
-﻿using NModbus.Message;
-
-namespace NModbus.Interfaces
+﻿namespace NModbus
 {
     public interface IModbusSerialTransport : IModbusTransport
     {
