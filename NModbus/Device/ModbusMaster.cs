@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using NModbus.Data;
+using NModbus.Interfaces;
 using NModbus.IO;
 using NModbus.Message;
 
@@ -13,7 +14,7 @@ namespace NModbus.Device
     /// </summary>
     public abstract class ModbusMaster : ModbusDevice, IModbusMaster
     {
-        internal ModbusMaster(ModbusTransport transport)
+        internal ModbusMaster(IModbusTransport transport)
             : base(transport)
         {
         }

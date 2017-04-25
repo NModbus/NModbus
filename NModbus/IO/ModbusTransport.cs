@@ -137,7 +137,7 @@ namespace NModbus.IO
                             if (exceptionResponse != null)
                             {
                                 // if SlaveExceptionCode == ACKNOWLEDGE we retry reading the response without resubmitting request
-                                readAgain = exceptionResponse.SlaveExceptionCode == Modbus.Acknowledge;
+                                readAgain = exceptionResponse.SlaveExceptionCode == SlaveExceptionCodes.Acknowledge;
 
                                 if (readAgain)
                                 {
@@ -162,7 +162,7 @@ namespace NModbus.IO
                 }
                 catch (SlaveException se)
                 {
-                    if (se.SlaveExceptionCode != Modbus.SlaveDeviceBusy)
+                    if (se.SlaveExceptionCode != SlaveExceptionCodes.SlaveDeviceBusy)
                     {
                         throw;
                     }

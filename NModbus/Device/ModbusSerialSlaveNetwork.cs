@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using NModbus.Interfaces;
-using NModbus.IO;
 using NModbus.Message;
 
 namespace NModbus.Device
@@ -23,33 +22,6 @@ namespace NModbus.Device
         {
             get { return _serialTransport; }
         }
-
-        //public static ModbusSerialSlaveNetwork CreateRtu(IStreamResource streamResource)
-        //{
-        //    if (streamResource == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(streamResource));
-        //    }
-
-        //    return new ModbusSerialSlaveNetwork(new ModbusRtuTransport(streamResource));
-        //}
-
-            
-
-        //private ModbusSerialTransport SerialTransport
-        //{
-        //    get
-        //    {
-        //        var transport = Transport as ModbusSerialTransport;
-
-        //        if (transport == null)
-        //        {
-        //            throw new ObjectDisposedException("SerialTransport");
-        //        }
-
-        //        return transport;
-        //    }
-        //}
 
         public override async Task ListenAsync()
         {

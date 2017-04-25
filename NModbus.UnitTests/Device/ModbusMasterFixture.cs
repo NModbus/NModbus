@@ -2,6 +2,7 @@
 using System.Linq;
 using Moq;
 using NModbus.Device;
+using NModbus.Interfaces;
 using NModbus.IO;
 using Xunit;
 
@@ -11,7 +12,9 @@ namespace NModbus.UnitTests.Device
     {
         private static IStreamResource StreamRsource => new Mock<IStreamResource>(MockBehavior.Strict).Object;
 
-        private ModbusSerialMaster Master => ModbusSerialMaster.CreateRtu(StreamRsource);
+        private static IModbusSerialTransport Transport => new Mock<IModbusSerialTransport>().Object;
+
+        private ModbusSerialMaster Master => new ModbusSerialMaster(Transport);
 
         [Fact]
         public void ReadCoils()

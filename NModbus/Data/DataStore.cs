@@ -101,7 +101,7 @@ namespace NModbus.Data
 
             if (startIndex < 0 || dataSource.Count < startIndex + count)
             {
-                throw new InvalidModbusRequestException(Modbus.IllegalDataAddress);
+                throw new InvalidModbusRequestException(SlaveExceptionCodes.IllegalDataAddress);
             }
 
             U[] dataToRetrieve;
@@ -137,7 +137,7 @@ namespace NModbus.Data
 
             if (startIndex < 0 || destination.Count < startIndex + items.Count())
             {
-                throw new InvalidModbusRequestException(Modbus.IllegalDataAddress);
+                throw new InvalidModbusRequestException(SlaveExceptionCodes.IllegalDataAddress);
             }
 
             lock (syncRoot)
@@ -160,7 +160,7 @@ namespace NModbus.Data
         {
             if (startIndex < 0 || destination.Count < startIndex + items.Count())
             {
-                throw new InvalidModbusRequestException(Modbus.IllegalDataAddress);
+                throw new InvalidModbusRequestException(SlaveExceptionCodes.IllegalDataAddress);
             }
 
             int index = startIndex;

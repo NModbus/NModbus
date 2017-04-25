@@ -46,7 +46,7 @@ namespace NModbus.Device
                 //Check to see if we found a handler for this function code.
                 if (handler == null)
                 {
-                    throw new InvalidModbusRequestException(Modbus.IllegalFunction);
+                    throw new InvalidModbusRequestException(SlaveExceptionCodes.IllegalFunction);
                 }
 
                 //Process the request

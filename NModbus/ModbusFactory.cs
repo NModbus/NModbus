@@ -75,11 +75,44 @@ namespace NModbus
             return new ModbusAsciiTransport(streamResource);
         }
 
+        public IModbusIpTransport CreateIpTransport(IStreamResource streamResource)
+        {
+            throw new NotImplementedException();
+        }
+
         public IModbusFunctionService[] GetAllFunctionServices()
         {
             return _functionServices
                 .Values
                 .ToArray();
+        }
+
+        public IModbusSerialMaster CreateMaster(IModbusRtuTransport transport)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IModbusSerialMaster CreateMaster(IModbusAsciiTransport transport)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IModbusMaster CreateMaster(UdpClient client)
+        {
+            var adapter = new UdpClientAdapter(client);
+
+            var transport = new ModbusIpTransport(adapter);
+
+            return new ModbusIpMaster(transport);
+        }
+
+        public IModbusMaster CreateMaster(TcpClient client)
+        {
+            var adapter = new TcpClientAdapter(client);
+
+            var transport = new ModbusIpTransport(adapter);
+
+            return new ModbusIpMaster(transport);
         }
 
         public IModbusFunctionService GetFunctionService(byte functionCode)

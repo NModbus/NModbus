@@ -1,4 +1,5 @@
-﻿using NModbus.IO;
+﻿using NModbus.Interfaces;
+using NModbus.IO;
 
 namespace NModbus.Device
 {
@@ -10,7 +11,7 @@ namespace NModbus.Device
         /// <summary>
         ///     Transport for used by this master.
         /// </summary>
-        new ModbusSerialTransport Transport { get; }
+        new IModbusSerialTransport Transport { get; }
 
         /// <summary>
         ///     Serial Line only.

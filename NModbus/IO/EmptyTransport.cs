@@ -3,7 +3,7 @@ using NModbus.Message;
 
 namespace NModbus.IO
 {
-    public class EmptyTransport : ModbusTransport
+    internal class EmptyTransport : ModbusTransport
     {
         public override byte[] ReadRequest()
         {

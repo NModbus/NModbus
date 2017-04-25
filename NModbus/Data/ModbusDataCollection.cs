@@ -9,7 +9,7 @@ namespace NModbus.Data
     /// </summary>
     public class ModbusDataCollection<TData> : Collection<TData>
     {
-        private bool _allowZeroElement = true;
+        private bool _allowZeroElement;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ModbusDataCollection&lt;TData&gt;" /> class.

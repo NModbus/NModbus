@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using NModbus.Interfaces;
 using NModbus.IO;
 
 namespace NModbus.Device
@@ -14,13 +15,13 @@ namespace NModbus.Device
     ///    Modbus IP master device.
     /// </summary>
     [SuppressMessage("Microsoft.Naming", "CA1706:ShortAcronymsShouldBeUppercase", Justification = "Breaking change.")]
-    public class ModbusIpMaster : ModbusMaster
+    internal class ModbusIpMaster : ModbusMaster
     {
         /// <summary>
         ///     Modbus IP master device.
         /// </summary>
         /// <param name="transport">Transport used by this master.</param>
-        private ModbusIpMaster(ModbusTransport transport)
+        public ModbusIpMaster(IModbusTransport transport)
             : base(transport)
         {
         }

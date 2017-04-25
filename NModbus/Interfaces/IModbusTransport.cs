@@ -22,23 +22,10 @@ namespace NModbus.Interfaces
 
         T UnicastMessage<T>(IModbusMessage message) where T : IModbusMessage, new();
 
-        IModbusMessage CreateResponse<T>(byte[] frame) where T : IModbusMessage, new();
-
-        void ValidateResponse(IModbusMessage request, IModbusMessage response);
-
-        bool ShouldRetryResponse(IModbusMessage request, IModbusMessage response);
-
-        bool OnShouldRetryResponse(IModbusMessage request, IModbusMessage response);
-
         byte[] ReadRequest();
-
-        IModbusMessage ReadResponse<T>() where T : IModbusMessage, new();
 
         byte[] BuildMessageFrame(IModbusMessage message);
 
         void Write(IModbusMessage message);
-
-
-
     }
 }

@@ -127,7 +127,8 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void ReadResponse()
         {
-            var mock = new Mock<ModbusRtuTransport>(StreamResource) { CallBase = true };
+            var factory = new ModbusFactory();
+            var mock = new Mock<ModbusRtuTransport>(StreamResource, factory) { CallBase = true };
             var transport = mock.Object;
 
             mock.Setup(t => t.Read(ModbusRtuTransport.ResponseFrameStartLength)).Returns(new byte[] { 1, 1, 1, 0 });
@@ -145,7 +146,8 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void ReadResponseSlaveException()
         {
-            var mock = new Mock<ModbusRtuTransport>(StreamResource) { CallBase = true };
+            var factory = new ModbusFactory();
+            var mock = new Mock<ModbusRtuTransport>(StreamResource, factory) { CallBase = true };
             var transport = mock.Object;
 
             byte[] messageFrame = { 0x01, 0x81, 0x02 };
@@ -173,7 +175,8 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void ReadResponseSlaveExceptionWithErroneousLrc()
         {
-            var mock = new Mock<ModbusRtuTransport>(StreamResource) { CallBase = true };
+            var factory = new ModbusFactory();
+            var mock = new Mock<ModbusRtuTransport>(StreamResource, factory) { CallBase = true };
             var transport = mock.Object;
 
             byte[] messageFrame = { 0x01, 0x81, 0x02 };
@@ -195,7 +198,8 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void ReadRequest()
         {
-            var mock = new Mock<ModbusRtuTransport>(StreamResource) { CallBase = true };
+            var factory = new ModbusFactory();
+            var mock = new Mock<ModbusRtuTransport>(StreamResource, factory) { CallBase = true };
             var transport = mock.Object;
 
             mock.Setup(t => t.Read(ModbusRtuTransport.RequestFrameStartLength))

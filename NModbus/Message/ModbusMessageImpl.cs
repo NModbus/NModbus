@@ -12,6 +12,10 @@ namespace NModbus.Message
     /// </summary>
     internal class ModbusMessageImpl
     {
+        // smallest supported message frame size (sans checksum)
+        private const int MinimumFrameSize = 2;
+
+
         public ModbusMessageImpl()
         {
         }
@@ -103,9 +107,9 @@ namespace NModbus.Message
                 throw new ArgumentNullException(nameof(frame), "Argument frame cannot be null.");
             }
 
-            if (frame.Length < Modbus.MinimumFrameSize)
+            if (frame.Length < MinimumFrameSize)
             {
-                string msg = $"Message frame must contain at least {Modbus.MinimumFrameSize} bytes of data.";
+                string msg = $"Message frame must contain at least {MinimumFrameSize} bytes of data.";
                 throw new FormatException(msg);
             }
 

@@ -147,7 +147,7 @@ namespace NModbus.UnitTests.IO
                     if (callsCount < transport.Retries + 1)
                     {
                         ++callsCount;
-                        return new SlaveExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, Modbus.Acknowledge);
+                        return new SlaveExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, SlaveExceptionCodes.Acknowledge);
                     }
 
                     return new ReadHoldingInputRegistersResponse(ModbusFunctionCodes.ReadHoldingRegisters, 1, new RegisterCollection(1));
@@ -187,7 +187,7 @@ namespace NModbus.UnitTests.IO
                 {
                     if (readResponseCallsCount == 0)
                     {
-                        return new SlaveExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, Modbus.SlaveDeviceBusy);
+                        return new SlaveExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, SlaveExceptionCodes.SlaveDeviceBusy);
                     }
                     else
                     {
@@ -232,7 +232,7 @@ namespace NModbus.UnitTests.IO
                 {
                     if (readResponseCallsCount < transport.Retries)
                     {
-                        return new SlaveExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, Modbus.SlaveDeviceBusy);
+                        return new SlaveExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, SlaveExceptionCodes.SlaveDeviceBusy);
                     }
 
                     return new ReadHoldingInputRegistersResponse(ModbusFunctionCodes.ReadHoldingRegisters, 1, new RegisterCollection(1));
