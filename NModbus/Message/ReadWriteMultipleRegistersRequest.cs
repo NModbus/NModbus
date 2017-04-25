@@ -4,7 +4,7 @@ using NModbus.Data;
 
 namespace NModbus.Message
 {
-    public class ReadWriteMultipleRegistersRequest : AbstractModbusMessage, IModbusRequest
+    internal class ReadWriteMultipleRegistersRequest : AbstractModbusMessage, IModbusRequest
     {
         private ReadHoldingInputRegistersRequest _readRequest;
         private WriteMultipleRegistersRequest _writeRequest;

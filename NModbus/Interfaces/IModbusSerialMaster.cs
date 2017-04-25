@@ -1,7 +1,4 @@
-﻿using NModbus.Interfaces;
-using NModbus.IO;
-
-namespace NModbus.Device
+﻿namespace NModbus.Interfaces
 {
     /// <summary>
     ///     Modbus Serial Master device.

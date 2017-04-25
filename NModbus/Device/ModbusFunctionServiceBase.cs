@@ -8,7 +8,7 @@ namespace NModbus.Device
     /// Base class for 
     /// </summary>
     /// <typeparam name="TRequest">The type of request to handle.</typeparam>
-    public abstract class ModbusFunctionServiceBase<TRequest> : IModbusFunctionService
+    internal abstract class ModbusFunctionServiceBase<TRequest> : IModbusFunctionService
         where TRequest : class
     {
         private readonly byte _functionCode;

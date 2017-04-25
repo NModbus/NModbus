@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using NModbus.Data;
 using NModbus.Interfaces;
-using NModbus.IO;
 using NModbus.Message;
 
 namespace NModbus.Device
@@ -12,7 +11,7 @@ namespace NModbus.Device
     /// <summary>
     ///     Modbus master device.
     /// </summary>
-    public abstract class ModbusMaster : ModbusDevice, IModbusMaster
+    internal abstract class ModbusMaster : ModbusDevice, IModbusMaster
     {
         internal ModbusMaster(IModbusTransport transport)
             : base(transport)

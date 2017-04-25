@@ -13,7 +13,7 @@ namespace NModbus.Device
     /// <summary>
     ///     Modbus UDP slave device.
     /// </summary>
-    public class ModbusUdpSlaveNetwork : ModbusSlaveNetwork
+    internal class ModbusUdpSlaveNetwork : ModbusSlaveNetwork
     {
         private readonly UdpClient _udpClient;
 
@@ -22,23 +22,6 @@ namespace NModbus.Device
         {
             _udpClient = udpClient;
         }
-
-        ///// <summary>
-        /////     Modbus UDP slave factory method.
-        /////     Creates NModbus UDP slave with default
-        ///// </summary>
-        //public static ModbusUdpSlave CreateUdp(UdpClient client)
-        //{
-        //    return new ModbusUdpSlave(Modbus.DefaultIpSlaveUnitId, client);
-        //}
-
-        ///// <summary>
-        /////     Modbus UDP slave factory method.
-        ///// </summary>
-        //public static ModbusUdpSlave CreateUdp(byte unitId, UdpClient client)
-        //{
-        //    return new ModbusUdpSlave(unitId, client);
-        //}
 
         /// <summary>
         ///     Start slave listening for requests.

@@ -5,12 +5,11 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using NModbus.Extensions;
 using NModbus.Interfaces;
-using NModbus.IO;
 using NModbus.Message;
 
 namespace NModbus.Device
 {
-    public abstract class ModbusSlaveNetwork : ModbusDevice, IModbusSlaveNetwork
+    internal abstract class ModbusSlaveNetwork : ModbusDevice, IModbusSlaveNetwork
     {
         private readonly IDictionary<byte, IModbusSlave> _slaves = new ConcurrentDictionary<byte, IModbusSlave>();
 

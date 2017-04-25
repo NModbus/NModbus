@@ -5,7 +5,7 @@ using NModbus.Unme.Common;
 
 namespace NModbus.Message
 {
-    public class ReadCoilsInputsResponse : AbstractModbusMessageWithData<DiscreteCollection>, IModbusMessage
+    internal class ReadCoilsInputsResponse : AbstractModbusMessageWithData<DiscreteCollection>, IModbusMessage
     {
         public ReadCoilsInputsResponse()
         {

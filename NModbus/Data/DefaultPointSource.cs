@@ -9,7 +9,7 @@ namespace NModbus.Data
     /// A simple implementation of the point source. All registers are 
     /// </summary>
     /// <typeparam name="TPoint"></typeparam>
-    public class DefaultPointSource<TPoint> : IPointSource<TPoint>
+    internal class DefaultPointSource<TPoint> : IPointSource<TPoint>
     {
         //Only create this if referenced.
         private readonly Lazy<TPoint[]> _points;

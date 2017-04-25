@@ -7,7 +7,7 @@ using NModbus.Message;
 
 namespace NModbus.Device
 {
-    public class ModbusSerialSlaveNetwork : ModbusSlaveNetwork
+    internal class ModbusSerialSlaveNetwork : ModbusSlaveNetwork
     {
         private readonly IModbusSerialTransport _serialTransport;
 

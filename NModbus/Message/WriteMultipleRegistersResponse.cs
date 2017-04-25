@@ -3,7 +3,7 @@ using System.Net;
 
 namespace NModbus.Message
 {
-    public class WriteMultipleRegistersResponse : AbstractModbusMessage, IModbusMessage
+    internal class WriteMultipleRegistersResponse : AbstractModbusMessage, IModbusMessage
     {
         public WriteMultipleRegistersResponse()
         {

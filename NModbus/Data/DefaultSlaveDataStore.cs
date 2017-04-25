@@ -2,7 +2,7 @@
 
 namespace NModbus.Data
 {
-    public class DefaultSlaveDataStore : ISlaveDataStore
+    internal class DefaultSlaveDataStore : ISlaveDataStore
     {
         private readonly IPointSource<ushort> _holdingRegisters = new DefaultPointSource<ushort>();
         private readonly IPointSource<ushort> _inputRegisters = new DefaultPointSource<ushort>();

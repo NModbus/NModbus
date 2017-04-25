@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NModbus.Device;
+using NModbus.Interfaces;
 using NModbus.Utility;
 
 namespace NModbus.Extensions.Enron
@@ -20,7 +20,7 @@ namespace NModbus.Extensions.Enron
         /// <param name="numberOfPoints">Number of holding registers to read.</param>
         /// <returns>Holding registers status</returns>
         public static uint[] ReadHoldingRegisters32(
-            this ModbusMaster master,
+            this IModbusMaster master,
             byte slaveAddress,
             ushort startAddress,
             ushort numberOfPoints)
@@ -50,7 +50,7 @@ namespace NModbus.Extensions.Enron
         /// <param name="numberOfPoints">Number of holding registers to read.</param>
         /// <returns>Input registers status</returns>
         public static uint[] ReadInputRegisters32(
-            this ModbusMaster master,
+            this IModbusMaster master,
             byte slaveAddress,
             ushort startAddress,
             ushort numberOfPoints)
@@ -78,7 +78,7 @@ namespace NModbus.Extensions.Enron
         /// <param name="registerAddress">Address to write.</param>
         /// <param name="value">Value to write.</param>
         public static void WriteSingleRegister32(
-            this ModbusMaster master,
+            this IModbusMaster master,
             byte slaveAddress,
             ushort registerAddress,
             uint value)
@@ -99,7 +99,7 @@ namespace NModbus.Extensions.Enron
         /// <param name="startAddress">Address to begin writing values.</param>
         /// <param name="data">Values to write.</param>
         public static void WriteMultipleRegisters32(
-            this ModbusMaster master,
+            this IModbusMaster master,
             byte slaveAddress,
             ushort startAddress,
             uint[] data)

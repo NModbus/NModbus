@@ -1,15 +1,9 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Net.Sockets;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using NModbus.Interfaces;
-using NModbus.IO;
 
 namespace NModbus.Device
 {
-#if SERIAL
-    using System.IO.Ports;
-#endif
 
     /// <summary>
     ///    Modbus IP master device.
@@ -24,73 +18,6 @@ namespace NModbus.Device
         public ModbusIpMaster(IModbusTransport transport)
             : base(transport)
         {
-        }
-
-        /// <summary>
-        ///    Modbus IP master factory method.
-        /// </summary>
-        /// <returns>New instance of Modbus IP master device using provided TCP client.</returns>
-        [SuppressMessage("Microsoft.Naming", "CA1706:ShortAcronymsShouldBeUppercase", Justification = "Breaking change.")]
-        public static ModbusIpMaster CreateIp(TcpClient tcpClient)
-        {
-            if (tcpClient == null)
-            {
-                throw new ArgumentNullException(nameof(tcpClient));
-            }
-
-            return CreateIp(new TcpClientAdapter(tcpClient));
-        }
-
-        /// <summary>
-        ///    Modbus IP master factory method.
-        /// </summary>
-        /// <returns>New instance of Modbus IP master device using provided UDP client.</returns>
-        [SuppressMessage("Microsoft.Naming", "CA1706:ShortAcronymsShouldBeUppercase", Justification = "Breaking change.")]
-        public static ModbusIpMaster CreateIp(UdpClient udpClient)
-        {
-            if (udpClient == null)
-            {
-                throw new ArgumentNullException(nameof(udpClient));
-            }
-
-            if (!udpClient.Client.Connected)
-            {
-                throw new InvalidOperationException(Resources.UdpClientNotConnected);
-            }
-
-            return CreateIp(new UdpClientAdapter(udpClient));
-        }
-
-#if SERIAL
-        /// <summary>
-        ///     Modbus IP master factory method.
-        /// </summary>
-        /// <returns>New instance of Modbus IP master device using provided serial port.</returns>
-        [SuppressMessage("Microsoft.Naming", "CA1706:ShortAcronymsShouldBeUppercase", Justification = "Breaking change.")]
-        public static ModbusIpMaster CreateIp(SerialPort serialPort)
-        {
-            if (serialPort == null)
-            {
-                throw new ArgumentNullException(nameof(serialPort));
-            }
-
-            return CreateIp(new SerialPortAdapter(serialPort));
-        }
-#endif
-
-        /// <summary>
-        ///     Modbus IP master factory method.
-        /// </summary>
-        /// <returns>New instance of Modbus IP master device using provided stream resource.</returns>
-        [SuppressMessage("Microsoft.Naming", "CA1706:ShortAcronymsShouldBeUppercase", Justification = "Breaking change.")]
-        public static ModbusIpMaster CreateIp(IStreamResource streamResource)
-        {
-            if (streamResource == null)
-            {
-                throw new ArgumentNullException(nameof(streamResource));
-            }
-
-            return new ModbusIpMaster(new ModbusIpTransport(streamResource));
         }
 
         /// <summary>
