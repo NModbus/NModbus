@@ -1,4 +1,4 @@
-version: 3.0.{build}
+version: 3.1.{build}
 branches:
   only:
   - portable-3.0
@@ -11,10 +11,10 @@ install:
 - cmd: >-
     dotnet restore
 build:
-  project: NModbus4.sln
+  project: NModbus.sln
   verbosity: minimal
 test_script:
-- cd NModbus4.UnitTests
+- cd NModbus.UnitTests
 - "SET PATH=C:/Users/appveyor/.nuget/packages/OpenCover/4.6.166/tools;C:/Python34;C:/Python34/Scripts;%PATH%"
 - OpenCover.Console.exe -oldStyle -register:user -target:"dotnet.exe" -targetargs:"test" -returntargetcode -filter:"+[NModbus4]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -output:./opencover_report.xml
 - pip install codecov
