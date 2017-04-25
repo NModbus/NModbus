@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>NModbus.Serial</id>
-        <version>1.0.0</version>
+        <version>$version$</version>
         <authors>Dmitry Turin</authors>
         <owners>Dmitry Turin</owners>
         <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
@@ -12,7 +12,7 @@
         <tags>modbus nmodbus serial master slave</tags>
         <dependencies>
             <group targetFramework=".NETFramework4.5">
-                <dependency id="NModbus" version="3.0.0" />
+                <dependency id="NModbus" version="$version$" />
             </group>
         </dependencies>
         <frameworkAssemblies>

@@ -4,9 +4,9 @@ NModbus
 
 
 
-|           |Build Status|Code Coverage|
+|           |Build Status|
 |-----------|:----------:|:-----------:|
-|**MS .NET**|[![Build status](https://ci.appveyor.com/api/projects/status/a4r06a0owl6xf9ar/branch/NetworkedSlave?svg=true)](https://ci.appveyor.com/project/nmodbus/nmodbus/branch/NetworkedSlave)|[![codecov.io](https://codecov.io/github/NModbus4/NModbus4/coverage.svg?branch=portable-3.0)](https://codecov.io/github/NModbus/NModbus?branch=NetworkedSlave)|
+|**MS .NET**|[![Build status](https://ci.appveyor.com/api/projects/status/a4r06a0owl6xf9ar/branch/NetworkedSlave?svg=true)](https://ci.appveyor.com/project/nmodbus/nmodbus/branch/NetworkedSlave)|
 
 NModbus is a C# implementation of the Modbus protocol.
 Provides connectivity to Modbus slave compatible devices and applications.
@@ -20,13 +20,12 @@ The NModbus4 project appears to have gone quiet. This is a fork of that project.
 - NModbus is a fork of NModbus4 (https://github.com/NModbus4/NModbus4).
 - NModbus4 is fork of NModbus(https://code.google.com/p/nmodbus).
 
-NModbus4 differs from original NModbus in following:
+NModbus differs from NModbus4 in following:
 
-1. removed USB support(FtdAdapter.dll)
-2. removed log4net dependency
-3. removed Unme.Common.dll dependency
-4. assembly renamed to NModbus4.dll
-5. target framework changed to .NET 4
+- Modbus slave devices are now added to a network which is represented by `IModbusSlaveInstance`.
+- Heavier use of interfaces.
+- Custom function code handlers can be added to slave devices.
+
 
 Goals
 =======
