@@ -13,14 +13,14 @@ namespace NModbus.UnitTests.IO
     public class ModbusRtuTransportFixture
     {
         private static IStreamResource StreamResource => new Mock<IStreamResource>(MockBehavior.Strict).Object;
+        private static IModbusFactory Factory = new ModbusFactory();
 
         [Fact]
         public void BuildMessageFrame()
         {
             byte[] message = { 17, ModbusFunctionCodes.ReadCoils, 0, 19, 0, 37, 14, 132 };
-            var factory = new ModbusFactory();
             var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 17, 19, 37);
-            var transport = new ModbusRtuTransport(StreamResource, factory);
+            var transport = new ModbusRtuTransport(StreamResource, Factory);
 
             Assert.Equal(message, transport.BuildMessageFrame(request));
         }
@@ -28,78 +28,89 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void ResponseBytesToReadCoils()
         {
+            var transport = new ModbusRtuTransport(StreamResource, Factory);
             byte[] frameStart = { 0x11, 0x01, 0x05, 0xCD, 0x6B, 0xB2, 0x0E, 0x1B };
-            Assert.Equal(6, ModbusRtuTransport.ResponseBytesToRead(frameStart));
+            Assert.Equal(6, transport.ResponseBytesToRead(frameStart));
         }
 
         [Fact]
         public void ResponseBytesToReadCoilsNoData()
         {
+            var transport = new ModbusRtuTransport(StreamResource, Factory);
             byte[] frameStart = { 0x11, 0x01, 0x00, 0x00, 0x00 };
-            Assert.Equal(1, ModbusRtuTransport.ResponseBytesToRead(frameStart));
+            Assert.Equal(1, transport.ResponseBytesToRead(frameStart));
         }
 
         [Fact]
         public void ResponseBytesToReadWriteCoilsResponse()
         {
+            var transport = new ModbusRtuTransport(StreamResource, Factory);
             byte[] frameStart = { 0x11, 0x0F, 0x00, 0x13, 0x00, 0x0A, 0, 0 };
-            Assert.Equal(4, ModbusRtuTransport.ResponseBytesToRead(frameStart));
+            Assert.Equal(4, transport.ResponseBytesToRead(frameStart));
         }
 
         [Fact]
         public void ResponseBytesToReadDiagnostics()
         {
+            var transport = new ModbusRtuTransport(StreamResource, Factory);
             byte[] frameStart = { 0x01, 0x08, 0x00, 0x00 };
-            Assert.Equal(4, ModbusRtuTransport.ResponseBytesToRead(frameStart));
+            Assert.Equal(4, transport.ResponseBytesToRead(frameStart));
         }
 
         [Fact]
         public void ResponseBytesToReadSlaveException()
         {
+            var transport = new ModbusRtuTransport(StreamResource, Factory);
             byte[] frameStart = { 0x01, Modbus.ExceptionOffset + 1, 0x01 };
-            Assert.Equal(1, ModbusRtuTransport.ResponseBytesToRead(frameStart));
+            Assert.Equal(1, transport.ResponseBytesToRead(frameStart));
         }
 
         [Fact]
         public void ResponseBytesToReadInvalidFunctionCode()
         {
+            var transport = new ModbusRtuTransport(StreamResource, Factory);
             byte[] frame = { 0x11, 0x16, 0x00, 0x01, 0x00, 0x02, 0x04 };
-            Assert.Throws<NotImplementedException>(() => ModbusRtuTransport.ResponseBytesToRead(frame));
+            Assert.Throws<NotImplementedException>(() => transport.ResponseBytesToRead(frame));
         }
 
         [Fact]
         public void RequestBytesToReadDiagnostics()
         {
+            var transport = new ModbusRtuTransport(StreamResource, Factory);
             byte[] frame = { 0x01, 0x08, 0x00, 0x00, 0xA5, 0x37, 0, 0 };
-            Assert.Equal(1, ModbusRtuTransport.RequestBytesToRead(frame));
+            Assert.Equal(1, transport.RequestBytesToRead(frame));
         }
 
         [Fact]
         public void RequestBytesToReadCoils()
         {
+            var transport = new ModbusRtuTransport(StreamResource, Factory);
             byte[] frameStart = { 0x11, 0x01, 0x00, 0x13, 0x00, 0x25 };
-            Assert.Equal(1, ModbusRtuTransport.RequestBytesToRead(frameStart));
+            Assert.Equal(1, transport.RequestBytesToRead(frameStart));
         }
 
         [Fact]
         public void RequestBytesToReadWriteCoilsRequest()
         {
+            var transport = new ModbusRtuTransport(StreamResource, Factory);
             byte[] frameStart = { 0x11, 0x0F, 0x00, 0x13, 0x00, 0x0A, 0x02, 0xCD, 0x01 };
-            Assert.Equal(4, ModbusRtuTransport.RequestBytesToRead(frameStart));
+            Assert.Equal(4, transport.RequestBytesToRead(frameStart));
         }
 
         [Fact]
         public void RequestBytesToReadWriteMultipleHoldingRegisters()
         {
+            var transport = new ModbusRtuTransport(StreamResource, Factory);
             byte[] frameStart = { 0x11, 0x10, 0x00, 0x01, 0x00, 0x02, 0x04 };
-            Assert.Equal(6, ModbusRtuTransport.RequestBytesToRead(frameStart));
+            Assert.Equal(6, transport.RequestBytesToRead(frameStart));
         }
 
         [Fact]
         public void RequestBytesToReadInvalidFunctionCode()
         {
+            var transport = new ModbusRtuTransport(StreamResource, Factory);
             byte[] frame = { 0x11, 0xFF, 0x00, 0x01, 0x00, 0x02, 0x04 };
-            Assert.Throws<NotImplementedException>(() => ModbusRtuTransport.RequestBytesToRead(frame));
+            Assert.Throws<NotImplementedException>(() => transport.RequestBytesToRead(frame));
         }
 
         [Fact]

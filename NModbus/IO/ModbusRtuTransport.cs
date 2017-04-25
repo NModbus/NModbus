@@ -24,70 +24,107 @@ namespace NModbus.IO
             Debug.Assert(streamResource != null, "Argument streamResource cannot be null.");
         }
 
-        public static int RequestBytesToRead(byte[] frameStart)
+        internal int RequestBytesToRead(byte[] frameStart)
         {
             byte functionCode = frameStart[1];
-            int numBytes;
 
-            switch (functionCode)
+            IModbusFunctionService service = _modbusFactory.GetFunctionService(functionCode);
+
+            if (service == null)
             {
-                case ModbusFunctionCodes.ReadCoils:
-                case ModbusFunctionCodes.ReadInputs:
-                case ModbusFunctionCodes.ReadHoldingRegisters:
-                case ModbusFunctionCodes.ReadInputRegisters:
-                case ModbusFunctionCodes.WriteSingleCoil:
-                case ModbusFunctionCodes.WriteSingleRegister:
-                case ModbusFunctionCodes.Diagnostics:
-                    numBytes = 1;
-                    break;
-                case ModbusFunctionCodes.WriteMultipleCoils:
-                case ModbusFunctionCodes.WriteMultipleRegisters:
-                    byte byteCount = frameStart[6];
-                    numBytes = byteCount + 2;
-                    break;
-                default:
-                    string msg = $"Function code {functionCode} not supported.";
-                    Debug.WriteLine(msg);
-                    throw new NotImplementedException(msg);
+                string msg = $"Function code {functionCode} not supported.";
+                Debug.WriteLine(msg);
+                throw new NotImplementedException(msg);
             }
 
-            return numBytes;
+            return service.GetRtuRequestBytesToRead(frameStart);
         }
 
-        public static int ResponseBytesToRead(byte[] frameStart)
+        //public static int RequestBytesToRead(byte[] frameStart)
+        //{
+        //    byte functionCode = frameStart[1];
+        //    int numBytes;
+
+        //    switch (functionCode)
+        //    {
+        //        case ModbusFunctionCodes.ReadCoils:
+        //        case ModbusFunctionCodes.ReadInputs:
+        //        case ModbusFunctionCodes.ReadHoldingRegisters:
+        //        case ModbusFunctionCodes.ReadInputRegisters:
+        //        case ModbusFunctionCodes.WriteSingleCoil:
+        //        case ModbusFunctionCodes.WriteSingleRegister:
+        //        case ModbusFunctionCodes.Diagnostics:
+        //            numBytes = 1;
+        //            break;
+        //        case ModbusFunctionCodes.WriteMultipleCoils:
+        //        case ModbusFunctionCodes.WriteMultipleRegisters:
+        //            byte byteCount = frameStart[6];
+        //            numBytes = byteCount + 2;
+        //            break;
+        //        default:
+        //            string msg = $"Function code {functionCode} not supported.";
+        //            Debug.WriteLine(msg);
+        //            throw new NotImplementedException(msg);
+        //    }
+
+        //    return numBytes;
+        //}
+
+        internal int ResponseBytesToRead(byte[] frameStart)
         {
             byte functionCode = frameStart[1];
 
-            // exception response
             if (functionCode > Modbus.ExceptionOffset)
             {
                 return 1;
             }
 
-            int numBytes;
-            switch (functionCode)
+            IModbusFunctionService service = _modbusFactory.GetFunctionService(functionCode);
+
+            if (service == null)
             {
-                case ModbusFunctionCodes.ReadCoils:
-                case ModbusFunctionCodes.ReadInputs:
-                case ModbusFunctionCodes.ReadHoldingRegisters:
-                case ModbusFunctionCodes.ReadInputRegisters:
-                    numBytes = frameStart[2] + 1;
-                    break;
-                case ModbusFunctionCodes.WriteSingleCoil:
-                case ModbusFunctionCodes.WriteSingleRegister:
-                case ModbusFunctionCodes.WriteMultipleCoils:
-                case ModbusFunctionCodes.WriteMultipleRegisters:
-                case ModbusFunctionCodes.Diagnostics:
-                    numBytes = 4;
-                    break;
-                default:
-                    string msg = $"Function code {functionCode} not supported.";
-                    Debug.WriteLine(msg);
-                    throw new NotImplementedException(msg);
+                string msg = $"Function code {functionCode} not supported.";
+                Debug.WriteLine(msg);
+                throw new NotImplementedException(msg);
             }
 
-            return numBytes;
+            return service.GetRtuResponseBytesToRead(frameStart);
         }
+
+        //public static int ResponseBytesToRead(byte[] frameStart)
+        //{
+        //    byte functionCode = frameStart[1];
+
+        //    // exception response
+        //    if (functionCode > Modbus.ExceptionOffset)
+        //    {
+        //        return 1;
+        //    }
+
+        //    int numBytes;
+        //    switch (functionCode)
+        //    {
+        //        case ModbusFunctionCodes.ReadCoils:
+        //        case ModbusFunctionCodes.ReadInputs:
+        //        case ModbusFunctionCodes.ReadHoldingRegisters:
+        //        case ModbusFunctionCodes.ReadInputRegisters:
+        //            numBytes = frameStart[2] + 1;
+        //            break;
+        //        case ModbusFunctionCodes.WriteSingleCoil:
+        //        case ModbusFunctionCodes.WriteSingleRegister:
+        //        case ModbusFunctionCodes.WriteMultipleCoils:
+        //        case ModbusFunctionCodes.WriteMultipleRegisters:
+        //        case ModbusFunctionCodes.Diagnostics:
+        //            numBytes = 4;
+        //            break;
+        //        default:
+        //            string msg = $"Function code {functionCode} not supported.";
+        //            Debug.WriteLine(msg);
+        //            throw new NotImplementedException(msg);
+        //    }
+
+        //    return numBytes;
+        //}
 
         public virtual byte[] Read(int count)
         {
@@ -122,6 +159,8 @@ namespace NModbus.IO
 
         public override IModbusMessage ReadResponse<T>()
         {
+
+
             byte[] frameStart = Read(ResponseFrameStartLength);
             byte[] frameEnd = Read(ResponseBytesToRead(frameStart));
             byte[] frame = frameStart.Concat(frameEnd).ToArray();
