@@ -5,7 +5,7 @@ NModbus
 
 
 |           |Build Status|
-|-----------|:----------:|:-----------:|
+|-----------|:----------:|
 |**MS .NET**|[![Build status](https://ci.appveyor.com/api/projects/status/a4r06a0owl6xf9ar/branch/NetworkedSlave?svg=true)](https://ci.appveyor.com/project/nmodbus/nmodbus/branch/NetworkedSlave)|
 
 NModbus is a C# implementation of the Modbus protocol.
