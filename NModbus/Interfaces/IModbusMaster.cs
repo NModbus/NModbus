@@ -185,5 +185,13 @@ namespace NModbus
             ushort numberOfPointsToRead,
             ushort startWriteAddress,
             ushort[] writeData);
+
+        /// <summary>
+        ///    Executes the custom message.
+        /// </summary>
+        /// <typeparam name="TResponse">The type of the response.</typeparam>
+        /// <param name="request">The request.</param>
+        TResponse ExecuteCustomMessage<TResponse>(IModbusMessage request)
+            where TResponse : IModbusMessage, new();
     }
 }
