@@ -1,4 +1,4 @@
-﻿namespace NModbus4.TestDriver
+﻿namespace NModbus.TestDriver
 {
     using System;
     using System.Net.Sockets;

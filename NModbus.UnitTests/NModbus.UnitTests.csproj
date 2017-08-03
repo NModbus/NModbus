@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp1.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>NModbus.UnitTests</AssemblyName>
-    <PackageId>NModbus4.UnitTests</PackageId>
+    <PackageId>NModbus.UnitTests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50;portable-net45+win8</PackageTargetFallback>
     <RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>

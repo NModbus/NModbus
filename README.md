@@ -34,7 +34,7 @@ Goals
 Install
 =======
 
-To install NModbus4, run the following command in the Package Manager Console
+To install NModbus, run the following command in the Package Manager Console
 
     PM> Install-Package NModbus
 
@@ -44,4 +44,4 @@ Documentation is available in chm format (NModbus.chm)
 
 License
 =======
-NModbus4 is licensed under the [MIT license](LICENSE.txt).
+NModbus is licensed under the [MIT license](LICENSE.txt).

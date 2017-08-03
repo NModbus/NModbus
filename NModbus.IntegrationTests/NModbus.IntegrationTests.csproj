@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Modbus.IntegrationTests</RootNamespace>
-    <AssemblyName>NModbus4.IntegrationTests</AssemblyName>
+    <AssemblyName>NModbus.IntegrationTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -19,7 +19,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>true</UseVSHostingProcess>
-    <CodeAnalysisRuleSet>NModbus4.IntegrationTests.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>NModbus.IntegrationTests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,7 +29,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>true</UseVSHostingProcess>
-    <CodeAnalysisRuleSet>NModbus4.IntegrationTests.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>NModbus.IntegrationTests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -80,7 +80,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NModbus\NModbus.csproj">
       <Project>{FF96B252-2B24-44A1-A09C-6401B5D7ED23}</Project>
-      <Name>NModbus4</Name>
+      <Name>NModbus</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
