@@ -16,10 +16,7 @@ namespace NModbus.Device
             _functionCode = functionCode;
         }
 
-        public byte FunctionCode
-        {
-            get { return _functionCode; }
-        }
+        public byte FunctionCode => _functionCode;
 
         public IModbusMessage HandleSlaveRequest(IModbusMessage request, ISlaveDataStore dataStore)
         {

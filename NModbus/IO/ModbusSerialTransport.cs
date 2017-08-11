@@ -22,8 +22,8 @@ namespace NModbus.IO
         /// </summary>
         public bool CheckFrame
         {
-            get { return _checkFrame; }
-            set { _checkFrame = value; }
+            get => _checkFrame;
+            set => _checkFrame = value;
         }
 
         public void DiscardInBuffer()

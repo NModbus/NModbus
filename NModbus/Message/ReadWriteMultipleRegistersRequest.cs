@@ -51,20 +51,11 @@ namespace NModbus.Message
             }
         }
 
-        public ReadHoldingInputRegistersRequest ReadRequest
-        {
-            get { return _readRequest; }
-        }
+        public ReadHoldingInputRegistersRequest ReadRequest => _readRequest;
 
-        public WriteMultipleRegistersRequest WriteRequest
-        {
-            get { return _writeRequest; }
-        }
+        public WriteMultipleRegistersRequest WriteRequest => _writeRequest;
 
-        public override int MinimumFrameSize
-        {
-            get { return 11; }
-        }
+        public override int MinimumFrameSize => 11;
 
         public override string ToString()
         {

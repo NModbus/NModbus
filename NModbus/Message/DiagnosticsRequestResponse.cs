@@ -21,16 +21,13 @@ namespace NModbus.Message
             Data = data;
         }
 
-        public override int MinimumFrameSize
-        {
-            get { return 6; }
-        }
+        public override int MinimumFrameSize => 6;
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "May implement addtional sub function codes in the future.")]
         public ushort SubFunctionCode
         {
-            get { return MessageImpl.SubFunctionCode.Value; }
-            set { MessageImpl.SubFunctionCode = value; }
+            get => MessageImpl.SubFunctionCode.Value;
+            set => MessageImpl.SubFunctionCode = value;
         }
 
         public override string ToString()

@@ -7,24 +7,12 @@
         private readonly IPointSource<bool> _coilDiscretes = new DefaultPointSource<bool>();
         private readonly IPointSource<bool> _coilInputs = new DefaultPointSource<bool>();
 
-        public IPointSource<ushort> HoldingRegisters
-        {
-            get { return _holdingRegisters; }
-        }
+        public IPointSource<ushort> HoldingRegisters => _holdingRegisters;
 
-        public IPointSource<ushort> InputRegisters
-        {
-            get { return _inputRegisters; }
-        }
+        public IPointSource<ushort> InputRegisters => _inputRegisters;
 
-        public IPointSource<bool> CoilDiscretes
-        {
-            get { return _coilDiscretes; }
-        }
+        public IPointSource<bool> CoilDiscretes => _coilDiscretes;
 
-        public IPointSource<bool> CoilInputs
-        {
-            get { return _coilInputs; }
-        }
+        public IPointSource<bool> CoilInputs => _coilInputs;
     }
 }

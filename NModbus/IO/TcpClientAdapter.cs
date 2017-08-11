@@ -20,21 +20,18 @@ namespace NModbus.IO
             _tcpClient = tcpClient;
         }
 
-        public int InfiniteTimeout
-        {
-            get { return Timeout.Infinite; }
-        }
+        public int InfiniteTimeout => Timeout.Infinite;
 
         public int ReadTimeout
         {
-            get { return _tcpClient.GetStream().ReadTimeout; }
-            set { _tcpClient.GetStream().ReadTimeout = value; }
+            get => _tcpClient.GetStream().ReadTimeout;
+            set => _tcpClient.GetStream().ReadTimeout = value;
         }
 
         public int WriteTimeout
         {
-            get { return _tcpClient.GetStream().WriteTimeout; }
-            set { _tcpClient.GetStream().WriteTimeout = value; }
+            get => _tcpClient.GetStream().WriteTimeout;
+            set => _tcpClient.GetStream().WriteTimeout = value;
         }
 
         public void Write(byte[] buffer, int offset, int size)

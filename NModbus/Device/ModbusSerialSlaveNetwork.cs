@@ -17,10 +17,7 @@ namespace NModbus.Device
             _serialTransport = transport;
         }
 
-        private IModbusSerialTransport SerialTransport
-        {
-            get { return _serialTransport; }
-        }
+        private IModbusSerialTransport SerialTransport => _serialTransport;
 
         public override async Task ListenAsync()
         {

@@ -28,21 +28,18 @@ namespace NModbus.IO
             _udpClient = udpClient;
         }
 
-        public int InfiniteTimeout
-        {
-            get { return Timeout.Infinite; }
-        }
+        public int InfiniteTimeout => Timeout.Infinite;
 
         public int ReadTimeout
         {
-            get { return _udpClient.Client.ReceiveTimeout; }
-            set { _udpClient.Client.ReceiveTimeout = value; }
+            get => _udpClient.Client.ReceiveTimeout;
+            set => _udpClient.Client.ReceiveTimeout = value;
         }
 
         public int WriteTimeout
         {
-            get { return _udpClient.Client.SendTimeout; }
-            set { _udpClient.Client.SendTimeout = value; }
+            get => _udpClient.Client.SendTimeout;
+            set => _udpClient.Client.SendTimeout = value;
         }
 
         public void DiscardInBuffer()

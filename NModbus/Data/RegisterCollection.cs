@@ -66,10 +66,7 @@ namespace NModbus.Data
         /// <summary>
         ///     Gets the byte count.
         /// </summary>
-        public byte ByteCount
-        {
-            get { return (byte)(Count * 2); }
-        }
+        public byte ByteCount => (byte)(Count * 2);
 
         /// <summary>
         ///     Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.

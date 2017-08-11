@@ -71,10 +71,7 @@ namespace NModbus.Utility
         /// <summary>
         ///     Gets the discriminated value option set for this instance.
         /// </summary>
-        public DiscriminatedUnionOption Option
-        {
-            get { return this.option; }
-        }
+        public DiscriminatedUnionOption Option => this.option;
 
         /// <summary>
         ///     Factory method for creating DiscriminatedUnion with option A set.

@@ -18,10 +18,7 @@ namespace NModbus.Device
         /// <summary>
         ///     Gets the Modbus Transport.
         /// </summary>
-        public IModbusTransport Transport
-        {
-            get { return _transport; }
-        }
+        public IModbusTransport Transport => _transport;
 
         /// <summary>
         ///     Releases unmanaged and - optionally - managed resources.

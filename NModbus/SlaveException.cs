@@ -111,28 +111,19 @@ namespace NModbus
         ///     Gets the response function code that caused the exception to occur, or 0.
         /// </summary>
         /// <value>The function code.</value>
-        public byte FunctionCode
-        {
-            get { return _slaveExceptionResponse != null ? _slaveExceptionResponse.FunctionCode : (byte)0; }
-        }
+        public byte FunctionCode => _slaveExceptionResponse != null ? _slaveExceptionResponse.FunctionCode : (byte)0;
 
         /// <summary>
         ///     Gets the slave exception code, or 0.
         /// </summary>
         /// <value>The slave exception code.</value>
-        public byte SlaveExceptionCode
-        {
-            get { return _slaveExceptionResponse != null ? _slaveExceptionResponse.SlaveExceptionCode : (byte)0; }
-        }
+        public byte SlaveExceptionCode => _slaveExceptionResponse != null ? _slaveExceptionResponse.SlaveExceptionCode : (byte)0;
 
         /// <summary>
         ///     Gets the slave address, or 0.
         /// </summary>
         /// <value>The slave address.</value>
-        public byte SlaveAddress
-        {
-            get { return _slaveExceptionResponse != null ? _slaveExceptionResponse.SlaveAddress : (byte)0; }
-        }
+        public byte SlaveAddress => _slaveExceptionResponse != null ? _slaveExceptionResponse.SlaveAddress : (byte)0;
 
 #if NET46
         /// <summary>

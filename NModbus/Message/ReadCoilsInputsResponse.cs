@@ -20,14 +20,11 @@ namespace NModbus.Message
 
         public byte ByteCount
         {
-            get { return MessageImpl.ByteCount.Value; }
-            set { MessageImpl.ByteCount = value; }
+            get => MessageImpl.ByteCount.Value;
+            set => MessageImpl.ByteCount = value;
         }
 
-        public override int MinimumFrameSize
-        {
-            get { return 3; }
-        }
+        public override int MinimumFrameSize => 3;
 
         public override string ToString()
         {

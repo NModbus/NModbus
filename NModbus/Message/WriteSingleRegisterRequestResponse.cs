@@ -20,15 +20,12 @@ namespace NModbus.Message
             Data = new RegisterCollection(registerValue);
         }
 
-        public override int MinimumFrameSize
-        {
-            get { return 6; }
-        }
+        public override int MinimumFrameSize => 6;
 
         public ushort StartAddress
         {
-            get { return MessageImpl.StartAddress.Value; }
-            set { MessageImpl.StartAddress = value; }
+            get => MessageImpl.StartAddress.Value;
+            set => MessageImpl.StartAddress = value;
         }
 
         public override string ToString()

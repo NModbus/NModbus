@@ -72,7 +72,7 @@ namespace NModbus
             if (dataStore == null)
                 dataStore = new DefaultSlaveDataStore();
 
-            return new NetworkedSlave(unitId, dataStore, GetAllFunctionServices());
+            return new ModbusSlave(unitId, dataStore, GetAllFunctionServices());
         }
 
         public IModbusSlaveNetwork CreateSlaveNetwork(IModbusRtuTransport transport)

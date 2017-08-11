@@ -49,20 +49,11 @@ namespace NModbus.Device
         /// </summary>
         public event EventHandler<TcpConnectionEventArgs> ModbusMasterTcpConnectionClosed;
 
-        public string EndPoint
-        {
-            get { return _endPoint; }
-        }
+        public string EndPoint => _endPoint;
 
-        public Stream Stream
-        {
-            get { return _stream; }
-        }
+        public Stream Stream => _stream;
 
-        public TcpClient TcpClient
-        {
-            get { return _client; }
-        }
+        public TcpClient TcpClient => _client;
 
         protected override void Dispose(bool disposing)
         {

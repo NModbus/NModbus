@@ -18,15 +18,12 @@ namespace NModbus.Message
             SlaveExceptionCode = exceptionCode;
         }
 
-        public override int MinimumFrameSize
-        {
-            get { return 3; }
-        }
+        public override int MinimumFrameSize => 3;
 
         public byte SlaveExceptionCode
         {
-            get { return MessageImpl.ExceptionCode.Value; }
-            set { MessageImpl.ExceptionCode = value; }
+            get => MessageImpl.ExceptionCode.Value;
+            set => MessageImpl.ExceptionCode = value;
         }
 
         /// <summary>

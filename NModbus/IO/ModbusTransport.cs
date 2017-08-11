@@ -38,8 +38,8 @@ namespace NModbus.IO
         /// </summary>
         public int Retries
         {
-            get { return _retries; }
-            set { _retries = value; }
+            get => _retries;
+            set => _retries = value;
         }
 
         /// <summary>
@@ -60,10 +60,7 @@ namespace NModbus.IO
         /// </summary>
         public int WaitToRetryMilliseconds
         {
-            get
-            {
-                return _waitToRetryMilliseconds;
-            }
+            get => _waitToRetryMilliseconds;
 
             set
             {
@@ -81,8 +78,8 @@ namespace NModbus.IO
         /// </summary>
         public int ReadTimeout
         {
-            get { return StreamResource.ReadTimeout; }
-            set { StreamResource.ReadTimeout = value; }
+            get => StreamResource.ReadTimeout;
+            set => StreamResource.ReadTimeout = value;
         }
 
         /// <summary>
@@ -90,17 +87,14 @@ namespace NModbus.IO
         /// </summary>
         public int WriteTimeout
         {
-            get { return StreamResource.WriteTimeout; }
-            set { StreamResource.WriteTimeout = value; }
+            get => StreamResource.WriteTimeout;
+            set => StreamResource.WriteTimeout = value;
         }
 
         /// <summary>
         ///     Gets the stream resource.
         /// </summary>
-        public IStreamResource StreamResource
-        {
-            get { return _streamResource; }
-        }
+        public IStreamResource StreamResource => _streamResource;
 
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

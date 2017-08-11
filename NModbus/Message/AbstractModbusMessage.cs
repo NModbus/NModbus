@@ -27,38 +27,29 @@ namespace NModbus.Message
 
         public ushort TransactionId
         {
-            get { return _messageImpl.TransactionId; }
-            set { _messageImpl.TransactionId = value; }
+            get => _messageImpl.TransactionId;
+            set => _messageImpl.TransactionId = value;
         }
 
         public byte FunctionCode
         {
-            get { return _messageImpl.FunctionCode; }
-            set { _messageImpl.FunctionCode = value; }
+            get => _messageImpl.FunctionCode;
+            set => _messageImpl.FunctionCode = value;
         }
 
         public byte SlaveAddress
         {
-            get { return _messageImpl.SlaveAddress; }
-            set { _messageImpl.SlaveAddress = value; }
+            get => _messageImpl.SlaveAddress;
+            set => _messageImpl.SlaveAddress = value;
         }
 
-        public byte[] MessageFrame
-        {
-            get { return _messageImpl.MessageFrame; }
-        }
+        public byte[] MessageFrame => _messageImpl.MessageFrame;
 
-        public virtual byte[] ProtocolDataUnit
-        {
-            get { return _messageImpl.ProtocolDataUnit; }
-        }
+        public virtual byte[] ProtocolDataUnit => _messageImpl.ProtocolDataUnit;
 
         public abstract int MinimumFrameSize { get; }
 
-        internal ModbusMessageImpl MessageImpl
-        {
-            get { return _messageImpl; }
-        }
+        internal ModbusMessageImpl MessageImpl => _messageImpl;
 
         public void Initialize(byte[] frame)
         {

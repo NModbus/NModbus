@@ -72,10 +72,7 @@ namespace NModbus
         /// <summary>
         ///     Gets the Modbus exception code to provide to the slave.
         /// </summary>
-        public byte ExceptionCode
-        {
-            get { return _exceptionCode; }
-        }
+        public byte ExceptionCode => _exceptionCode;
 
 #if NET46
         /// <summary>Sets the <see cref="SerializationInfo" /> object with the Modbus exception code and additional exception information.</summary>
