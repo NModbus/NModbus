@@ -10,7 +10,7 @@ namespace NModbus.IO
     /// <summary>
     ///     Concrete Implementor - http://en.wikipedia.org/wiki/Bridge_Pattern
     /// </summary>
-    internal class UdpClientAdapter : IStreamResource
+    public class UdpClientAdapter : IStreamResource
     {
         // strategy for cross platform r/w
         private const int MaxBufferSize = ushort.MaxValue;
