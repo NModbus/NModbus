@@ -14,6 +14,9 @@
             <group targetFramework=".NETFramework4.5">
                 <dependency id="NModbus" version="$version$" />
             </group>
+          <group targetFramework=".NETStandard2.0">
+            <dependency id="NETStandard.Library" version="1.6.0" />
+          </group>
         </dependencies>
         <frameworkAssemblies>
             <frameworkAssembly assemblyName="mscorlib" targetFramework=".NETFramework4.5" />
@@ -29,5 +32,6 @@
 
     <files>
       <file src="bin\release\net45\NModbus.Serial.*" target="lib\net45" />
+      <file src="bin\release\netstandard2.0\NModbus.Serial.*" target="lib\net45" />
     </files>
 </package>
