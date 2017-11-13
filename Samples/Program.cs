@@ -253,6 +253,39 @@ namespace Samples
             }
         }
 
+        public static void StartModbusSerialRtuSlaveWithCustomStore()
+        {
+            using (SerialPort slavePort = new SerialPort("COM2"))
+            {
+                // configure serial port
+                slavePort.BaudRate = 9600;
+                slavePort.DataBits = 8;
+                slavePort.Parity = Parity.None;
+                slavePort.StopBits = StopBits.One;
+                slavePort.Open();
+
+                var adapter = new SerialPortAdapter(slavePort);
+
+                var factory = new ModbusFactory();
+
+                // create modbus slave
+                var slaveNetwork = factory.CreateRtuSlaveNetwork(adapter);
+
+                var dataStore = new SlaveStorage();
+
+                dataStore.CoilDiscretes.StorageOperationOccurred += (sender, args) => Console.WriteLine($"Coil discretes: {args.Operation} starting at {args.StartingAddress}");
+                dataStore.CoilInputs.StorageOperationOccurred += (sender, args) => Console.WriteLine($"Coil inputs: {args.Operation} starting at {args.StartingAddress}");
+                dataStore.InputRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"Input registers: {args.Operation} starting at {args.StartingAddress}");
+                dataStore.HoldingRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"Holding registers: {args.Operation} starting at {args.StartingAddress}");
+
+                IModbusSlave slave1 = factory.CreateSlave(1, dataStore);
+
+                slaveNetwork.AddSlave(slave1);
+
+                slaveNetwork.ListenAsync().GetAwaiter().GetResult();
+            }
+        }
+
         /// <summary>
         ///     Simple Modbus serial USB ASCII slave example.
         /// </summary>
