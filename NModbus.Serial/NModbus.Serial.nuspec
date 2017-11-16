@@ -10,14 +10,16 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>NModbus Serial Class Library</description>
         <tags>modbus nmodbus serial master slave</tags>
+      
         <dependencies>
-            <group targetFramework=".NETFramework4.5">
+            <group >
                 <dependency id="NModbus" version="$version$" />
             </group>
-          <group targetFramework=".NETStandard2.0">
+          <group targetFramework="netstandard2.0">
             <dependency id="NETStandard.Library" version="1.6.0" />
           </group>
         </dependencies>
+      
         <frameworkAssemblies>
             <frameworkAssembly assemblyName="mscorlib" targetFramework=".NETFramework4.5" />
             <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.5" />
@@ -26,12 +28,25 @@
         </frameworkAssemblies>
 
         <references>
-          <reference file ="NModbus.Serial.dll" />
+          
+          <group targetFramework="net45">
+            <reference file ="NModbus.Serial.dll" />
+          </group>
+
+          <group targetFramework="uap10.0">
+            <reference file ="NModbus.Serial.UWP.dll" />
+          </group>
         </references>
     </metadata>
 
     <files>
+      
+      
       <file src="bin\release\net45\NModbus.Serial.*" target="lib\net45" />
-      <file src="bin\release\netstandard2.0\NModbus.Serial.*" target="lib\net45" />
+      
+      <file src="bin\release\netstandard2.0\NModbus.Serial.*" target="lib\netstandard2.0" />
+      
+      <!-- UWP -->
+      <file src="..\NModbus.Serial.UWP\bin\release\NModbus.Serial.UWP.*" target="lib\uap10.0" />
     </files>
 </package>
