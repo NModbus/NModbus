@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>Rich Quackenbush</Authors>
+    <Company />
+    <Description>A serial port adapter implementation for the SerialPortStream library. Please note that an additional native dll is necessary to make this work. More details can be found at: https://github.com/jcurl/SerialPortStream
+</Description>
+    <PackageProjectUrl>https://github.com/NModbus/NModbus</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/NModbus/NModbus</RepositoryUrl>
+    <PackageTags>Modbus SerialPortStream Serial</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SerialPortStream" Version="2.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NModbus\NModbus.csproj" />
+  </ItemGroup>
+
+</Project>
