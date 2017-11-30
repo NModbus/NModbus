@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 using NModbus.IO;
 using NModbus.Message;
@@ -26,13 +27,13 @@ namespace NModbus.Device
         /// <summary>
         ///     Start slave listening for requests.
         /// </summary>
-        public override async Task ListenAsync()
+        public override async Task ListenAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             Debug.WriteLine("Start Modbus Udp Server.");
 
             try
             {
-                while (true)
+                while (!cancellationToken.IsCancellationRequested)
                 {
                     UdpReceiveResult receiveResult = await _udpClient.ReceiveAsync().ConfigureAwait(false);
                     IPEndPoint masterEndPoint = receiveResult.RemoteEndPoint;

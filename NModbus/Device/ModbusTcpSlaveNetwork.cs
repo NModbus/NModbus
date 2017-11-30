@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 using NModbus.IO;
 
@@ -108,13 +109,13 @@ namespace NModbus.Device
         /// <summary>
         ///     Start slave listening for requests.
         /// </summary>
-        public override async Task ListenAsync()
+        public override async Task ListenAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             Debug.WriteLine("Start Modbus Tcp Server.");
             // TODO: add state {stoped, listening} and check it before starting
             Server.Start();
 
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 TcpClient client = await Server.AcceptTcpClientAsync().ConfigureAwait(false);
                 var masterConnection = new ModbusMasterTcpConnection(client, this);

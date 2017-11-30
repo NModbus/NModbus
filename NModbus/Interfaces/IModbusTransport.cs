@@ -1,4 +1,5 @@
 ﻿using System;
+using NModbus.IO;
 
 namespace NModbus
 {
@@ -23,5 +24,7 @@ namespace NModbus
         byte[] BuildMessageFrame(IModbusMessage message);
 
         void Write(IModbusMessage message);
+
+        IStreamResource StreamResource { get; }
     }
 }

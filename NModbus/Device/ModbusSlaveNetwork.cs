@@ -2,6 +2,8 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using NModbus.Extensions;
 
@@ -19,7 +21,7 @@ namespace NModbus.Device
         /// <summary>
         /// Start slave listening for requests.
         /// </summary>
-        public abstract Task ListenAsync();
+        public abstract Task ListenAsync(CancellationToken cancellationToken = new CancellationToken());
 
         /// <summary>
         /// Apply the request.
@@ -27,17 +29,38 @@ namespace NModbus.Device
         /// <param name="request"></param>
         protected IModbusMessage ApplyRequest(IModbusMessage request)
         {
-            IModbusSlave slave = GetSlave(request.SlaveAddress);
-
-            // only service requests addressed to our slaves
-            if (slave == null)
+            //Check for broadcast requests
+            if (request.SlaveAddress == 0)
             {
-                Debug.WriteLine($"NModbus Slave Network ignoring request intended for NModbus Slave {request.SlaveAddress}");
+                //Grab each slave
+                foreach (var slave in _slaves.Values)
+                {
+                    try
+                    {
+                        //Ignore the response
+                        slave.ApplyRequest(request);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Error applying request to slave {slave.UnitId}: {ex.Message}");
+                    }
+                }
             }
             else
             {
-                // perform action
-                return slave.ApplyRequest(request);
+                //Attempt to find a slave for this address
+                IModbusSlave slave = GetSlave(request.SlaveAddress);
+
+                // only service requests addressed to our slaves
+                if (slave == null)
+                {
+                    Debug.WriteLine($"NModbus Slave Network ignoring request intended for NModbus Slave {request.SlaveAddress}");
+                }
+                else
+                {
+                    // perform action
+                    return slave.ApplyRequest(request);
+                }
             }
 
             return null;

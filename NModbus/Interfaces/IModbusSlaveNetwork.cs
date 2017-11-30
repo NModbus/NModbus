@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NModbus
@@ -12,7 +13,7 @@ namespace NModbus
         /// Listen for incoming requests.
         /// </summary>
         /// <returns></returns>
-        Task ListenAsync();
+        Task ListenAsync(CancellationToken cancellationToken = new CancellationToken());
 
         /// <summary>
         /// Add a slave to the network.

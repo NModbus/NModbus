@@ -226,7 +226,7 @@ namespace Samples
 
         public static async Task StartModbusSerialRtuSlaveNetwork()
         {
-            using (SerialPort slavePort = new SerialPort("COM5"))
+            using (SerialPort slavePort = new SerialPort("COM4"))
             {
                 // configure serial port
                 slavePort.BaudRate = 19200;
@@ -241,17 +241,43 @@ namespace Samples
 
                 IModbusSlaveNetwork modbusSlaveNetwork = factory.CreateRtuSlaveNetwork(adapter);
 
-                IModbusSlave slave1 = factory.CreateSlave(1);
-                IModbusSlave slave2 = factory.CreateSlave(2);
+                adapter.ReadTimeout = 50;
+                adapter.WriteTimeout = 500;
+
+                var acTechDataStore = new SlaveStorage();
+
+                //acTechDataStore.CoilDiscretes.StorageOperationOccurred += (sender, args) => Console.WriteLine($"Coil discretes: {args.Operation} starting at {args.StartingAddress}");
+                //acTechDataStore.CoilInputs.StorageOperationOccurred += (sender, args) => Console.WriteLine($"Coil  inputs: {args.Operation} starting at {args.StartingAddress}");
+                acTechDataStore.InputRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"ACTECH Input registers: {args.Operation} starting at {args.StartingAddress}");
+                acTechDataStore.HoldingRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"ACTECH Holding registers: {args.Operation} starting at {args.StartingAddress}");
+
+                var casHmiDataStore = new SlaveStorage();
+
+                casHmiDataStore.InputRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"CASHMI Input registers: {args.Operation} starting at {args.StartingAddress}");
+                casHmiDataStore.HoldingRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"CASHMI Holding registers: {args.Operation} starting at {args.StartingAddress}");
+
+                var danfossStore = new SlaveStorage();
+
+                danfossStore.InputRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"DANFOSS Input registers: {args.Operation} starting at {args.StartingAddress}");
+                danfossStore.HoldingRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"DANFOSS Holding registers: {args.Operation} starting at {args.StartingAddress}");
+
+                IModbusSlave slave1 = factory.CreateSlave(21, acTechDataStore);
+                IModbusSlave slave2 = factory.CreateSlave(55, casHmiDataStore);
+
+                IModbusSlave slave3 = factory.CreateSlave(1, danfossStore);
 
                 modbusSlaveNetwork.AddSlave(slave1);
+                //modbusSlaveNetwork.AddSlave(slave2);
                 modbusSlaveNetwork.AddSlave(slave2);
+                modbusSlaveNetwork.AddSlave(slave3);
 
                 await modbusSlaveNetwork.ListenAsync();
 
                 await Task.Delay(1);
             }
         }
+
+        
 
         public static void StartModbusSerialRtuSlaveWithCustomStore()
         {
@@ -279,6 +305,7 @@ namespace Samples
                 dataStore.HoldingRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"Holding registers: {args.Operation} starting at {args.StartingAddress}");
 
                 IModbusSlave slave1 = factory.CreateSlave(1, dataStore);
+                
 
                 slaveNetwork.AddSlave(slave1);
 
