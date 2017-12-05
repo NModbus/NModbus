@@ -1,6 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
+using NModbus.Logging;
 using NModbus.Utility;
 
 namespace NModbus.IO
@@ -10,8 +12,8 @@ namespace NModbus.IO
     /// </summary>
     internal class ModbusAsciiTransport : ModbusSerialTransport, IModbusAsciiTransport
     {
-        internal ModbusAsciiTransport(IStreamResource streamResource)
-            : base(streamResource)
+        internal ModbusAsciiTransport(IStreamResource streamResource, IModbusLogger logger)
+            : base(streamResource, logger)
         {
             Debug.Assert(streamResource != null, "Argument streamResource cannot be null.");
         }
@@ -55,7 +57,7 @@ namespace NModbus.IO
 
             // convert hex to bytes
             byte[] frame = ModbusUtility.HexToBytes(frameHex);
-            Debug.WriteLine($"RX: {string.Join(", ", frame)}");
+            Logger.Trace($"RX: {string.Join(", ", frame)}");
 
             if (frame.Length < 3)
             {
@@ -63,6 +65,11 @@ namespace NModbus.IO
             }
 
             return frame;
+        }
+
+        public override void IgnoreResponse()
+        {
+            ReadRequestResponse();
         }
     }
 }

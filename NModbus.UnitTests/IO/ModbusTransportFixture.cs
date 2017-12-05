@@ -4,6 +4,7 @@ using System.Linq;
 using Moq;
 using NModbus.Data;
 using NModbus.IO;
+using NModbus.Logging;
 using NModbus.Message;
 using NModbus.Utility;
 using Xunit;
@@ -18,7 +19,7 @@ namespace NModbus.UnitTests.IO
             var streamMock = new Mock<IStreamResource>(MockBehavior.Strict);
             streamMock.Setup(s => s.Dispose());
 
-            var mock = new Mock<ModbusTransport>(streamMock.Object) { CallBase = true };
+            var mock = new Mock<ModbusTransport>(streamMock.Object, NullModbusLogger.Instance) { CallBase = true };
 
             using (var transport = mock.Object)
             {
@@ -38,7 +39,7 @@ namespace NModbus.UnitTests.IO
             mock.SetupProperty(s => s.ReadTimeout, expectedReadTimeout);
             mock.SetupProperty(s => s.WriteTimeout, expectedWriteTimeout);
 
-            var transport = new Mock<ModbusTransport>(MockBehavior.Strict, mock.Object) { CallBase = true }.Object;
+            var transport = new Mock<ModbusTransport>(MockBehavior.Strict, mock.Object, NullModbusLogger.Instance) { CallBase = true }.Object;
 
             Assert.Equal(expectedReadTimeout, transport.ReadTimeout);
             Assert.Equal(expectedWriteTimeout, transport.WriteTimeout);
@@ -56,7 +57,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void WaitToRetryMilliseconds()
         {
-            var mock = new Mock<ModbusTransport>(MockBehavior.Strict) { CallBase = true };
+            var mock = new Mock<ModbusTransport>(MockBehavior.Strict, NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
 
             Assert.Equal(Modbus.DefaultWaitToRetryMilliseconds, transport.WaitToRetryMilliseconds);
@@ -72,7 +73,7 @@ namespace NModbus.UnitTests.IO
         public void UnicastMessage()
         {
             var data = new DiscreteCollection(true, false, true, false, false, false, false, false);
-            var mock = new Mock<ModbusTransport>() { CallBase = true };
+            var mock = new Mock<ModbusTransport>(NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
 
             mock.Setup(t => t.Write(It.IsNotNull<IModbusMessage>()));
@@ -92,7 +93,7 @@ namespace NModbus.UnitTests.IO
         public void UnicastMessage_WrongResponseFunctionCode()
         {
             var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadInputs, 2, 3, 4);
-            var mock = new Mock<ModbusTransport>() { CallBase = true };
+            var mock = new Mock<ModbusTransport>(NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
             int writeCallsCount = 0;
             int readResponseCallsCount = 0;
@@ -113,7 +114,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void UnicastMessage_ErrorSlaveException()
         {
-            var mock = new Mock<ModbusTransport>() { CallBase = true };
+            var mock = new Mock<ModbusTransport>(NullModbusLogger.Instance) { CallBase = true };
             var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadInputs, 2, 3, 4);
             var transport = mock.Object;
 
@@ -131,7 +132,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void UnicastMessage_AcknowlegeSlaveException()
         {
-            var mock = new Mock<ModbusTransport>() { CallBase = true };
+            var mock = new Mock<ModbusTransport>(NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
             int callsCount = 0;
 
@@ -170,7 +171,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void UnicastMessage_SlaveDeviceBusySlaveException()
         {
-            var mock = new Mock<ModbusTransport>() { CallBase = true };
+            var mock = new Mock<ModbusTransport>(NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
             int writeCallsCount = 0;
             int readResponseCallsCount = 0;
@@ -215,7 +216,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void UnicastMessage_SlaveDeviceBusySlaveExceptionDoesNotFailAfterExceedingRetries()
         {
-            var mock = new Mock<ModbusTransport>() { CallBase = true };
+            var mock = new Mock<ModbusTransport>(NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
             int writeCallsCount = 0;
             int readResponseCallsCount = 0;
@@ -291,7 +292,7 @@ namespace NModbus.UnitTests.IO
         [InlineData(typeof(FormatException))]
         public void UnicastMessage_TooManyFailingExceptions(Type exceptionType)
         {
-            var mock = new Mock<ModbusTransport>() { CallBase = true };
+            var mock = new Mock<ModbusTransport>(NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
             int writeCallsCount = 0;
             int readResponseCallsCount = 0;
@@ -314,7 +315,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void UnicastMessage_TimeoutException()
         {
-            var mock = new Mock<ModbusTransport>() { CallBase = true };
+            var mock = new Mock<ModbusTransport>(NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
             int writeCallsCount = 0;
             int readResponseCallsCount = 0;
@@ -336,7 +337,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void UnicastMessage_Retries()
         {
-            var mock = new Mock<ModbusTransport>() { CallBase = true };
+            var mock = new Mock<ModbusTransport>(NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
             int writeCallsCount = 0;
             int readResponseCallsCount = 0;
@@ -360,7 +361,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void UnicastMessage_ReReads_IfShouldRetryReturnTrue()
         {
-            var mock = new Mock<ModbusTransport>() { CallBase = true };
+            var mock = new Mock<ModbusTransport>(NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
             var expectedResponse = new ReadHoldingInputRegistersResponse(ModbusFunctionCodes.ReadHoldingRegisters, 1, new RegisterCollection(1));
             int readResponseCallsCount = 0;
@@ -393,7 +394,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void CreateResponse_SlaveException()
         {
-            var mock = new Mock<ModbusTransport>() { CallBase = true };
+            var mock = new Mock<ModbusTransport>(NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
 
             byte[] frame = { 2, 129, 2 };
@@ -405,7 +406,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void ShouldRetryResponse_ReturnsFalse_IfDifferentMessage()
         {
-            var mock = new Mock<ModbusTransport>(MockBehavior.Strict) { CallBase = true };
+            var mock = new Mock<ModbusTransport>(MockBehavior.Strict, NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
 
             IModbusMessage request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 2, 1, 1);
@@ -417,7 +418,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void ValidateResponse_MismatchingFunctionCodes()
         {
-            var mock = new Mock<ModbusTransport>(MockBehavior.Strict) { CallBase = true };
+            var mock = new Mock<ModbusTransport>(MockBehavior.Strict, NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
 
             IModbusMessage request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 1);
@@ -429,7 +430,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void ValidateResponse_MismatchingSlaveAddress()
         {
-            var mock = new Mock<ModbusTransport>(MockBehavior.Strict) { CallBase = true };
+            var mock = new Mock<ModbusTransport>(MockBehavior.Strict, NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
 
             IModbusMessage request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 42, 1, 1);
@@ -441,7 +442,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void ValidateResponse_CallsOnValidateResponse()
         {
-            var mock = new Mock<ModbusTransport>(MockBehavior.Strict) { CallBase = true };
+            var mock = new Mock<ModbusTransport>(MockBehavior.Strict, NullModbusLogger.Instance) { CallBase = true };
             var transport = mock.Object;
 
             mock.Setup(t => t.OnValidateResponse(It.IsNotNull<IModbusMessage>(), It.IsNotNull<IModbusMessage>()));

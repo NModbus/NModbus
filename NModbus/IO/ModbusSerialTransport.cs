@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using NModbus.Extensions;
+using NModbus.Logging;
 
 namespace NModbus.IO
 {
@@ -11,8 +13,8 @@ namespace NModbus.IO
     {
         private bool _checkFrame = true;
 
-        internal ModbusSerialTransport(IStreamResource streamResource)
-            : base(streamResource)
+        internal ModbusSerialTransport(IStreamResource streamResource, IModbusLogger logger)
+            : base(streamResource, logger)
         {
             Debug.Assert(streamResource != null, "Argument streamResource cannot be null.");
         }
@@ -36,7 +38,9 @@ namespace NModbus.IO
             DiscardInBuffer();
 
             byte[] frame = BuildMessageFrame(message);
-            Debug.WriteLine($"TX: {string.Join(", ", frame)}");
+
+            Logger.LogFrameTx(frame);
+            
             StreamResource.Write(frame, 0, frame.Length);
         }
 
@@ -48,12 +52,14 @@ namespace NModbus.IO
             if (CheckFrame && !ChecksumsMatch(response, frame))
             {
                 string msg = $"Checksums failed to match {string.Join(", ", response.MessageFrame)} != {string.Join(", ", frame)}";
-                Debug.WriteLine(msg);
+                Logger.Warning(msg);
                 throw new IOException(msg);
             }
 
             return response;
         }
+
+        public abstract void IgnoreResponse();
 
         public abstract bool ChecksumsMatch(IModbusMessage message, byte[] messageFrame);
 

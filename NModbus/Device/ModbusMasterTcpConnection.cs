@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using NModbus.IO;
 using NModbus.Message;
+using NModbus.Logging;
 
 namespace NModbus.Device
 {
@@ -15,6 +16,7 @@ namespace NModbus.Device
     /// </summary>
     internal class ModbusMasterTcpConnection : ModbusDevice, IDisposable
     {
+        
         private readonly TcpClient _client;
         private readonly string _endPoint;
         private readonly Stream _stream;
@@ -24,23 +26,14 @@ namespace NModbus.Device
         private readonly byte[] _mbapHeader = new byte[6];
         private byte[] _messageFrame;
 
-        public ModbusMasterTcpConnection(TcpClient client, IModbusSlaveNetwork slaveNetwork)
-            : base(new ModbusIpTransport(new TcpClientAdapter(client)))
+        public ModbusMasterTcpConnection(TcpClient client, IModbusSlaveNetwork slaveNetwork, IModbusLogger logger)
+            : base(new ModbusIpTransport(new TcpClientAdapter(client), logger))
         {
-            if (client == null)
-            {
-                throw new ArgumentNullException(nameof(client));
-            }
-
-            if (slaveNetwork == null)
-            {
-                throw new ArgumentNullException(nameof(slaveNetwork));
-            }
-
-            _client = client;
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _client = client ?? throw new ArgumentNullException(nameof(client));
             _endPoint = client.Client.RemoteEndPoint.ToString();
             _stream = client.GetStream();
-            _slaveNetwork = slaveNetwork;
+            _slaveNetwork = slaveNetwork ?? throw new ArgumentNullException(nameof(slaveNetwork));
             _requestHandlerTask = Task.Run((Func<Task>)HandleRequestAsync);
         }
 
@@ -48,6 +41,8 @@ namespace NModbus.Device
         ///     Occurs when a Modbus master TCP connection is closed.
         /// </summary>
         public event EventHandler<TcpConnectionEventArgs> ModbusMasterTcpConnectionClosed;
+
+        public IModbusLogger Logger { get; }
 
         public string EndPoint => _endPoint;
 
@@ -69,31 +64,31 @@ namespace NModbus.Device
         {
             while (true)
             {
-                Debug.WriteLine($"Begin reading header from Master at IP: {EndPoint}");
+                Logger.Debug($"Begin reading header from Master at IP: {EndPoint}");
 
                 int readBytes = await Stream.ReadAsync(_mbapHeader, 0, 6).ConfigureAwait(false);
                 if (readBytes == 0)
                 {
-                    Debug.WriteLine($"0 bytes read, Master at {EndPoint} has closed Socket connection.");
+                    Logger.Debug($"0 bytes read, Master at {EndPoint} has closed Socket connection.");
                     ModbusMasterTcpConnectionClosed?.Invoke(this, new TcpConnectionEventArgs(EndPoint));
                     return;
                 }
 
                 ushort frameLength = (ushort)IPAddress.HostToNetworkOrder(BitConverter.ToInt16(_mbapHeader, 4));
-                Debug.WriteLine($"Master at {EndPoint} sent header: \"{string.Join(", ", _mbapHeader)}\" with {frameLength} bytes in PDU");
+                Logger.Debug($"Master at {EndPoint} sent header: \"{string.Join(", ", _mbapHeader)}\" with {frameLength} bytes in PDU");
 
                 _messageFrame = new byte[frameLength];
                 readBytes = await Stream.ReadAsync(_messageFrame, 0, frameLength).ConfigureAwait(false);
                 if (readBytes == 0)
                 {
-                    Debug.WriteLine($"0 bytes read, Master at {EndPoint} has closed Socket connection.");
+                    Logger.Debug($"0 bytes read, Master at {EndPoint} has closed Socket connection.");
                     ModbusMasterTcpConnectionClosed?.Invoke(this, new TcpConnectionEventArgs(EndPoint));
                     return;
                 }
 
-                Debug.WriteLine($"Read frame from Master at {EndPoint} completed {readBytes} bytes");
+                Logger.Debug($"Read frame from Master at {EndPoint} completed {readBytes} bytes");
                 byte[] frame = _mbapHeader.Concat(_messageFrame).ToArray();
-                Debug.WriteLine($"RX from Master at {EndPoint}: {string.Join(", ", frame)}");
+                Logger.Trace($"RX from Master at {EndPoint}: {string.Join(", ", frame)}");
 
                 var request = ModbusMessageFactory.CreateModbusRequest(_messageFrame);
                 request.TransactionId = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(frame, 0));
@@ -110,7 +105,7 @@ namespace NModbus.Device
 
                     // write response
                     byte[] responseFrame = Transport.BuildMessageFrame(response);
-                    Debug.WriteLine($"TX to Master at {EndPoint}: {string.Join(", ", responseFrame)}");
+                    Logger.Information($"TX to Master at {EndPoint}: {string.Join(", ", responseFrame)}");
                     await Stream.WriteAsync(responseFrame, 0, responseFrame.Length).ConfigureAwait(false);
                 }
             }

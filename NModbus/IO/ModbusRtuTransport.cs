@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using NModbus.Extensions;
+using NModbus.Logging;
 using NModbus.Utility;
 
 namespace NModbus.IO
@@ -16,8 +18,8 @@ namespace NModbus.IO
 
         public const int ResponseFrameStartLength = 4;
 
-        internal ModbusRtuTransport(IStreamResource streamResource, IModbusFactory modbusFactory)
-            : base(streamResource)
+        internal ModbusRtuTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger)
+            : base(streamResource, logger)
         {
             if (modbusFactory == null) throw new ArgumentNullException(nameof(modbusFactory));
             _modbusFactory = modbusFactory;
@@ -33,7 +35,7 @@ namespace NModbus.IO
             if (service == null)
             {
                 string msg = $"Function code {functionCode} not supported.";
-                Debug.WriteLine(msg);
+                Logger.Warning(msg);
                 throw new NotImplementedException(msg);
             }
 
@@ -54,7 +56,7 @@ namespace NModbus.IO
             if (service == null)
             {
                 string msg = $"Function code {functionCode} not supported.";
-                Debug.WriteLine(msg);
+                Logger.Warning(msg);
                 throw new NotImplementedException(msg);
             }
 
@@ -94,14 +96,27 @@ namespace NModbus.IO
 
         public override IModbusMessage ReadResponse<T>()
         {
+            byte[] frame = ReadResponse();
 
+            Logger.LogFrameRx(frame);
 
+            return CreateResponse<T>(frame);
+        }
+
+        private byte[] ReadResponse()
+        {
             byte[] frameStart = Read(ResponseFrameStartLength);
             byte[] frameEnd = Read(ResponseBytesToRead(frameStart));
             byte[] frame = frameStart.Concat(frameEnd).ToArray();
-            Debug.WriteLine($"RX: {string.Join(", ", frame)}");
 
-            return CreateResponse<T>(frame);
+            return frame;
+        }
+
+        public override void IgnoreResponse()
+        {
+            byte[] frame = ReadResponse();
+
+            Logger.LogFrameIgnoreRx(frame);
         }
 
         public override byte[] ReadRequest()
@@ -109,7 +124,8 @@ namespace NModbus.IO
             byte[] frameStart = Read(RequestFrameStartLength);
             byte[] frameEnd = Read(RequestBytesToRead(frameStart));
             byte[] frame = frameStart.Concat(frameEnd).ToArray();
-            Debug.WriteLine($"RX: {string.Join(", ", frame)}");
+
+            Logger.LogFrameRx(frame);
 
             return frame;
         }

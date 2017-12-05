@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using NModbus.IO;
+using NModbus.Logging;
 using NModbus.Message;
 using NModbus.Unme.Common;
 
@@ -18,8 +19,8 @@ namespace NModbus.Device
     {
         private readonly UdpClient _udpClient;
 
-        public ModbusUdpSlaveNetwork(UdpClient udpClient)
-            : base(new ModbusIpTransport(new UdpClientAdapter(udpClient)))
+        public ModbusUdpSlaveNetwork(UdpClient udpClient, IModbusLogger logger)
+            : base(new ModbusIpTransport(new UdpClientAdapter(udpClient), logger), logger)
         {
             _udpClient = udpClient;
         }
@@ -29,7 +30,7 @@ namespace NModbus.Device
         /// </summary>
         public override async Task ListenAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            Debug.WriteLine("Start Modbus Udp Server.");
+            Logger.Information("Start Modbus Udp Server.");
 
             try
             {
@@ -40,7 +41,8 @@ namespace NModbus.Device
                     byte[] frame = receiveResult.Buffer;
 
                     Debug.WriteLine($"Read Frame completed {frame.Length} bytes");
-                    Debug.WriteLine($"RX: {string.Join(", ", frame)}");
+
+                    Logger.LogFrameRx(frame);
 
                     IModbusMessage request =
                         ModbusMessageFactory.CreateModbusRequest(frame.Slice(6, frame.Length - 6).ToArray());
@@ -55,7 +57,9 @@ namespace NModbus.Device
 
                         // write response
                         byte[] responseFrame = Transport.BuildMessageFrame(response);
-                        Debug.WriteLine($"TX: {string.Join(", ", responseFrame)}");
+
+                        Logger.LogFrameTx(frame);
+
                         await _udpClient.SendAsync(responseFrame, responseFrame.Length, masterEndPoint)
                             .ConfigureAwait(false);
                     }

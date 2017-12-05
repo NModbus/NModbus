@@ -7,11 +7,14 @@ using NModbus.Extensions;
 using NModbus.Data;
 using NModbus.Device;
 using NModbus.IO;
+using NModbus.Logging;
 
 namespace NModbus
 {
     public class ModbusFactory : IModbusFactory
     {
+        private readonly IModbusLogger _logger;
+
         /// <summary>
         /// The "built-in" message handlers.
         /// </summary>
@@ -37,6 +40,8 @@ namespace NModbus
         public ModbusFactory()
         {
             _functionServices = BuiltInFunctionServices.ToDictionary(s => s.FunctionCode, s => s);
+
+            _logger = NullModbusLogger.Instance;
         }
 
         /// <summary>
@@ -44,8 +49,14 @@ namespace NModbus
         /// </summary>
         /// <param name="functionServices">User provided function services.</param>
         /// <param name="includeBuiltIn">If true, the built in function services are included. Otherwise, all function services will come from the functionService parameter.</param>
-        public ModbusFactory(IEnumerable<IModbusFunctionService> functionServices, bool includeBuiltIn)
+        /// <param name="logger">Logger</param>
+        public ModbusFactory(
+            IEnumerable<IModbusFunctionService> functionServices = null, 
+            bool includeBuiltIn = true, 
+            IModbusLogger logger = null)
         {
+            _logger = logger ?? NullModbusLogger.Instance;
+
             //Determine if we're including the built in services
             if (includeBuiltIn)
             {
@@ -59,11 +70,14 @@ namespace NModbus
                 _functionServices = new Dictionary<byte, IModbusFunctionService>();
             }
 
-            //Add and replace the provided function services as necessary.
-            foreach (IModbusFunctionService service in functionServices)
+            if (functionServices != null)
             {
-                //This will add or replace the service.
-                _functionServices[service.FunctionCode] = service;
+                //Add and replace the provided function services as necessary.
+                foreach (IModbusFunctionService service in functionServices)
+                {
+                    //This will add or replace the service.
+                    _functionServices[service.FunctionCode] = service;
+                }
             }
         }
 
@@ -77,32 +91,32 @@ namespace NModbus
 
         public IModbusSlaveNetwork CreateSlaveNetwork(IModbusRtuTransport transport)
         {
-            return new ModbusSerialSlaveNetwork(transport);
+            return new ModbusSerialSlaveNetwork(transport, _logger);
         }
 
         public IModbusSlaveNetwork CreateSlaveNetwork(IModbusAsciiTransport transport)
         {
-            return new ModbusSerialSlaveNetwork(transport);
+            return new ModbusSerialSlaveNetwork(transport, _logger);
         }
 
         public IModbusSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener)
         {
-            return new ModbusTcpSlaveNetwork(tcpListener);
+            return new ModbusTcpSlaveNetwork(tcpListener, _logger);
         }
 
         public IModbusSlaveNetwork CreateSlaveNetwork(UdpClient client)
         {
-            return new ModbusUdpSlaveNetwork(client);
+            return new ModbusUdpSlaveNetwork(client, _logger);
         }
 
         public IModbusRtuTransport CreateRtuTransport(IStreamResource streamResource)
         {
-            return new ModbusRtuTransport(streamResource, this);
+            return new ModbusRtuTransport(streamResource, this, _logger);
         }
 
         public IModbusAsciiTransport CreateAsciiTransport(IStreamResource streamResource)
         {
-            return new ModbusAsciiTransport(streamResource);
+            return new ModbusAsciiTransport(streamResource, _logger);
         }
 
         public IModbusFunctionService[] GetAllFunctionServices()
@@ -121,7 +135,7 @@ namespace NModbus
         {
             var adapter = new UdpClientAdapter(client);
 
-            var transport = new ModbusIpTransport(adapter);
+            var transport = new ModbusIpTransport(adapter, _logger);
 
             return new ModbusIpMaster(transport);
         }
@@ -130,7 +144,7 @@ namespace NModbus
         {
             var adapter = new TcpClientAdapter(client);
 
-            var transport = new ModbusIpTransport(adapter);
+            var transport = new ModbusIpTransport(adapter, _logger);
 
             return new ModbusIpMaster(transport);
         }
@@ -139,9 +153,5 @@ namespace NModbus
         {
             return _functionServices.GetValueOrDefault(functionCode);
         }
-
-        
-
-        
     }
 }

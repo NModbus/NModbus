@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using NModbus.IO;
+using NModbus.Logging;
 
 namespace NModbus.Device
 {
@@ -29,8 +30,8 @@ namespace NModbus.Device
 #if TIMER
         private Timer _timer;
 #endif
-        internal ModbusTcpSlaveNetwork(TcpListener tcpListener)
-            : base(new EmptyTransport())
+        internal ModbusTcpSlaveNetwork(TcpListener tcpListener, IModbusLogger logger)
+            : base(new EmptyTransport(), logger)
         {
             if (tcpListener == null)
             {
@@ -111,14 +112,14 @@ namespace NModbus.Device
         /// </summary>
         public override async Task ListenAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            Debug.WriteLine("Start Modbus Tcp Server.");
+            Logger.Information("Start Modbus Tcp Server.");
             // TODO: add state {stoped, listening} and check it before starting
             Server.Start();
 
             while (!cancellationToken.IsCancellationRequested)
             {
                 TcpClient client = await Server.AcceptTcpClientAsync().ConfigureAwait(false);
-                var masterConnection = new ModbusMasterTcpConnection(client, this);
+                var masterConnection = new ModbusMasterTcpConnection(client, this, Logger);
                 masterConnection.ModbusMasterTcpConnectionClosed += OnMasterConnectionClosedHandler;
                 _masters.TryAdd(client.Client.RemoteEndPoint.ToString(), masterConnection);
             }
@@ -199,7 +200,7 @@ namespace NModbus.Device
                 throw new ArgumentException(msg);
             }
 
-            Debug.WriteLine($"Removed Master {e.EndPoint}");
+            Logger.Information($"Removed Master {e.EndPoint}");
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using NModbus.Logging;
 using NModbus.Message;
 using NModbus.Unme.Common;
 
@@ -21,15 +22,15 @@ namespace NModbus.IO
         /// <summary>
         ///     This constructor is called by the NullTransport.
         /// </summary>
-        internal ModbusTransport()
+        internal ModbusTransport(IModbusLogger logger)
         {
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        internal ModbusTransport(IStreamResource streamResource)
+        internal ModbusTransport(IStreamResource streamResource, IModbusLogger logger) 
+            : this(logger)
         {
-            Debug.Assert(streamResource != null, "Argument streamResource cannot be null.");
-
-            _streamResource = streamResource;
+            _streamResource = streamResource ?? throw new ArgumentNullException(nameof(streamResource));
         }
 
         /// <summary>
@@ -97,6 +98,11 @@ namespace NModbus.IO
         public IStreamResource StreamResource => _streamResource;
 
         /// <summary>
+        /// Gets the logger for this instance.
+        /// </summary>
+        protected IModbusLogger Logger { get; }
+
+        /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
@@ -134,7 +140,7 @@ namespace NModbus.IO
 
                                 if (readAgain)
                                 {
-                                    Debug.WriteLine($"Received ACKNOWLEDGE slave exception response, waiting {_waitToRetryMilliseconds} milliseconds and retrying to read response.");
+                                    Logger.Debug($"Received ACKNOWLEDGE slave exception response, waiting {_waitToRetryMilliseconds} milliseconds and retrying to read response.");
                                     Sleep(WaitToRetryMilliseconds);
                                 }
                                 else
@@ -165,7 +171,7 @@ namespace NModbus.IO
                         throw;
                     }
 
-                    Debug.WriteLine($"Received SLAVE_DEVICE_BUSY exception response, waiting {_waitToRetryMilliseconds} milliseconds and resubmitting request.");
+                    Logger.Warning($"Received SLAVE_DEVICE_BUSY exception response, waiting {_waitToRetryMilliseconds} milliseconds and resubmitting request.");
                     Sleep(WaitToRetryMilliseconds);
                 }
                 catch (Exception e)
@@ -175,7 +181,7 @@ namespace NModbus.IO
                         e is TimeoutException ||
                         e is IOException)
                     {
-                        Debug.WriteLine($"{e.GetType().Name}, {(_retries - attempt + 1)} retries remaining - {e}");
+                        Logger.Error($"{e.GetType().Name}, {(_retries - attempt + 1)} retries remaining - {e}");
 
                         if (attempt++ > _retries)
                         {

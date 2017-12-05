@@ -1,8 +1,14 @@
 ﻿using System;
+using NModbus.Logging;
+
 namespace NModbus.IO
 {
     internal class EmptyTransport : ModbusTransport
     {
+        public EmptyTransport() : base(NullModbusLogger.Instance)
+        {
+        }
+
         public override byte[] ReadRequest()
         {
             throw new NotImplementedException();
@@ -27,5 +33,9 @@ namespace NModbus.IO
         {
             throw new NotImplementedException();
         }
+
+        
+
+        
     }
 }

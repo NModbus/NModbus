@@ -3,6 +3,7 @@ using System.IO;
 using Moq;
 using NModbus.Data;
 using NModbus.IO;
+using NModbus.Logging;
 using NModbus.Message;
 using NModbus.UnitTests.Message;
 using NModbus.Utility;
@@ -17,7 +18,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void CreateResponse()
         {
-            var transport = new ModbusAsciiTransport(StreamResource);
+            var transport = new ModbusAsciiTransport(StreamResource, NullModbusLogger.Instance);
             var expectedResponse = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 2, 1, new DiscreteCollection(true, false, false, false, false, false, false, true));
             byte lrc = ModbusUtility.CalculateLrc(expectedResponse.MessageFrame);
             var response = transport.CreateResponse<ReadCoilsInputsResponse>(new byte[] { 2, ModbusFunctionCodes.ReadCoils, 1, 129, lrc });
@@ -29,7 +30,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void CreateResponseErroneousLrc()
         {
-            var transport = new ModbusAsciiTransport(StreamResource) { CheckFrame = true };
+            var transport = new ModbusAsciiTransport(StreamResource, NullModbusLogger.Instance) { CheckFrame = true };
             var frame = new byte[] { 19, ModbusFunctionCodes.ReadCoils, 0, 0, 0, 2, 115 };
 
             Assert.Throws<IOException>(
@@ -39,7 +40,7 @@ namespace NModbus.UnitTests.IO
         [Fact]
         public void CreateResponseErroneousLrcDoNotCheckFrame()
         {
-            var transport = new ModbusAsciiTransport(StreamResource) { CheckFrame = false };
+            var transport = new ModbusAsciiTransport(StreamResource, NullModbusLogger.Instance) { CheckFrame = false };
 
             transport.CreateResponse<ReadCoilsInputsResponse>(new byte[] { 19, ModbusFunctionCodes.ReadCoils, 0, 0, 0, 2, 115 });
         }
@@ -54,7 +55,7 @@ namespace NModbus.UnitTests.IO
             var mock = new Mock<IStreamResource>(MockBehavior.Strict);
             IStreamResource serialResource = mock.Object;
             var factory = new ModbusFactory();
-            var transport = new ModbusRtuTransport(serialResource, factory);
+            var transport = new ModbusRtuTransport(serialResource, factory, NullModbusLogger.Instance);
 
             mock.Setup(s => s.DiscardInBuffer());
             mock.Setup(s => s.Write(It.IsAny<byte[]>(), 0, 0));

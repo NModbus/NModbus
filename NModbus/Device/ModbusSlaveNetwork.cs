@@ -6,16 +6,24 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NModbus.Extensions;
+using NModbus.Logging;
 
 namespace NModbus.Device
 {
     internal abstract class ModbusSlaveNetwork : ModbusDevice, IModbusSlaveNetwork
     {
+        private readonly IModbusLogger _logger;
         private readonly IDictionary<byte, IModbusSlave> _slaves = new ConcurrentDictionary<byte, IModbusSlave>();
 
-        protected ModbusSlaveNetwork(IModbusTransport transport) 
+        protected ModbusSlaveNetwork(IModbusTransport transport, IModbusLogger logger) 
             : base(transport)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
+        protected IModbusLogger Logger
+        {
+            get { return _logger; }
         }
 
         /// <summary>
@@ -37,12 +45,12 @@ namespace NModbus.Device
                 {
                     try
                     {
-                        //Ignore the response
+                        //Apply the request
                         slave.ApplyRequest(request);
                     }
                     catch (Exception ex)
                     {
-                        Debug.WriteLine($"Error applying request to slave {slave.UnitId}: {ex.Message}");
+                        Logger.Error($"Error applying request to slave {slave.UnitId}: {ex.Message}");
                     }
                 }
             }
@@ -54,7 +62,7 @@ namespace NModbus.Device
                 // only service requests addressed to our slaves
                 if (slave == null)
                 {
-                    Debug.WriteLine($"NModbus Slave Network ignoring request intended for NModbus Slave {request.SlaveAddress}");
+                   // Logger.Trace($"NModbus Slave Network ignoring request intended for NModbus Slave {request.SlaveAddress}");
                 }
                 else
                 {
@@ -71,11 +79,15 @@ namespace NModbus.Device
             if (slave == null) throw new ArgumentNullException(nameof(slave));
 
             _slaves.Add(slave.UnitId, slave);
+
+            Logger.Information($"Slave {slave.UnitId} added to slave network.");
         }
 
         public void RemoveSlave(byte unitId)
         {
             _slaves.Remove(unitId);
+
+            Logger.Information($"Slave {unitId} removed from slave network.");
         }
 
         public IModbusSlave GetSlave(byte unitId)

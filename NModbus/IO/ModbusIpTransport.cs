@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using NModbus.Logging;
 using NModbus.Message;
 using NModbus.Unme.Common;
 
@@ -17,14 +18,17 @@ namespace NModbus.IO
         private static readonly object _transactionIdLock = new object();
         private ushort _transactionId;
 
-        internal ModbusIpTransport(IStreamResource streamResource)
-            : base(streamResource)
+        internal ModbusIpTransport(IStreamResource streamResource, IModbusLogger logger)
+            : base(streamResource, logger)
         {
-            Debug.Assert(streamResource != null, "Argument streamResource cannot be null.");
+            if (streamResource == null) throw new ArgumentNullException(nameof(streamResource));
         }
 
-        internal static byte[] ReadRequestResponse(IStreamResource streamResource)
+        internal static byte[] ReadRequestResponse(IStreamResource streamResource, IModbusLogger logger)
         {
+            if (streamResource == null) throw new ArgumentNullException(nameof(streamResource));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+
             // read header
             var mbapHeader = new byte[6];
             int numBytesRead = 0;
@@ -41,9 +45,9 @@ namespace NModbus.IO
                 numBytesRead += bRead;
             }
 
-            Debug.WriteLine($"MBAP header: {string.Join(", ", mbapHeader)}");
+            logger.Debug($"MBAP header: {string.Join(", ", mbapHeader)}");
             var frameLength = (ushort)IPAddress.HostToNetworkOrder(BitConverter.ToInt16(mbapHeader, 4));
-            Debug.WriteLine($"{frameLength} bytes in PDU.");
+            logger.Debug($"{frameLength} bytes in PDU.");
 
             // read message
             var messageFrame = new byte[frameLength];
@@ -61,9 +65,9 @@ namespace NModbus.IO
                 numBytesRead += bRead;
             }
 
-            Debug.WriteLine($"PDU: {frameLength}");
+            logger.Debug($"PDU: {frameLength}");
             var frame = mbapHeader.Concat(messageFrame).ToArray();
-            Debug.WriteLine($"RX: {string.Join(", ", frame)}");
+            logger.Debug($"RX: {string.Join(", ", frame)}");
 
             return frame;
         }
@@ -124,18 +128,20 @@ namespace NModbus.IO
         {
             message.TransactionId = GetNewTransactionId();
             byte[] frame = BuildMessageFrame(message);
-            Debug.WriteLine($"TX: {string.Join(", ", frame)}");
+
+            Logger.LogFrameTx(frame);
+
             StreamResource.Write(frame, 0, frame.Length);
         }
 
         public override byte[] ReadRequest()
         {
-            return ReadRequestResponse(StreamResource);
+            return ReadRequestResponse(StreamResource, Logger);
         }
 
         public override IModbusMessage ReadResponse<T>()
         {
-            return CreateMessageAndInitializeTransactionId<T>(ReadRequestResponse(StreamResource));
+            return CreateMessageAndInitializeTransactionId<T>(ReadRequestResponse(StreamResource, Logger));
         }
 
         internal override void OnValidateResponse(IModbusMessage request, IModbusMessage response)

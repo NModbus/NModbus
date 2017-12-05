@@ -7,5 +7,7 @@
         bool CheckFrame { get; set; }
 
         bool ChecksumsMatch(IModbusMessage message, byte[] messageFrame);
+
+        void IgnoreResponse();
     }
 }
