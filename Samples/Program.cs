@@ -238,7 +238,6 @@ namespace Samples
                 IModbusFactory factory = new ModbusFactory();
 
                 var adapter = new SerialPortAdapter(slavePort);
-
                 IModbusSlaveNetwork modbusSlaveNetwork = factory.CreateRtuSlaveNetwork(adapter);
 
                 adapter.ReadTimeout = 50;
