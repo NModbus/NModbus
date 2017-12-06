@@ -47,6 +47,6 @@
       <file src="bin\release\netstandard2.0\NModbus.Serial.*" target="lib\netstandard2.0" />
       
       <!-- UWP -->
-      <file src="..\NModbus.Serial.UWP\bin\release\NModbus.Serial.UWP.*" target="lib\uap10.0" />
+      <file src="..\NModbus.Serial.UWP\bin\Release\NModbus.Serial.UWP.*" target="lib\uap10.0" />
     </files>
 </package>
