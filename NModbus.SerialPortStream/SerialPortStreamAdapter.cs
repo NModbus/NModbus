@@ -1,23 +1,21 @@
 ﻿using System;
-using RJCP.IO.Ports;
 using NModbus.IO;
 
-// ReSharper disable once CheckNamespace
-namespace NModbus.Serial
+namespace NModbus.SerialPortStream
 {
     /// <summary>
     /// An adapter for the SerialPortStream class. Useful for getting serial port access on non-Windows devices.
     /// </summary>
     public class SerialPortStreamAdapter : IStreamResource
     {
-        private readonly SerialPortStream _serialPortStream;
+        private readonly RJCP.IO.Ports.SerialPortStream _serialPortStream;
 
-        public SerialPortStreamAdapter(SerialPortStream serialPortStream)
+        public SerialPortStreamAdapter(RJCP.IO.Ports.SerialPortStream serialPortStream)
         {
             _serialPortStream = serialPortStream;
         }
 
-        public int InfiniteTimeout => SerialPortStream.InfiniteTimeout;
+        public int InfiniteTimeout => RJCP.IO.Ports.SerialPortStream.InfiniteTimeout;
 
         public int ReadTimeout
         {
