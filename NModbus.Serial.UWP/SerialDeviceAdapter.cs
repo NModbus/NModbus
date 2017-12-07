@@ -51,15 +51,14 @@ namespace NModbus.Serial
 
         public int Read(byte[] buffer, int offset, int count)
         {
-
-            Task t = Task.Run(async () => await inputStream.LoadAsync((uint)count));
+            Task t = Task.Run(async () => await inputStream.LoadAsync((uint)(count + offset)));
             t.Wait();
-            while (inputStream.UnconsumedBufferLength > 0)
+            if (inputStream.UnconsumedBufferLength > 0)
             {
+                inputStream.ReadBytes(new byte[offset]);
                 inputStream.ReadBytes(buffer);
             }
             return buffer.Length;
-
         }
 
         public void Write(byte[] buffer, int offset, int count)
