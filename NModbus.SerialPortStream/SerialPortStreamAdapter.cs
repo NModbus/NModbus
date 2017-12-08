@@ -30,7 +30,7 @@ namespace NModbus.SerialPortStream
 
         public void DiscardInBuffer()
         {
-            _serialPortStream.Flush();
+            _serialPortStream.DiscardInBuffer();
         }
 
         public int Read(byte[] buffer, int offset, int count)
