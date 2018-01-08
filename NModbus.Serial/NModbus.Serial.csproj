@@ -18,6 +18,10 @@
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<NuspecFile>NModbus.Serial.nuspec</NuspecFile>  
   </PropertyGroup>
+	
+  <ItemGroup>
+    <PackageReference Include="docfx.console" Version="2.29.1" />
+  </ItemGroup>
     
   <ItemGroup>
     <ProjectReference Include="..\NModbus\NModbus.csproj" />
