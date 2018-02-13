@@ -1,0 +1,32 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+		  "NModbus/**.csproj",
+		  "NModbus.Serial/**.csproj",
+		  "NModbus.Serial.UWP/**.csproj",
+		  "NModbus.SerialPortStream/**.csproj"		  
+		  ],
+          "exclude": [
+            "**/obj/**",
+            "**/bin/**",
+            "_site/**"
+          ],
+		  "src": ".."
+        }
+      ],
+      "dest": "api",
+      "properties" : { "TargetFramework": "net46" }
+    }
+  ],
+  
+  "build": {
+    "content": [
+      {"files": [ "api/*.yml" ]},
+	  {"files": [ "*.md" ], "src": ".."}
+    ],
+    "dest": "../_site"
+  }
+}

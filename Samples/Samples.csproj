@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Samples Console Application</Description>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net46</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>Samples</AssemblyName>
     <OutputType>Exe</OutputType>
