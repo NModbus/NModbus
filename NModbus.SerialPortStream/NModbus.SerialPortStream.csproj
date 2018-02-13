@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;netstandard1.5</TargetFrameworks>
-    <Authors>LGinC@github.com, Rich Quackenbush</Authors>
+    <TargetFrameworks>net46;netstandard1.5</TargetFrameworks>
+    <Authors>LGinC@github.com, Rich Quackenbush, Jesse Beard</Authors>
     <Company>OSS</Company>
     <Description>A serial port adapter implementation for the SerialPortStream library. Please note that an additional native dll is necessary to make this work. More details can be found at: https://github.com/jcurl/SerialPortStream</Description>
     <PackageProjectUrl>https://github.com/NModbus/NModbus</PackageProjectUrl>
