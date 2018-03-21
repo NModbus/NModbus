@@ -2,6 +2,9 @@
 {
   using System;
 
+  /// <summary>
+  /// Class containing functions to covert endian from network device to host this code is running on.
+  /// </summary>
   public class Endian
   {
     /// <summary>
