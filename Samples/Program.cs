@@ -12,6 +12,7 @@ namespace Samples
 {
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using NModbus.Logging;
 
     /// <summary>
     ///     Demonstration of NModbus
@@ -255,8 +256,13 @@ namespace Samples
                 SlaveAddress = frame[0];
                 FunctionCode = frame[1];
 
-                MessageFrame = frame;
-                ProtocolDataUnit = frame.Skip(1).ToArray();
+                MessageFrame = frame
+                    .Take(frame.Length - 2)
+                    .ToArray();
+
+                ProtocolDataUnit = frame
+                    .Skip(1)
+                    .ToArray();
             }
         }
 
@@ -277,8 +283,13 @@ namespace Samples
                 SlaveAddress = frame[0];
                 FunctionCode = frame[1];
 
-                MessageFrame = frame;
-                ProtocolDataUnit = frame.Skip(1).ToArray();
+                MessageFrame = frame
+                    .Take(frame.Length - 2)
+                    .ToArray();
+
+                ProtocolDataUnit = frame
+                    .Skip(1)
+                    .ToArray();
             }
         }
 
@@ -288,7 +299,7 @@ namespace Samples
 
             public IModbusMessage CreateRequest(byte[] frame)
             {
-                Console.WriteLine("HMI Buffer Message Receieved");
+                Console.WriteLine($"HMI Buffer Message Receieved - {frame.Length} bytes");
 
                 var request = new HmiBufferRequestmessage();
 
@@ -306,8 +317,6 @@ namespace Samples
 
             public int GetRtuRequestBytesToRead(byte[] frameStart)
             {
-                
-
                 byte registerCountMSB = frameStart[4];
                 byte registerCountLSB = frameStart[5];
 
@@ -315,7 +324,7 @@ namespace Samples
 
                 Console.WriteLine($"Got Hmi Buffer Request for {numberOfRegisters} registers.");
 
-                return (numberOfRegisters * 2) + 4;
+                return (numberOfRegisters * 2) + 1;
             }
 
             public int GetRtuResponseBytesToRead(byte[] frameStart)
@@ -323,6 +332,8 @@ namespace Samples
                 return 4;
             }
         }
+
+
         
         /// <summary>
         /// Simple Modbus serial RTU slave example.
@@ -345,7 +356,7 @@ namespace Samples
                     new HmiBufferFunctionService()
                 };
 
-                var factory = new ModbusFactory(functionServices);
+                var factory = new ModbusFactory(functionServices, true, new ConsoleModbusLogger(LoggingLevel.Debug));
 
                 // create modbus slave
                 var slaveNetwork = factory.CreateRtuSlaveNetwork(adapter);

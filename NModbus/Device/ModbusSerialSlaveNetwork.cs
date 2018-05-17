@@ -14,7 +14,7 @@ namespace NModbus.Device
         private readonly IModbusSerialTransport _serialTransport;
         private readonly IModbusFactory _modbusFactory;
 
-        public ModbusSerialSlaveNetwork(IModbusSerialTransport transport,  IModbusFactory modbusFactory, IModbusLogger logger) 
+        public ModbusSerialSlaveNetwork(IModbusSerialTransport transport, IModbusFactory modbusFactory, IModbusLogger logger) 
             : base(transport, modbusFactory, logger)
         {
             _serialTransport = transport ?? throw new ArgumentNullException(nameof(transport));

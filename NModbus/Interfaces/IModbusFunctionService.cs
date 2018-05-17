@@ -35,7 +35,7 @@ namespace NModbus
         int GetRtuRequestBytesToRead(byte[] frameStart);
 
         /// <summary>
-        /// Gets the number of bytes to read for a response
+        /// Gets the number of bytes to read for a response.
         /// </summary>
         /// <param name="frameStart"></param>
         /// <returns></returns>

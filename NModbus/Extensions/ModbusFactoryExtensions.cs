@@ -1,6 +1,7 @@
 ﻿namespace NModbus.Extensions
 {
     using System;
+    using Logging;
 
     internal static class ModbusFactoryExtensions
     {
@@ -19,6 +20,21 @@
             var functionService = factory.GetFunctionService(functionCode);
 
             return functionService.CreateRequest(frame);
+        }
+
+        public static IModbusFunctionService GetFunctionServiceOrThrow(this IModbusFactory factory, byte functionCode)
+        {
+            IModbusFunctionService service = factory.GetFunctionService(functionCode);
+
+            if (service == null)
+            {
+                string msg = $"Function code {functionCode} not supported.";
+                factory.Logger.Warning(msg);
+
+                throw new NotImplementedException(msg);
+            }
+
+            return service;
         }
     }
 }
