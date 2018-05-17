@@ -11,6 +11,8 @@ using NModbus.Logging;
 
 namespace NModbus.Device
 {
+    using Extensions;
+
     /// <summary>
     /// Represents an incoming connection from a Modbus master. Contains the slave's logic to process the connection.
     /// </summary>
@@ -21,19 +23,21 @@ namespace NModbus.Device
         private readonly string _endPoint;
         private readonly Stream _stream;
         private readonly IModbusSlaveNetwork _slaveNetwork;
+        private readonly IModbusFactory _modbusFactory;
         private readonly Task _requestHandlerTask;
 
         private readonly byte[] _mbapHeader = new byte[6];
         private byte[] _messageFrame;
 
-        public ModbusMasterTcpConnection(TcpClient client, IModbusSlaveNetwork slaveNetwork, IModbusLogger logger)
-            : base(new ModbusIpTransport(new TcpClientAdapter(client), logger))
+        public ModbusMasterTcpConnection(TcpClient client, IModbusSlaveNetwork slaveNetwork, IModbusFactory modbusFactory, IModbusLogger logger)
+            : base(new ModbusIpTransport(new TcpClientAdapter(client), modbusFactory, logger))
         {
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _endPoint = client.Client.RemoteEndPoint.ToString();
             _stream = client.GetStream();
             _slaveNetwork = slaveNetwork ?? throw new ArgumentNullException(nameof(slaveNetwork));
+            _modbusFactory = modbusFactory ?? throw new ArgumentNullException(nameof(modbusFactory));
             _requestHandlerTask = Task.Run((Func<Task>)HandleRequestAsync);
         }
 
@@ -90,7 +94,7 @@ namespace NModbus.Device
                 byte[] frame = _mbapHeader.Concat(_messageFrame).ToArray();
                 Logger.Trace($"RX from Master at {EndPoint}: {string.Join(", ", frame)}");
 
-                var request = ModbusMessageFactory.CreateModbusRequest(_messageFrame);
+                var request = _modbusFactory.CreateModbusRequest(_messageFrame);
                 request.TransactionId = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(frame, 0));
 
                 IModbusSlave slave = _slaveNetwork.GetSlave(request.SlaveAddress);

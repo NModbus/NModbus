@@ -30,8 +30,8 @@ namespace NModbus.Device
 #if TIMER
         private Timer _timer;
 #endif
-        internal ModbusTcpSlaveNetwork(TcpListener tcpListener, IModbusLogger logger)
-            : base(new EmptyTransport(), logger)
+        internal ModbusTcpSlaveNetwork(TcpListener tcpListener, IModbusFactory modbusFactory,  IModbusLogger logger)
+            : base(new EmptyTransport(modbusFactory), modbusFactory, logger)
         {
             if (tcpListener == null)
             {
@@ -119,7 +119,7 @@ namespace NModbus.Device
             while (!cancellationToken.IsCancellationRequested)
             {
                 TcpClient client = await Server.AcceptTcpClientAsync().ConfigureAwait(false);
-                var masterConnection = new ModbusMasterTcpConnection(client, this, Logger);
+                var masterConnection = new ModbusMasterTcpConnection(client, this, ModbusFactory, Logger);
                 masterConnection.ModbusMasterTcpConnectionClosed += OnMasterConnectionClosedHandler;
                 _masters.TryAdd(client.Client.RemoteEndPoint.ToString(), masterConnection);
             }

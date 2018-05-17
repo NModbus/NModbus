@@ -13,16 +13,14 @@ namespace NModbus.IO
     /// </summary>
     internal class ModbusRtuTransport : ModbusSerialTransport, IModbusRtuTransport
     {
-        private readonly IModbusFactory _modbusFactory;
         public const int RequestFrameStartLength = 7;
 
         public const int ResponseFrameStartLength = 4;
 
         internal ModbusRtuTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger)
-            : base(streamResource, logger)
+            : base(streamResource, modbusFactory, logger)
         {
             if (modbusFactory == null) throw new ArgumentNullException(nameof(modbusFactory));
-            _modbusFactory = modbusFactory;
             Debug.Assert(streamResource != null, "Argument streamResource cannot be null.");
         }
 
@@ -30,7 +28,7 @@ namespace NModbus.IO
         {
             byte functionCode = frameStart[1];
 
-            IModbusFunctionService service = _modbusFactory.GetFunctionService(functionCode);
+            IModbusFunctionService service = ModbusFactory.GetFunctionService(functionCode);
 
             if (service == null)
             {
@@ -51,7 +49,7 @@ namespace NModbus.IO
                 return 1;
             }
 
-            IModbusFunctionService service = _modbusFactory.GetFunctionService(functionCode);
+            IModbusFunctionService service = ModbusFactory.GetFunctionService(functionCode);
 
             if (service == null)
             {

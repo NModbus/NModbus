@@ -7,14 +7,18 @@ using NModbus.Message;
 
 namespace NModbus.Device
 {
+    using Extensions;
+
     internal class ModbusSerialSlaveNetwork : ModbusSlaveNetwork
     {
         private readonly IModbusSerialTransport _serialTransport;
+        private readonly IModbusFactory _modbusFactory;
 
-        public ModbusSerialSlaveNetwork(IModbusSerialTransport transport, IModbusLogger logger) 
-            : base(transport, logger)
+        public ModbusSerialSlaveNetwork(IModbusSerialTransport transport,  IModbusFactory modbusFactory, IModbusLogger logger) 
+            : base(transport, modbusFactory, logger)
         {
             _serialTransport = transport ?? throw new ArgumentNullException(nameof(transport));
+            _modbusFactory = modbusFactory;
         }
 
         private IModbusSerialTransport SerialTransport => _serialTransport;
@@ -29,7 +33,7 @@ namespace NModbus.Device
                     byte[] frame = SerialTransport.ReadRequest();
 
                     //Create the request
-                    IModbusMessage request = ModbusMessageFactory.CreateModbusRequest(frame);
+                    IModbusMessage request = _modbusFactory.CreateModbusRequest(frame);
 
                     //Check the message
                     if (SerialTransport.CheckFrame && !SerialTransport.ChecksumsMatch(request, frame))

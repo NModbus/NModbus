@@ -1,10 +1,17 @@
 ﻿namespace NModbus.Device.MessageHandlers
 {
+    using Message;
+
     internal class DiagnosticsService : ModbusFunctionServiceBase<IModbusMessage>
     {
         public DiagnosticsService() 
             : base(ModbusFunctionCodes.Diagnostics)
         {
+        }
+
+        public override IModbusMessage CreateRequest(byte[] frame)
+        {
+            return CreateModbusMessage<DiagnosticsRequestResponse>(frame);
         }
 
         public override int GetRtuRequestBytesToRead(byte[] frameStart)

@@ -13,6 +13,13 @@ namespace NModbus
         byte FunctionCode { get; }
 
         /// <summary>
+        /// Creates a message that wrapps the request frame.
+        /// </summary>
+        /// <param name="frame"></param>
+        /// <returns></returns>
+        IModbusMessage CreateRequest(byte[] frame);
+
+        /// <summary>
         /// Handle a slave request.
         /// </summary>
         /// <param name="request"></param>

@@ -12,8 +12,8 @@ namespace NModbus.IO
     /// </summary>
     internal class ModbusAsciiTransport : ModbusSerialTransport, IModbusAsciiTransport
     {
-        internal ModbusAsciiTransport(IStreamResource streamResource, IModbusLogger logger)
-            : base(streamResource, logger)
+        internal ModbusAsciiTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger)
+            : base(streamResource, modbusFactory, logger)
         {
             Debug.Assert(streamResource != null, "Argument streamResource cannot be null.");
         }

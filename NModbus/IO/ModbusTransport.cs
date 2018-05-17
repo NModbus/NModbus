@@ -22,13 +22,14 @@ namespace NModbus.IO
         /// <summary>
         ///     This constructor is called by the NullTransport.
         /// </summary>
-        internal ModbusTransport(IModbusLogger logger)
+        internal ModbusTransport(IModbusFactory modbusFactory, IModbusLogger logger)
         {
+            ModbusFactory = modbusFactory;
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        internal ModbusTransport(IStreamResource streamResource, IModbusLogger logger) 
-            : this(logger)
+        internal ModbusTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger) 
+            : this(modbusFactory, logger)
         {
             _streamResource = streamResource ?? throw new ArgumentNullException(nameof(streamResource));
         }
@@ -96,6 +97,8 @@ namespace NModbus.IO
         ///     Gets the stream resource.
         /// </summary>
         public IStreamResource StreamResource => _streamResource;
+
+        protected IModbusFactory ModbusFactory { get; }
 
         /// <summary>
         /// Gets the logger for this instance.

@@ -91,22 +91,22 @@ namespace NModbus
 
         public IModbusSlaveNetwork CreateSlaveNetwork(IModbusRtuTransport transport)
         {
-            return new ModbusSerialSlaveNetwork(transport, _logger);
+            return new ModbusSerialSlaveNetwork(transport, this, _logger);
         }
 
         public IModbusSlaveNetwork CreateSlaveNetwork(IModbusAsciiTransport transport)
         {
-            return new ModbusSerialSlaveNetwork(transport, _logger);
+            return new ModbusSerialSlaveNetwork(transport, this, _logger);
         }
 
         public IModbusSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener)
         {
-            return new ModbusTcpSlaveNetwork(tcpListener, _logger);
+            return new ModbusTcpSlaveNetwork(tcpListener, this, _logger);
         }
 
         public IModbusSlaveNetwork CreateSlaveNetwork(UdpClient client)
         {
-            return new ModbusUdpSlaveNetwork(client, _logger);
+            return new ModbusUdpSlaveNetwork(client, this, _logger);
         }
 
         public IModbusRtuTransport CreateRtuTransport(IStreamResource streamResource)
@@ -116,7 +116,7 @@ namespace NModbus
 
         public IModbusAsciiTransport CreateAsciiTransport(IStreamResource streamResource)
         {
-            return new ModbusAsciiTransport(streamResource, _logger);
+            return new ModbusAsciiTransport(streamResource, this, _logger);
         }
 
         public IModbusFunctionService[] GetAllFunctionServices()
@@ -135,7 +135,7 @@ namespace NModbus
         {
             var adapter = new UdpClientAdapter(client);
 
-            var transport = new ModbusIpTransport(adapter, _logger);
+            var transport = new ModbusIpTransport(adapter, this, _logger);
 
             return new ModbusIpMaster(transport);
         }
@@ -144,7 +144,7 @@ namespace NModbus
         {
             var adapter = new TcpClientAdapter(client);
 
-            var transport = new ModbusIpTransport(adapter, _logger);
+            var transport = new ModbusIpTransport(adapter, this, _logger);
 
             return new ModbusIpMaster(transport);
         }

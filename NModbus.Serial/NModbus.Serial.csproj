@@ -20,7 +20,7 @@
   </PropertyGroup>
 	
   <ItemGroup>
-    <PackageReference Include="docfx.console" Version="2.29.1" />
+    <!--<PackageReference Include="docfx.console" Version="2.29.1" />-->
   </ItemGroup>
     
   <ItemGroup>

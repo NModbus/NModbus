@@ -12,6 +12,8 @@ using NModbus.Unme.Common;
 
 namespace NModbus.Device
 {
+    using Extensions;
+
     /// <summary>
     ///     Modbus UDP slave device.
     /// </summary>
@@ -19,8 +21,8 @@ namespace NModbus.Device
     {
         private readonly UdpClient _udpClient;
 
-        public ModbusUdpSlaveNetwork(UdpClient udpClient, IModbusLogger logger)
-            : base(new ModbusIpTransport(new UdpClientAdapter(udpClient), logger), logger)
+        public ModbusUdpSlaveNetwork(UdpClient udpClient, IModbusFactory modbusFactory, IModbusLogger logger)
+            : base(new ModbusIpTransport(new UdpClientAdapter(udpClient), modbusFactory, logger), modbusFactory, logger)
         {
             _udpClient = udpClient;
         }
@@ -44,8 +46,7 @@ namespace NModbus.Device
 
                     Logger.LogFrameRx(frame);
 
-                    IModbusMessage request =
-                        ModbusMessageFactory.CreateModbusRequest(frame.Slice(6, frame.Length - 6).ToArray());
+                    IModbusMessage request = ModbusFactory.CreateModbusRequest(frame.Slice(6, frame.Length - 6).ToArray());
                     request.TransactionId = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(frame, 0));
 
                     // perform action and build response
