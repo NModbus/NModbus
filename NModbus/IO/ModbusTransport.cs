@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using NModbus.Logging;
 using NModbus.Message;
@@ -179,10 +180,14 @@ namespace NModbus.IO
                 }
                 catch (Exception e)
                 {
-                    if (e is FormatException ||
-                        e is NotImplementedException ||
-                        e is TimeoutException ||
-                        e is IOException)
+                    if (e is SocketException || e.InnerException is SocketException)
+                    {
+                        throw;
+                    }
+                    else if (e is FormatException ||
+                             e is NotImplementedException ||
+                             e is TimeoutException ||
+                             e is IOException)
                     {
                         Logger.Error($"{e.GetType().Name}, {(_retries - attempt + 1)} retries remaining - {e}");
 
