@@ -39,8 +39,21 @@
                 return Task.Delay(difference, cancellationToken);
             }
 
+#if NET45
+            return CompletedTask();
+#else
             return Task.CompletedTask;
+#endif
         }
+
+#if NET45
+        private static readonly Task completedTask = Task.FromResult(false);
+
+        public static Task CompletedTask()
+        {
+            return completedTask;
+        }
+#endif
 
         private async Task<T> PerformFuncAsync<T>(Func<Task<T>> action, CancellationToken cancellationToken)
         {
@@ -215,4 +228,5 @@
             }
         }
     }
+
 }
