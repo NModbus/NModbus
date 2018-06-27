@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using NModbus.Data;
+using NModbus.Unme.Common;
 
 namespace NModbus.Message
 {
-    internal class ReadWriteMultipleRegistersRequest : AbstractModbusMessage, IModbusRequest
+    internal class ReadWriteMultipleRegistersRequest : AbstractModbusMessageWithData<RegisterCollection>, IModbusRequest
     {
         private ReadHoldingInputRegistersRequest _readRequest;
         private WriteMultipleRegistersRequest _writeRequest;
@@ -31,6 +33,20 @@ namespace NModbus.Message
                 slaveAddress,
                 startWriteAddress,
                 writeData);
+
+            // TODO: ugly hack for all ModbusSerialTransport-inheritances (ModbusIpTransport would not need this, as it implements complete different BuildMessageFrame)
+
+            // fake ByteCount, Data can hold only even number of bytes
+            ByteCount = (ProtocolDataUnit[1]);
+
+            // fake Data, as this modbusmessage does not fit ModbusMessageImpl
+            Data = new RegisterCollection(ProtocolDataUnit.Slice(2, ProtocolDataUnit.Length - 2).ToArray());
+        }
+
+        public byte ByteCount
+        {
+            get => MessageImpl.ByteCount.Value;
+            set => MessageImpl.ByteCount = value;
         }
 
         public override byte[] ProtocolDataUnit
