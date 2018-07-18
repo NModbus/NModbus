@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using NModbus.Logging;
 using NModbus.Message;
@@ -22,13 +23,14 @@ namespace NModbus.IO
         /// <summary>
         ///     This constructor is called by the NullTransport.
         /// </summary>
-        internal ModbusTransport(IModbusLogger logger)
+        internal ModbusTransport(IModbusFactory modbusFactory, IModbusLogger logger)
         {
+            ModbusFactory = modbusFactory;
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        internal ModbusTransport(IStreamResource streamResource, IModbusLogger logger) 
-            : this(logger)
+        internal ModbusTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger) 
+            : this(modbusFactory, logger)
         {
             _streamResource = streamResource ?? throw new ArgumentNullException(nameof(streamResource));
         }
@@ -96,6 +98,8 @@ namespace NModbus.IO
         ///     Gets the stream resource.
         /// </summary>
         public IStreamResource StreamResource => _streamResource;
+
+        protected IModbusFactory ModbusFactory { get; }
 
         /// <summary>
         /// Gets the logger for this instance.
@@ -176,10 +180,14 @@ namespace NModbus.IO
                 }
                 catch (Exception e)
                 {
-                    if (e is FormatException ||
-                        e is NotImplementedException ||
-                        e is TimeoutException ||
-                        e is IOException)
+                    if (e is SocketException || e.InnerException is SocketException)
+                    {
+                        throw;
+                    }
+                    else if (e is FormatException ||
+                             e is NotImplementedException ||
+                             e is TimeoutException ||
+                             e is IOException)
                     {
                         Logger.Error($"{e.GetType().Name}, {(_retries - attempt + 1)} retries remaining - {e}");
 

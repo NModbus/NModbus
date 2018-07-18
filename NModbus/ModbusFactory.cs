@@ -13,8 +13,6 @@ namespace NModbus
 {
     public class ModbusFactory : IModbusFactory
     {
-        private readonly IModbusLogger _logger;
-
         /// <summary>
         /// The "built-in" message handlers.
         /// </summary>
@@ -41,7 +39,7 @@ namespace NModbus
         {
             _functionServices = BuiltInFunctionServices.ToDictionary(s => s.FunctionCode, s => s);
 
-            _logger = NullModbusLogger.Instance;
+            Logger = NullModbusLogger.Instance;
         }
 
         /// <summary>
@@ -55,7 +53,7 @@ namespace NModbus
             bool includeBuiltIn = true, 
             IModbusLogger logger = null)
         {
-            _logger = logger ?? NullModbusLogger.Instance;
+            Logger = logger ?? NullModbusLogger.Instance;
 
             //Determine if we're including the built in services
             if (includeBuiltIn)
@@ -91,33 +89,35 @@ namespace NModbus
 
         public IModbusSlaveNetwork CreateSlaveNetwork(IModbusRtuTransport transport)
         {
-            return new ModbusSerialSlaveNetwork(transport, _logger);
+            return new ModbusSerialSlaveNetwork(transport, this, Logger);
         }
 
         public IModbusSlaveNetwork CreateSlaveNetwork(IModbusAsciiTransport transport)
         {
-            return new ModbusSerialSlaveNetwork(transport, _logger);
+            return new ModbusSerialSlaveNetwork(transport, this, Logger);
         }
 
         public IModbusSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener)
         {
-            return new ModbusTcpSlaveNetwork(tcpListener, _logger);
+            return new ModbusTcpSlaveNetwork(tcpListener, this, Logger);
         }
 
         public IModbusSlaveNetwork CreateSlaveNetwork(UdpClient client)
         {
-            return new ModbusUdpSlaveNetwork(client, _logger);
+            return new ModbusUdpSlaveNetwork(client, this, Logger);
         }
 
         public IModbusRtuTransport CreateRtuTransport(IStreamResource streamResource)
         {
-            return new ModbusRtuTransport(streamResource, this, _logger);
+            return new ModbusRtuTransport(streamResource, this, Logger);
         }
 
         public IModbusAsciiTransport CreateAsciiTransport(IStreamResource streamResource)
         {
-            return new ModbusAsciiTransport(streamResource, _logger);
+            return new ModbusAsciiTransport(streamResource, this, Logger);
         }
+
+        public IModbusLogger Logger { get; }
 
         public IModbusFunctionService[] GetAllFunctionServices()
         {
@@ -135,7 +135,7 @@ namespace NModbus
         {
             var adapter = new UdpClientAdapter(client);
 
-            var transport = new ModbusIpTransport(adapter, _logger);
+            var transport = new ModbusIpTransport(adapter, this, Logger);
 
             return new ModbusIpMaster(transport);
         }
@@ -144,7 +144,7 @@ namespace NModbus
         {
             var adapter = new TcpClientAdapter(client);
 
-            var transport = new ModbusIpTransport(adapter, _logger);
+            var transport = new ModbusIpTransport(adapter, this, Logger);
 
             return new ModbusIpMaster(transport);
         }

@@ -13,6 +13,13 @@ namespace NModbus
         byte FunctionCode { get; }
 
         /// <summary>
+        /// Creates a message that wrapps the request frame.
+        /// </summary>
+        /// <param name="frame"></param>
+        /// <returns></returns>
+        IModbusMessage CreateRequest(byte[] frame);
+
+        /// <summary>
         /// Handle a slave request.
         /// </summary>
         /// <param name="request"></param>
@@ -28,7 +35,7 @@ namespace NModbus
         int GetRtuRequestBytesToRead(byte[] frameStart);
 
         /// <summary>
-        /// Gets the number of bytes to read for a response
+        /// Gets the number of bytes to read for a response.
         /// </summary>
         /// <param name="frameStart"></param>
         /// <returns></returns>

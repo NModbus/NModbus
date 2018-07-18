@@ -18,8 +18,8 @@ namespace NModbus.IO
         private static readonly object _transactionIdLock = new object();
         private ushort _transactionId;
 
-        internal ModbusIpTransport(IStreamResource streamResource, IModbusLogger logger)
-            : base(streamResource, logger)
+        internal ModbusIpTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger)
+            : base(streamResource, modbusFactory, logger)
         {
             if (streamResource == null) throw new ArgumentNullException(nameof(streamResource));
         }

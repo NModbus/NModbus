@@ -10,6 +10,11 @@ namespace NModbus.Device.MessageHandlers
         {
         }
 
+        public override IModbusMessage CreateRequest(byte[] frame)
+        {
+            return CreateModbusMessage<WriteSingleRegisterRequestResponse>(frame);
+        }
+
         public override int GetRtuRequestBytesToRead(byte[] frameStart)
         {
             return 1;

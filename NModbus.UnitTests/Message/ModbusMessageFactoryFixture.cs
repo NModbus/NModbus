@@ -279,33 +279,33 @@ namespace NModbus.UnitTests.Message
                 ModbusMessageFactory.CreateModbusMessage<DiagnosticsRequestResponse>(frame));
         }
 
-        [Fact]
-        public void CreateModbusRequestWithInvalidMessageFrame()
-        {
-            Assert.Throws<FormatException>(() => ModbusMessageFactory.CreateModbusRequest(new byte[] { 0, 1 }));
-        }
+        //[Fact]
+        //public void CreateModbusRequestWithInvalidMessageFrame()
+        //{
+        //    Assert.Throws<FormatException>(() => ModbusMessageFactory.CreateModbusRequest(new byte[] { 0, 1 }));
+        //}
 
-        [Fact]
-        public void CreateModbusRequestWithInvalidFunctionCode()
-        {
-            Assert.Throws<ArgumentException>(() => ModbusMessageFactory.CreateModbusRequest(new byte[] { 1, 99, 0, 0, 0, 1, 23 }));
-        }
+        //[Fact]
+        //public void CreateModbusRequestWithInvalidFunctionCode()
+        //{
+        //    Assert.Throws<ArgumentException>(() => ModbusMessageFactory.CreateModbusRequest(new byte[] { 1, 99, 0, 0, 0, 1, 23 }));
+        //}
 
-        [Fact]
-        public void CreateModbusRequestForReadCoils()
-        {
-            ReadCoilsInputsRequest req = new ReadCoilsInputsRequest(1, 2, 1, 10);
-            IModbusMessage request = ModbusMessageFactory.CreateModbusRequest(req.MessageFrame);
-            Assert.Equal(typeof(ReadCoilsInputsRequest), request.GetType());
-        }
+        //[Fact]
+        //public void CreateModbusRequestForReadCoils()
+        //{
+        //    ReadCoilsInputsRequest req = new ReadCoilsInputsRequest(1, 2, 1, 10);
+        //    IModbusMessage request = ModbusMessageFactory.CreateModbusRequest(req.MessageFrame);
+        //    Assert.Equal(typeof(ReadCoilsInputsRequest), request.GetType());
+        //}
 
-        [Fact]
-        public void CreateModbusRequestForDiagnostics()
-        {
-            DiagnosticsRequestResponse diagnosticsRequest = new DiagnosticsRequestResponse(0, 2,
-                new RegisterCollection(45));
-            IModbusMessage request = ModbusMessageFactory.CreateModbusRequest(diagnosticsRequest.MessageFrame);
-            Assert.Equal(typeof(DiagnosticsRequestResponse), request.GetType());
-        }
+        //[Fact]
+        //public void CreateModbusRequestForDiagnostics()
+        //{
+        //    DiagnosticsRequestResponse diagnosticsRequest = new DiagnosticsRequestResponse(0, 2,
+        //        new RegisterCollection(45));
+        //    IModbusMessage request = ModbusMessageFactory.CreateModbusRequest(diagnosticsRequest.MessageFrame);
+        //    Assert.Equal(typeof(DiagnosticsRequestResponse), request.GetType());
+        //}
     }
 }

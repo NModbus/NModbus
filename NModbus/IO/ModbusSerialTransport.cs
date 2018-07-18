@@ -13,8 +13,8 @@ namespace NModbus.IO
     {
         private bool _checkFrame = true;
 
-        internal ModbusSerialTransport(IStreamResource streamResource, IModbusLogger logger)
-            : base(streamResource, logger)
+        internal ModbusSerialTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger)
+            : base(streamResource, modbusFactory, logger)
         {
             Debug.Assert(streamResource != null, "Argument streamResource cannot be null.");
         }

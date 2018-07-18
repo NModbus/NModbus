@@ -18,6 +18,8 @@ namespace NModbus.Device
 
         public byte FunctionCode => _functionCode;
 
+        public abstract IModbusMessage CreateRequest(byte[] frame);
+
         public IModbusMessage HandleSlaveRequest(IModbusMessage request, ISlaveDataStore dataStore)
         {
             //Attempt to cast the message
@@ -35,5 +37,14 @@ namespace NModbus.Device
         public abstract int GetRtuResponseBytesToRead(byte[] frameStart);
        
         protected abstract IModbusMessage Handle(TRequest request, ISlaveDataStore dataStore);
+
+        protected static T CreateModbusMessage<T>(byte[] frame)
+            where T : IModbusMessage, new()
+        {
+            IModbusMessage message = new T();
+            message.Initialize(frame);
+
+            return (T)message;
+        }
     }
 }

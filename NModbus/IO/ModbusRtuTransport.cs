@@ -13,16 +13,14 @@ namespace NModbus.IO
     /// </summary>
     internal class ModbusRtuTransport : ModbusSerialTransport, IModbusRtuTransport
     {
-        private readonly IModbusFactory _modbusFactory;
         public const int RequestFrameStartLength = 7;
 
         public const int ResponseFrameStartLength = 4;
 
         internal ModbusRtuTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger)
-            : base(streamResource, logger)
+            : base(streamResource, modbusFactory, logger)
         {
             if (modbusFactory == null) throw new ArgumentNullException(nameof(modbusFactory));
-            _modbusFactory = modbusFactory;
             Debug.Assert(streamResource != null, "Argument streamResource cannot be null.");
         }
 
@@ -30,15 +28,8 @@ namespace NModbus.IO
         {
             byte functionCode = frameStart[1];
 
-            IModbusFunctionService service = _modbusFactory.GetFunctionService(functionCode);
-
-            if (service == null)
-            {
-                string msg = $"Function code {functionCode} not supported.";
-                Logger.Warning(msg);
-                throw new NotImplementedException(msg);
-            }
-
+            IModbusFunctionService service = ModbusFactory.GetFunctionServiceOrThrow(functionCode);
+                
             return service.GetRtuRequestBytesToRead(frameStart);
         }
 
@@ -51,14 +42,7 @@ namespace NModbus.IO
                 return 1;
             }
 
-            IModbusFunctionService service = _modbusFactory.GetFunctionService(functionCode);
-
-            if (service == null)
-            {
-                string msg = $"Function code {functionCode} not supported.";
-                Logger.Warning(msg);
-                throw new NotImplementedException(msg);
-            }
+            IModbusFunctionService service = ModbusFactory.GetFunctionServiceOrThrow(functionCode);
 
             return service.GetRtuResponseBytesToRead(frameStart);
         }
@@ -90,8 +74,10 @@ namespace NModbus.IO
 
         public override bool ChecksumsMatch(IModbusMessage message, byte[] messageFrame)
         {
-            return BitConverter.ToUInt16(messageFrame, messageFrame.Length - 2) ==
-                BitConverter.ToUInt16(ModbusUtility.CalculateCrc(message.MessageFrame), 0);
+            ushort messageCrc = BitConverter.ToUInt16(messageFrame, messageFrame.Length - 2);
+            ushort calculatedCrc = BitConverter.ToUInt16(ModbusUtility.CalculateCrc(message.MessageFrame), 0);
+
+            return messageCrc == calculatedCrc;
         }
 
         public override IModbusMessage ReadResponse<T>()

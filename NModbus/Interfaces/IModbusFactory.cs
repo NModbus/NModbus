@@ -108,6 +108,6 @@ namespace NModbus
 
         #endregion
 
-        
+        IModbusLogger Logger { get; }
     }
 }
