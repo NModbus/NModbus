@@ -10,7 +10,6 @@
     <PackageId>NModbus</PackageId>
     <PackageTags>modbus;nmodbus;tcp;udp;master;slave;coreclr</PackageTags>
     <PackageProjectUrl>https://github.com/NModbus/NModbus</PackageProjectUrl>
-    <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.3' ">1.6.0</NetStandardImplicitPackageVersion>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>

@@ -153,5 +153,12 @@ namespace NModbus
         {
             return _functionServices.GetValueOrDefault(functionCode);
         }
+
+        public IModbusMaster CreateRtuOverTcpMaster(TcpClient client)
+        {
+            var adapter = new TcpClientAdapter(client);
+            var transport = new ModbusRtuOverTcpTransport(adapter, this, Logger);
+            return new ModbusIpMaster(transport);
+        }
     }
 }

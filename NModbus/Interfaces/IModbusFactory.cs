@@ -44,6 +44,13 @@ namespace NModbus
         /// <returns></returns>
         IModbusMaster CreateMaster(TcpClient client);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        IModbusMaster CreateRtuOverTcpMaster(TcpClient client);
+
         #endregion
 
         #region Slave

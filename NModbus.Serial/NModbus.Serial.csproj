@@ -13,12 +13,6 @@
 	<NoWarn>1701;1702;1705;1591</NoWarn>
   </PropertyGroup>
 	
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <NuspecProperties>version=$(PackageVersion);</NuspecProperties>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<NuspecFile>NModbus.Serial.nuspec</NuspecFile>  
-  </PropertyGroup>
-	
   <ItemGroup>
     <!--<PackageReference Include="docfx.console" Version="2.29.1" />-->
   </ItemGroup>
