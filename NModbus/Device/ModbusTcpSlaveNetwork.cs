@@ -200,6 +200,7 @@ namespace NModbus.Device
                 throw new ArgumentException(msg);
             }
 
+            connection.Dispose();
             Logger.Information($"Removed Master {e.EndPoint}");
         }
     }
