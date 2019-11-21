@@ -69,11 +69,8 @@ namespace Samples
                 port.StopBits = StopBits.One;
                 port.Open();
 
-                var adapter = new SerialPortAdapter(port);
-                // create modbus master
                 var factory = new ModbusFactory();
-
-                IModbusMaster master = factory.CreateRtuMaster(adapter);
+                IModbusMaster master = factory.CreateRtuMaster(port);
 
                 byte slaveId = 1;
                 ushort startAddress = 100;
@@ -98,12 +95,8 @@ namespace Samples
                 port.StopBits = StopBits.One;
                 port.Open();
 
-                var adapter = new SerialPortAdapter(port);
-
                 var factory = new ModbusFactory();
-
-                // create modbus master
-                IModbusSerialMaster master = factory.CreateAsciiMaster(adapter);
+                IModbusSerialMaster master = factory.CreateAsciiMaster(port);
 
                 byte slaveId = 1;
                 ushort startAddress = 1;
@@ -134,7 +127,6 @@ namespace Samples
             using (TcpClient client = new TcpClient("127.0.0.1", 502))
             {
                 var factory = new ModbusFactory();
-
                 IModbusMaster master = factory.CreateMaster(client);
 
                 // read five input values
@@ -192,11 +184,7 @@ namespace Samples
                 slavePort.Open();
 
                 var factory = new ModbusFactory();
-
-                var adapter = new SerialPortAdapter(slavePort);
-
-                // create modbus slave
-                IModbusSlaveNetwork slaveNetwork = factory.CreateAsciiSlaveNetwork(adapter);
+                IModbusSlaveNetwork slaveNetwork = factory.CreateAsciiSlaveNetwork(slavePort);
 
                 IModbusSlave slave1 = factory.CreateSlave(1);
                 IModbusSlave slave2 = factory.CreateSlave(2);
@@ -222,12 +210,8 @@ namespace Samples
                 slavePort.StopBits = StopBits.One;
                 slavePort.Open();
 
-                var adapter = new SerialPortAdapter(slavePort);
-
                 var factory = new ModbusFactory();
-
-                // create modbus slave
-                var slaveNetwork = factory.CreateRtuSlaveNetwork(adapter);
+                var slaveNetwork = factory.CreateRtuSlaveNetwork(slavePort);
 
                 IModbusSlave slave1 = factory.CreateSlave(1);
                 IModbusSlave slave2 = factory.CreateSlave(2);
@@ -393,12 +377,10 @@ namespace Samples
                 slavePort.Open();
 
                 IModbusFactory factory = new ModbusFactory();
+                IModbusSlaveNetwork modbusSlaveNetwork = factory.CreateRtuSlaveNetwork(slavePort);
 
-                var adapter = new SerialPortAdapter(slavePort);
-                IModbusSlaveNetwork modbusSlaveNetwork = factory.CreateRtuSlaveNetwork(adapter);
-
-                adapter.ReadTimeout = 50;
-                adapter.WriteTimeout = 500;
+                slavePort.ReadTimeout = 50;
+                slavePort.WriteTimeout = 500;
 
                 var acTechDataStore = new SlaveStorage();
 
@@ -444,12 +426,8 @@ namespace Samples
                 slavePort.StopBits = StopBits.One;
                 slavePort.Open();
 
-                var adapter = new SerialPortAdapter(slavePort);
-
                 var factory = new ModbusFactory();
-
-                // create modbus slave
-                var slaveNetwork = factory.CreateRtuSlaveNetwork(adapter);
+                var slaveNetwork = factory.CreateRtuSlaveNetwork(slavePort);
 
                 var dataStore = new SlaveStorage();
 
@@ -518,7 +496,6 @@ namespace Samples
             using (UdpClient client = new UdpClient(502))
             {
                 var factory = new ModbusFactory();
-
                 IModbusSlaveNetwork network = factory.CreateSlaveNetwork(client);
 
                 IModbusSlave slave1 = factory.CreateSlave(1);
@@ -548,7 +525,6 @@ namespace Samples
             slaveTcpListener.Start();
 
             var factory = new ModbusFactory();
-
             var network = factory.CreateSlaveNetwork(slaveTcpListener);
 
             IModbusSlave slave = factory.CreateSlave(slaveId);
@@ -600,40 +576,26 @@ namespace Samples
                 masterPort.Open();
                 slavePort.Open();
 
-                var slaveAdapter = new SerialPortAdapter(slavePort);
                 // create modbus slave on seperate thread
                 byte slaveId = 1;
-
                 var factory = new ModbusFactory();
-
-                var transport = factory.CreateAsciiTransport(slaveAdapter);
-
+                var transport = factory.CreateAsciiTransport(slavePort);
                 var network = factory.CreateSlaveNetwork(transport);
-
                 var slave = factory.CreateSlave(slaveId);
-
                 network.AddSlave(slave);
 
                 var listenTask = network.ListenAsync();
 
-                var masterAdapter = new SerialPortAdapter(masterPort);
-
-                var masterTransport = factory.CreateAsciiTransport(masterAdapter);
-
-                // create modbus master
+                var masterTransport = factory.CreateAsciiTransport(masterPort);
                 IModbusSerialMaster master = factory.CreateMaster(masterTransport);
 
                 master.Transport.Retries = 5;
                 ushort startAddress = 100;
                 ushort numRegisters = 5;
-
-                // read five register values
                 ushort[] registers = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
 
                 for (int i = 0; i < numRegisters; i++)
-                {
                     Console.WriteLine($"Register {(startAddress + i)}={registers[i]}");
-                }
             }
 
             // output
@@ -659,12 +621,7 @@ namespace Samples
                 port.Open();
 
                 var factory = new ModbusFactory();
-
-                var adapter = new SerialPortAdapter(port);
-
-                IModbusRtuTransport transport = factory.CreateRtuTransport(adapter);
-
-                // create modbus master
+                IModbusRtuTransport transport = factory.CreateRtuTransport(port);
                 IModbusSerialMaster master = factory.CreateMaster(transport);
 
                 byte slaveId = 1;
