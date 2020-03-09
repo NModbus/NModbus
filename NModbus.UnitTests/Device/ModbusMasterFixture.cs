@@ -71,5 +71,15 @@ namespace NModbus.UnitTests.Device
             Assert.Throws<ArgumentException>(() => Master.ReadWriteMultipleRegisters(1, 1, 1, 1, new ushort[0]));
             Assert.Throws<ArgumentException>(() => Master.ReadWriteMultipleRegisters(1, 1, 1, 1, Enumerable.Repeat<ushort>(1, 122).ToArray()));
         }
+
+        [Fact]
+        public void WriteFileRecord()
+        {
+            Assert.Throws<ArgumentException>(() => Master.WriteFileRecord(1, 1, 2, null));
+
+            // Max message byte size is 256, minus 11 for overhead,
+            // 244 data bytes are allowed (must be even), 246 should throw.
+            Assert.Throws<ArgumentException>(() => Master.WriteFileRecord(1, 1, 2, Enumerable.Repeat<byte>(1, 246).ToArray()));
+        }
     }
 }

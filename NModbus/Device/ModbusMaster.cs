@@ -369,6 +369,22 @@ namespace NModbus.Device
         }
 
         /// <summary>
+        /// Write a file record to the device.
+        /// </summary>
+        /// <param name="slaveAdress">Address of device to write values to</param>
+        /// <param name="fileNumber">The Extended Memory file number</param>
+        /// <param name="startingAddress">The starting register address within the file</param>
+        /// <param name="data">The data to be written</param>
+        public void WriteFileRecord(byte slaveAdress, ushort fileNumber, ushort startingAddress, byte[] data)
+        {
+            ValidateMaxData("data", data, 244);
+            var request = new WriteFileRecordRequest(slaveAdress, new FileRecordCollection(
+                fileNumber, startingAddress, data));
+
+            Transport.UnicastMessage<WriteFileRecordResponse>(request);
+        }
+
+        /// <summary>
         ///    Executes the custom message.
         /// </summary>
         /// <typeparam name="TResponse">The type of the response.</typeparam>
@@ -391,6 +407,20 @@ namespace NModbus.Device
             if (data.Length == 0 || data.Length > maxDataLength)
             {
                 string msg = $"The length of argument {argumentName} must be between 1 and {maxDataLength} inclusive.";
+                throw new ArgumentException(msg);
+            }
+        }
+
+        private static void ValidateMaxData<T>(string argumentName, T[] data, int maxDataLength)
+        {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            if (data.Length > maxDataLength)
+            {
+                string msg = $"The length of argument {argumentName} must not be greater than {maxDataLength}.";
                 throw new ArgumentException(msg);
             }
         }
