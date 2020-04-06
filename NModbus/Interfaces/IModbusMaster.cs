@@ -187,6 +187,15 @@ namespace NModbus
             ushort[] writeData);
 
         /// <summary>
+        /// Write a file record to the device.
+        /// </summary>
+        /// <param name="slaveAdress">Address of device to write values to</param>
+        /// <param name="fileNumber">The Extended Memory file number</param>
+        /// <param name="startingAddress">The starting register address within the file</param>
+        /// <param name="data">The data to be written</param>
+        void WriteFileRecord(byte slaveAdress, ushort fileNumber, ushort startingAddress, byte[] data);
+
+        /// <summary>
         ///    Executes the custom message.
         /// </summary>
         /// <typeparam name="TResponse">The type of the response.</typeparam>

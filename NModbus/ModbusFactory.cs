@@ -27,6 +27,7 @@ namespace NModbus
             new WriteSingleRegisterService(),
             new WriteMultipleCoilsService(),
             new WriteMultipleRegistersService(),
+            new WriteFileRecordService(),
             new ReadWriteMultipleRegistersService(),
         };
 
