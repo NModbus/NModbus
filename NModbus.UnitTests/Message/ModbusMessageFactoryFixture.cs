@@ -279,6 +279,23 @@ namespace NModbus.UnitTests.Message
                 ModbusMessageFactory.CreateModbusMessage<DiagnosticsRequestResponse>(frame));
         }
 
+        [Fact]
+        public void CreateModbusMessageWriteFileRecordRequest()
+        {
+            var request =
+                ModbusMessageFactory.CreateModbusMessage<WriteFileRecordRequest>(new byte[]
+                { 17, ModbusFunctionCodes.WriteFileRecord, 9, 6, 0, 1, 0, 2, 0, 1, 1, 2 });
+            var expectedRequest = new WriteFileRecordRequest(17, new FileRecordCollection(1, 2, new byte[] { 1, 2 }));
+            ModbusMessageFixture.AssertModbusMessagePropertiesAreEqual(expectedRequest, request);
+        }
+
+        [Fact]
+        public void CreateModbusMessageWriteFileRecordRequestThrowsOnNotEnoughBytes()
+        {
+            Assert.Throws<FormatException>(() => ModbusMessageFactory.CreateModbusMessage<WriteFileRecordRequest>(new byte[]
+                { 17, ModbusFunctionCodes.WriteFileRecord, 0, 19, 0, 10 }));
+        }
+
         //[Fact]
         //public void CreateModbusRequestWithInvalidMessageFrame()
         //{
