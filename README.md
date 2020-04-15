@@ -40,7 +40,7 @@ To install NModbus, run the following command in the Package Manager Console
 
 Documentation
 =======
-Documentation is available in chm format (NModbus.chm)
+Documentation is available [here](https://nmodbus.github.io/api/NModbus.html).
 
 License
 =======

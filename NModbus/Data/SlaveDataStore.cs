@@ -2,17 +2,24 @@
 {
     public class SlaveDataStore : ISlaveDataStore
     {
-        private readonly IPointSource<ushort> _holdingRegisters = new PointSource<ushort>();
-        private readonly IPointSource<ushort> _inputRegisters = new PointSource<ushort>();
-        private readonly IPointSource<bool> _coilDiscretes = new PointSource<bool>();
-        private readonly IPointSource<bool> _coilInputs = new PointSource<bool>();
+        public PointSource<ushort> HoldingRegisters { get; } = new PointSource<ushort>();
 
-        IPointSource<ushort> ISlaveDataStore.HoldingRegisters => _holdingRegisters;
+        public PointSource<ushort> InputRegisters { get; } = new PointSource<ushort>();
 
-        IPointSource<ushort> ISlaveDataStore.InputRegisters => _inputRegisters;
+        public PointSource<bool> CoilDiscretes { get; } = new PointSource<bool>();
 
-        IPointSource<bool> ISlaveDataStore.CoilDiscretes => _coilDiscretes;
+        public PointSource<bool> CoilInputs { get; } = new PointSource<bool>();
 
-        IPointSource<bool> ISlaveDataStore.CoilInputs => _coilInputs;
+        #region ISlaveDataStore
+
+        IPointSource<ushort> ISlaveDataStore.HoldingRegisters => HoldingRegisters;
+
+        IPointSource<ushort> ISlaveDataStore.InputRegisters => InputRegisters;
+
+        IPointSource<bool> ISlaveDataStore.CoilDiscretes => CoilDiscretes;
+
+        IPointSource<bool> ISlaveDataStore.CoilInputs => CoilInputs;
+
+        #endregion
     }
 }
