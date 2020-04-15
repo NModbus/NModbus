@@ -237,7 +237,7 @@ namespace NModbus.IO
 
             if (request.SlaveAddress != response.SlaveAddress)
             {
-                string msg = $"Response slave address does not match request. Expected {response.SlaveAddress}, received {request.SlaveAddress}.";
+                string msg = $"Response slave address does not match request. Expected {request.SlaveAddress}, received {response.SlaveAddress}.";
                 throw new IOException(msg);
             }
 
