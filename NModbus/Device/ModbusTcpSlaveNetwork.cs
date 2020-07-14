@@ -113,15 +113,34 @@ namespace NModbus.Device
         public override async Task ListenAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             Logger.Information("Start Modbus Tcp Server.");
-            // TODO: add state {stoped, listening} and check it before starting
+            // TODO: add state {stopped, listening} and check it before starting
             Server.Start();
-
-            while (!cancellationToken.IsCancellationRequested)
+            // Cancellation code based on https://stackoverflow.com/a/47049129/11066760
+            using (cancellationToken.Register(() => Server.Stop()))
             {
-                TcpClient client = await Server.AcceptTcpClientAsync().ConfigureAwait(false);
-                var masterConnection = new ModbusMasterTcpConnection(client, this, ModbusFactory, Logger);
-                masterConnection.ModbusMasterTcpConnectionClosed += OnMasterConnectionClosedHandler;
-                _masters.TryAdd(client.Client.RemoteEndPoint.ToString(), masterConnection);
+                try
+                {
+                    while (!cancellationToken.IsCancellationRequested)
+                    {
+                        TcpClient client = await Server.AcceptTcpClientAsync().ConfigureAwait(false);
+                        var masterConnection = new ModbusMasterTcpConnection(client, this, ModbusFactory, Logger);
+                        masterConnection.ModbusMasterTcpConnectionClosed += OnMasterConnectionClosedHandler;
+                        _masters.TryAdd(client.Client.RemoteEndPoint.ToString(), masterConnection);
+                    }
+                }
+                catch (InvalidOperationException)
+                {
+                    // Either Server.Start wasn't called (a bug!)
+                    // or the CancellationToken was cancelled before
+                    // we started accepting (giving an InvalidOperationException),
+                    // or the CancellationToken was cancelled after
+                    // we started accepting (giving an ObjectDisposedException).
+                    //
+                    // In the latter two cases we should surface the cancellation
+                    // exception, or otherwise rethrow the original exception.
+                    cancellationToken.ThrowIfCancellationRequested();
+                    throw;
+                }
             }
         }
 
