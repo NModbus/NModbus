@@ -136,16 +136,19 @@ namespace NModbus
         {
             var adapter = new UdpClientAdapter(client);
 
-            var transport = new ModbusIpTransport(adapter, this, Logger);
-
-            return new ModbusIpMaster(transport);
+            return CreateIpMaster(adapter);
         }
 
         public IModbusMaster CreateMaster(TcpClient client)
         {
             var adapter = new TcpClientAdapter(client);
 
-            var transport = new ModbusIpTransport(adapter, this, Logger);
+            return CreateIpMaster(adapter);
+        }
+
+        public IModbusMaster CreateIpMaster(IStreamResource streamResource)
+        {
+            var transport = new ModbusIpTransport(streamResource, this, Logger);
 
             return new ModbusIpMaster(transport);
         }

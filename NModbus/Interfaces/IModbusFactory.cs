@@ -44,6 +44,13 @@ namespace NModbus
         /// <returns></returns>
         IModbusMaster CreateMaster(TcpClient client);
 
+        /// <summary>
+        /// Create an IP master from IStreamResource
+        /// </summary>
+        /// <param name="streamResource">IStreamResource transport</param>
+        /// <returns></returns>
+        IModbusMaster CreateIpMaster(IStreamResource streamResource);
+
         #endregion
 
         #region Slave
