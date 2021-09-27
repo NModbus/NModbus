@@ -150,6 +150,15 @@ namespace NModbus
             return new ModbusIpMaster(transport);
         }
 
+        public IModbusMaster CreateMaster(Socket client)
+        {
+            var adapter = new SocketAdapter(client);
+
+            var transport = new ModbusRtuTransport(adapter, this, Logger);
+
+            return new ModbusSerialMaster(transport);
+        }
+
         public IModbusFunctionService GetFunctionService(byte functionCode)
         {
             return _functionServices.GetValueOrDefault(functionCode);
