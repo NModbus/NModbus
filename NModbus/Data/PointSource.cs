@@ -6,7 +6,8 @@ using System.Linq;
 namespace NModbus.Data
 {
     /// <summary>
-    /// A simple implementation of the point source. All registers are.
+    /// A simple implementation of the point source. Memory for all points is allocated the first time a point is accessed. 
+    /// This is useful for cases where many points are used.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class PointSource<T> : IPointSource<T> where T : struct
@@ -22,9 +23,11 @@ namespace NModbus.Data
 
         private readonly object _syncRoot = new object();
 
+        private const int NumberOfPoints = ushort.MaxValue + 1;
+
         public PointSource()
         {
-            _points = new Lazy<T[]>(() => new T[ushort.MaxValue]);
+            _points = new Lazy<T[]>(() => new T[NumberOfPoints]);
         }
 
         public T[] ReadPoints(ushort startAddress, ushort numberOfPoints)
