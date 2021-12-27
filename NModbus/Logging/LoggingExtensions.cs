@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NModbus.Extensions;
 
 namespace NModbus.Logging
@@ -92,7 +93,7 @@ namespace NModbus.Logging
                 {
                     string prefix = frame.DoesCrcMatch() ? validPrefix : invalidPrefix;
 
-                    logger.Trace($"{prefix}: {string.Join(", ", frame)}");
+                    logger.Trace($"{prefix}: {string.Join(" ", frame.Select(b => b.ToString("X2")))}");
                 }
             }
         }
