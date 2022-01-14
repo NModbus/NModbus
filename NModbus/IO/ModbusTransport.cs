@@ -176,18 +176,15 @@ namespace NModbus.IO
                     }
 
                     Logger.Warning($"Received SLAVE_DEVICE_BUSY exception response, waiting {_waitToRetryMilliseconds} milliseconds and resubmitting request.");
+
                     Sleep(WaitToRetryMilliseconds);
                 }
                 catch (Exception e)
                 {
-                    if (e is SocketException || e.InnerException is SocketException)
-                    {
-                        throw;
-                    }
-                    else if (e is FormatException ||
-                             e is NotImplementedException ||
-                             e is TimeoutException ||
-                             e is IOException)
+                    if (e is FormatException ||
+                        e is NotImplementedException ||
+                        e is TimeoutException ||
+                        e is IOException)
                     {
                         Logger.Error($"{e.GetType().Name}, {(_retries - attempt + 1)} retries remaining - {e}");
 
@@ -195,6 +192,8 @@ namespace NModbus.IO
                         {
                             throw;
                         }
+
+                        Sleep(WaitToRetryMilliseconds);
                     }
                     else
                     {
