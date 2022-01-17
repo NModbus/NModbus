@@ -67,9 +67,9 @@ namespace NModbus.IO
 
             logger.Debug($"PDU: {frameLength}");
             var frame = mbapHeader.Concat(messageFrame).ToArray();
-            logger.Debug($"RX: {string.Join(", ", frame)}");
+            logger.LogFrameRx(frame);
 
-            return frame;
+      return frame;
         }
 
         internal static byte[] GetMbapHeader(IModbusMessage message)
