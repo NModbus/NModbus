@@ -19,7 +19,7 @@ namespace Samples
     /// </summary>
     public class Driver
     {
-        private const string PrimarySerialPortName = "COM12";
+        private const string PrimarySerialPortName = "COM4";
         private const string SecondarySerialPortName = "COM2";
 
         private static async Task<int> Main(string[] args)
@@ -30,6 +30,10 @@ namespace Samples
 
             try
             {
+                ModbusSocketSerialMasterReadRegisters();
+                ModbusSocketSerialMasterWriteRegisters();
+                ModbusSocketSerialMasterReadRegisters();
+                await Task.Run(() => { });
                 //ModbusTcpMasterReadInputs();
                 //SimplePerfTest();
                 //ModbusSerialRtuMasterWriteRegisters();
@@ -42,8 +46,9 @@ namespace Samples
                 //StartModbusUdpSlave();
                 //StartModbusAsciiSlave();
                 //await StartModbusSerialRtuSlaveNetwork(cts.Token);
-                await StartModbusSerialRtuSlaveWithCustomMessage(cts.Token);
+                //await StartModbusSerialRtuSlaveWithCustomMessage(cts.Token);
             }
+
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -80,7 +85,60 @@ namespace Samples
                 master.WriteMultipleRegisters(slaveId, startAddress, registers);
             }
         }
+        /// <summary>
+        /// Simple write to socket connector sending RTU messages
+        /// </summary>
+        public static void ModbusSocketSerialMasterWriteRegisters()
+        {
 
+
+            using (var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            {
+
+                // configure socket
+                var serverIP = IPAddress.Parse("192.168.2.100");
+                var serverFullAddr = new IPEndPoint(serverIP, 9000);
+                sock.Connect(serverFullAddr);
+
+                var factory = new ModbusFactory();
+                IModbusMaster master = factory.CreateMaster(sock);
+
+                byte slaveId = 1;
+                ushort startAddress = 100;
+                ushort[] registers = new ushort[] { 10, 20, 30 };
+
+                // write three registers
+                master.WriteMultipleRegisters(slaveId, startAddress, registers);
+            }
+        }
+        /// <summary>
+        /// Simple Read registers using socket and expecting RTU fromatted response messages.
+        /// </summary>
+        public static void ModbusSocketSerialMasterReadRegisters()
+        {
+
+
+            using (var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            {
+
+                // configure socket
+                var serverIP = IPAddress.Parse("192.168.2.100");
+                var serverFullAddr = new IPEndPoint(serverIP, 9000);
+                sock.Connect(serverFullAddr);
+
+                var factory = new ModbusFactory();
+                IModbusMaster master = factory.CreateMaster(sock);
+
+                byte slaveId = 1;
+                ushort startAddress = 100;
+                ushort[] registers = master.ReadHoldingRegisters(slaveId, startAddress, 3);
+                for (int i = 0; i < 3; i++)
+                {
+                    Console.WriteLine($"Input {(startAddress + i)}={registers[i]}");
+                }
+
+            }
+        }
         /// <summary>
         ///     Simple Modbus serial ASCII master read holding registers example.
         /// </summary>
