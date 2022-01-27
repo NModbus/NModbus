@@ -11,7 +11,7 @@ namespace NModbus.Data
     /// <summary>
     ///     Collection of 16 bit registers.
     /// </summary>
-    internal class RegisterCollection : Collection<ushort>, IModbusMessageDataCollection
+    public class RegisterCollection : Collection<ushort>, IModbusMessageDataCollection
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="RegisterCollection" /> class.
