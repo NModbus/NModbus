@@ -51,7 +51,7 @@ namespace NModbus.UnitTests
         public void Serializable()
         {
             var formatter = new BinaryFormatter();
-            var e = new InvalidModbusRequestException(Modbus.SlaveDeviceBusy);
+            var e = new InvalidModbusRequestException(SlaveExceptionCodes.SlaveDeviceBusy);
 
             using (var stream = new MemoryStream())
             {
@@ -60,8 +60,8 @@ namespace NModbus.UnitTests
 
                 var e2 = (InvalidModbusRequestException)formatter.Deserialize(stream);
                 Assert.NotNull(e2);
-                Assert.Equal(Modbus.SlaveDeviceBusy, e2.ExceptionCode);
-                Assert.Equal($"Modbus exception code {Modbus.SlaveDeviceBusy}.", e2.Message);
+                Assert.Equal(SlaveExceptionCodes.SlaveDeviceBusy, e2.ExceptionCode);
+                Assert.Equal($"Modbus exception code {SlaveExceptionCodes.SlaveDeviceBusy}.", e2.Message);
             }
         }
 #endif
