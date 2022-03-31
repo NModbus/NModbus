@@ -24,6 +24,8 @@
 	<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+	<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+	<AnalysisLevel>latest</AnalysisLevel>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net46|AnyCPU'">
@@ -74,5 +76,10 @@
 	<ItemGroup>
 		<None Include="..\LICENSE.txt" Pack="true" PackagePath="" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="System.Text.Json" Version="6.0.2" />
+	</ItemGroup>
+
 
 </Project>
