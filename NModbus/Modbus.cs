@@ -28,7 +28,7 @@ namespace NModbus
 
         // IP slaves should be addressed by IP
         [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use DefaultIpServerUnitId instead.")]
-        public const byte DefaultIpSlaveUnitId = 0;
+        public const byte DefaultIpSlaveUnitId = DefaultIpServerUnitId;
         // IP servers should be addressed by IP
         public const byte DefaultIpServerUnitId = 0;
 

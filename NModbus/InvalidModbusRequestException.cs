@@ -18,7 +18,7 @@ namespace NModbus
         /// <summary>
         ///     Initializes a new instance of the <see cref="InvalidModbusRequestException" /> class with a specified Modbus exception code.
         /// </summary>
-        /// <param name="exceptionCode">The Modbus exception code to provide to the slave.</param>
+        /// <param name="exceptionCode">The Modbus exception code to provide to the server.</param>
         public InvalidModbusRequestException(byte exceptionCode)
             : this(GetMessage(exceptionCode), exceptionCode)
         {
@@ -28,7 +28,7 @@ namespace NModbus
         ///     Initializes a new instance of the <see cref="InvalidModbusRequestException" /> class with a specified error message and Modbus exception code.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
-        /// <param name="exceptionCode">The Modbus exception code to provide to the slave.</param>
+        /// <param name="exceptionCode">The Modbus exception code to provide to the server.</param>
         public InvalidModbusRequestException(string message, byte exceptionCode)
             : this(message, exceptionCode, null)
         {
@@ -37,7 +37,7 @@ namespace NModbus
         /// <summary>
         ///     Initializes a new instance of the <see cref="InvalidModbusRequestException" /> class with a specified Modbus exception code and a reference to the inner exception that is the cause of this exception.
         /// </summary>
-        /// <param name="exceptionCode">The Modbus exception code to provide to the slave.</param>
+        /// <param name="exceptionCode">The Modbus exception code to provide to the server.</param>
         /// <param name="innerException">The exception that is the cause of the current exception. If the <paramref name="innerException" /> parameter is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
         public InvalidModbusRequestException(byte exceptionCode, Exception innerException)
             : this(GetMessage(exceptionCode), exceptionCode, innerException)
@@ -48,7 +48,7 @@ namespace NModbus
         ///     Initializes a new instance of the <see cref="InvalidModbusRequestException" /> class with a specified Modbus exception code and a reference to the inner exception that is the cause of this exception.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
-        /// <param name="exceptionCode">The Modbus exception code to provide to the slave.</param>
+        /// <param name="exceptionCode">The Modbus exception code to provide to the server.</param>
         /// <param name="innerException">The exception that is the cause of the current exception. If the <paramref name="innerException" /> parameter is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
         public InvalidModbusRequestException(string message, byte exceptionCode, Exception innerException)
             : base(message, innerException)
@@ -70,7 +70,7 @@ namespace NModbus
 #endif
 
         /// <summary>
-        ///     Gets the Modbus exception code to provide to the slave.
+        ///     Gets the Modbus exception code to provide to the server.
         /// </summary>
         public byte ExceptionCode => _exceptionCode;
 

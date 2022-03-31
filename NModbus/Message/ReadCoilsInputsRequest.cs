@@ -10,8 +10,8 @@ namespace NModbus.Message
         {
         }
 
-        public ReadCoilsInputsRequest(byte functionCode, byte slaveAddress, ushort startAddress, ushort numberOfPoints)
-            : base(slaveAddress, functionCode)
+        public ReadCoilsInputsRequest(byte functionCode, byte serverAddress, ushort startAddress, ushort numberOfPoints)
+            : base(serverAddress, functionCode)
         {
             StartAddress = startAddress;
             NumberOfPoints = numberOfPoints;

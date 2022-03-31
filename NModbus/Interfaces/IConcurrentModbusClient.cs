@@ -8,20 +8,20 @@
     public interface IConcurrentModbusMaster : IConcurrentModbusClient {}
     public interface IConcurrentModbusClient : IDisposable
     {
-        Task<ushort[]> ReadInputRegistersAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints, ushort blockSize = 125, CancellationToken cancellationToken = default(CancellationToken));
+        Task<ushort[]> ReadInputRegistersAsync(byte serverAddress, ushort startAddress, ushort numberOfPoints, ushort blockSize = 125, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<ushort[]> ReadHoldingRegistersAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints, ushort blockSize = 125, CancellationToken cancellationToken = default(CancellationToken));
+        Task<ushort[]> ReadHoldingRegistersAsync(byte serverAddress, ushort startAddress, ushort numberOfPoints, ushort blockSize = 125, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task WriteMultipleRegistersAsync(byte slaveAddress, ushort startAddress, ushort[] data, ushort blockSize = 121, CancellationToken cancellationToken = default(CancellationToken));
+        Task WriteMultipleRegistersAsync(byte serverAddress, ushort startAddress, ushort[] data, ushort blockSize = 121, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<bool[]> ReadCoilsAsync(byte slaveAddress, ushort startAddress, ushort number, CancellationToken cancellationToken = default(CancellationToken));
+        Task<bool[]> ReadCoilsAsync(byte serverAddress, ushort startAddress, ushort number, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<bool[]> ReadDiscretesAsync(byte slaveAddress, ushort startAddress, ushort number, CancellationToken cancellationToken = default(CancellationToken));
+        Task<bool[]> ReadDiscretesAsync(byte serverAddress, ushort startAddress, ushort number, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task WriteCoilsAsync(byte slaveAddress, ushort startAddress, bool[] data, CancellationToken cancellationToken = default(CancellationToken));
+        Task WriteCoilsAsync(byte serverAddress, ushort startAddress, bool[] data, CancellationToken cancellationToken = default(CancellationToken));
         
-        Task WriteSingleCoilAsync(byte slaveAddress, ushort coilAddress, bool value, CancellationToken cancellationToken = default(CancellationToken));
+        Task WriteSingleCoilAsync(byte serverAddress, ushort coilAddress, bool value, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task WriteSingleRegisterAsync(byte slaveAddress, ushort address, ushort value, CancellationToken cancellationToken = default(CancellationToken));
+        Task WriteSingleRegisterAsync(byte serverAddress, ushort address, ushort value, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using NModbus.IO;
+﻿using NModbus.IO;
+using System;
 
 namespace NModbus
 {
@@ -9,7 +9,9 @@ namespace NModbus
 
         uint RetryOnOldResponseThreshold { get; set; }
 
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use ServerBusyUsesRetryCount instead.")]
         bool SlaveBusyUsesRetryCount { get; set; }
+        bool ServerBusyUsesRetryCount { get; set; }
 
         int WaitToRetryMilliseconds { get; set; }
 

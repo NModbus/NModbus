@@ -1,13 +1,11 @@
-﻿using System;
-using System.Diagnostics;
+﻿using NModbus.IO;
+using NModbus.Logging;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using NModbus.IO;
-using NModbus.Message;
-using NModbus.Logging;
 
 namespace NModbus.Device
 {

@@ -1,11 +1,11 @@
 ﻿namespace NModbus.Extensions
 {
-  using System;
+    using System;
 
-  [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use ModbusClientEnhanced instead.")]
+    [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use ModbusClientEnhanced instead.")]
   public class ModbusMasterEnhanced : ModbusClientEnhanced
   {
-      public ModbusMasterEnhanced(IModbusClient client, uint wordSize = 32, Func<byte[], byte[]> endian = null, bool wordSwapped = false) : base(client, wordSize, endian, wordSwapped) { }
+      public ModbusMasterEnhanced(IModbusMaster client, uint wordSize = 32, Func<byte[], byte[]> endian = null, bool wordSwapped = false) : base(client, wordSize, endian, wordSwapped) { }
   }
 
   /// <summary>

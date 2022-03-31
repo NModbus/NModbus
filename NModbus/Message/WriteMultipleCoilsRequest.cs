@@ -1,9 +1,9 @@
-﻿using System;
+﻿using NModbus.Data;
+using NModbus.Unme.Common;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
-using NModbus.Data;
-using NModbus.Unme.Common;
 
 namespace NModbus.Message
 {
@@ -22,8 +22,8 @@ namespace NModbus.Message
         /// <summary>
         ///     Write Multiple Coils request.
         /// </summary>
-        public WriteMultipleCoilsRequest(byte slaveAddress, ushort startAddress, DiscreteCollection data)
-            : base(slaveAddress, ModbusFunctionCodes.WriteMultipleCoils)
+        public WriteMultipleCoilsRequest(byte serverAddress, ushort startAddress, DiscreteCollection data)
+            : base(serverAddress, ModbusFunctionCodes.WriteMultipleCoils)
         {
             StartAddress = startAddress;
             NumberOfPoints = (ushort)data.Count;

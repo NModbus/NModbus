@@ -9,9 +9,9 @@
     using System.Threading.Tasks;
 
     [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use ConcurrentModbusClient instead.")]
-    public class ConcurrentModbusMaster : ConcurrentModbusClient
+    public class ConcurrentModbusMaster : ConcurrentModbusClient, IConcurrentModbusMaster
     {
-        public ConcurrentModbusMaster(IModbusClient master, TimeSpan minInterval) : base(master, minInterval) {}
+        public ConcurrentModbusMaster(IModbusMaster master, TimeSpan minInterval) : base(master, minInterval) {}
     }
 
     /// <summary>

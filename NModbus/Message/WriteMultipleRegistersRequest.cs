@@ -1,9 +1,9 @@
-﻿using System;
+﻿using NModbus.Data;
+using NModbus.Unme.Common;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
-using NModbus.Data;
-using NModbus.Unme.Common;
 
 namespace NModbus.Message
 {
@@ -13,8 +13,8 @@ namespace NModbus.Message
         {
         }
 
-        public WriteMultipleRegistersRequest(byte slaveAddress, ushort startAddress, RegisterCollection data)
-            : base(slaveAddress, ModbusFunctionCodes.WriteMultipleRegisters)
+        public WriteMultipleRegistersRequest(byte serverAddress, ushort startAddress, RegisterCollection data)
+            : base(serverAddress, ModbusFunctionCodes.WriteMultipleRegisters)
         {
             StartAddress = startAddress;
             NumberOfPoints = (ushort)data.Count;

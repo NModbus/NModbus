@@ -1,9 +1,9 @@
-﻿using System;
+﻿using NModbus.Data;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using NModbus.Data;
 
 namespace NModbus.Message
 {
@@ -13,8 +13,8 @@ namespace NModbus.Message
         {
         }
 
-        public WriteSingleRegisterRequestResponse(byte slaveAddress, ushort startAddress, ushort registerValue)
-            : base(slaveAddress, ModbusFunctionCodes.WriteSingleRegister)
+        public WriteSingleRegisterRequestResponse(byte serverAddress, ushort startAddress, ushort registerValue)
+            : base(serverAddress, ModbusFunctionCodes.WriteSingleRegister)
         {
             StartAddress = startAddress;
             Data = new RegisterCollection(registerValue);

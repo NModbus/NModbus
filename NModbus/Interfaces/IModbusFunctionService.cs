@@ -1,10 +1,9 @@
 ﻿using System;
-using NModbus.Message;
 
 namespace NModbus
 {
     /// <summary>
-    /// A Modbus slave message handler.
+    /// A Modbus server message handler.
     /// </summary>
     public interface IModbusFunctionService
     {
@@ -14,7 +13,7 @@ namespace NModbus
         byte FunctionCode { get; }
 
         /// <summary>
-        /// Creates a message that wrapps the request frame.
+        /// Creates a message that wraps the request frame.
         /// </summary>
         /// <param name="frame"></param>
         /// <returns></returns>

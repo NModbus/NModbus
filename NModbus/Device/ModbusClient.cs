@@ -1,9 +1,9 @@
-﻿using System;
+﻿using NModbus.Data;
+using NModbus.Message;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
-using NModbus.Data;
-using NModbus.Message;
 
 namespace NModbus.Device
 {
@@ -11,7 +11,7 @@ namespace NModbus.Device
     ///     Modbus master device.
     /// </summary>
     [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use ModbusClient instead.")]
-    internal abstract class ModbusMaster : ModbusClient, IModbusClient
+    internal abstract class ModbusMaster : ModbusClient, IModbusMaster
     {
         internal ModbusMaster(IModbusTransport transport) : base(transport) { }
     }

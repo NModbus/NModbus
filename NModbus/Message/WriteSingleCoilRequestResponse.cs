@@ -1,10 +1,10 @@
-﻿using System;
+﻿using NModbus.Data;
+using NModbus.Unme.Common;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using NModbus.Data;
-using NModbus.Unme.Common;
 
 namespace NModbus.Message
 {
@@ -14,8 +14,8 @@ namespace NModbus.Message
         {
         }
 
-        public WriteSingleCoilRequestResponse(byte slaveAddress, ushort startAddress, bool coilState)
-            : base(slaveAddress, ModbusFunctionCodes.WriteSingleCoil)
+        public WriteSingleCoilRequestResponse(byte serverAddress, ushort startAddress, bool coilState)
+            : base(serverAddress, ModbusFunctionCodes.WriteSingleCoil)
         {
             StartAddress = startAddress;
             Data = new RegisterCollection(coilState ? Modbus.CoilOn : Modbus.CoilOff);

@@ -1,8 +1,5 @@
 ﻿using NModbus.Data;
-using NModbus.Unme.Common;
 using System;
-using System.Linq;
-using System.Net;
 
 namespace NModbus.Message
 {
@@ -17,8 +14,8 @@ namespace NModbus.Message
         {
         }
 
-        public WriteFileRecordResponse(byte slaveAddress, FileRecordCollection data)
-            : base(slaveAddress, ModbusFunctionCodes.WriteFileRecord)
+        public WriteFileRecordResponse(byte serverAddress, FileRecordCollection data)
+            : base(serverAddress, ModbusFunctionCodes.WriteFileRecord)
         {
             Data = data;
         }
