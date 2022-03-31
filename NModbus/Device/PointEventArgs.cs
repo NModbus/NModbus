@@ -4,7 +4,7 @@
 namespace NModbus.Device
 {
     /// <summary>
-    /// Modbus Slave request event args containing information on the message.
+    /// Modbus Server request event args containing information on the message.
     /// </summary>
     public class PointEventArgs : EventArgs
     {

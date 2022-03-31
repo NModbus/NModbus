@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 using NModbus.IO;
 
 namespace NModbus
@@ -21,79 +22,104 @@ namespace NModbus
         /// <returns></returns>
         IModbusFunctionService[] GetAllFunctionServices();
 
-        #region Master
+        #region Client
 
-        /// <summary>
-        /// Create an rtu master.
-        /// </summary>
-        /// <param name="transport"></param>
-        /// <returns></returns>
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateClient instead.")]
         IModbusSerialMaster CreateMaster(IModbusSerialTransport transport);
 
         /// <summary>
-        /// Create a TCP master.
+        /// Create an rtu client.
+        /// </summary>
+        /// <param name="transport"></param>
+        /// <returns></returns>
+        IModbusSerialClient CreateClient(IModbusSerialTransport transport);
+
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateClient instead.")]
+        IModbusMaster CreateMaster(UdpClient client);
+
+        /// <summary>
+        /// Create a TCP client.
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        IModbusMaster CreateMaster(UdpClient client);
+        IModbusClient CreateClient(UdpClient client);
+
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateClient instead.")]
+        IModbusMaster CreateMaster(TcpClient client);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        IModbusMaster CreateMaster(TcpClient client);
+        IModbusClient CreateClient(TcpClient client);
 
         #endregion
 
-        #region Slave
+        #region Server
 
-        /// <summary>
-        /// Creates a Modbus Slave.
-        /// </summary>
-        /// <param name="unitId">The address of this slave on the Modbus network.</param>
-        /// <param name="dataStore">Optionally specify a custom data store for the created slave.</param>
-        /// <returns></returns>
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateServer instead.")]
         IModbusSlave CreateSlave(byte unitId, ISlaveDataStore dataStore = null);
 
+        /// <summary>
+        /// Creates a Modbus Server.
+        /// </summary>
+        /// <param name="unitId">The address of this server on the Modbus network.</param>
+        /// <param name="dataStore">Optionally specify a custom data store for the created server.</param>
+        /// <returns></returns>
+        IModbusServer CreateServer(byte unitId, IServerDataStore dataStore = null);
+
         #endregion
 
-        #region Slave Networks
+        #region Server Networks
 
-        /// <summary>
-        /// Creates a slave network based on the RTU transport.
-        /// </summary>
-        /// <param name="transport"></param>
-        /// <returns></returns>
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateServerNetwork instead.")]
         IModbusSlaveNetwork CreateSlaveNetwork(IModbusRtuTransport transport);
 
         /// <summary>
-        /// Creates an ascii slave network.
+        /// Creates a server network based on the RTU transport.
         /// </summary>
-        /// <param name="transport">The ascii transport to base this on.</param>
+        /// <param name="transport"></param>
         /// <returns></returns>
+        IModbusServerNetwork CreateServerNetwork(IModbusRtuTransport transport);
+
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateServerNetwork instead.")]
         IModbusSlaveNetwork CreateSlaveNetwork(IModbusAsciiTransport transport);
 
         /// <summary>
-        /// Create a slave network based on TCP.
+        /// Creates an ascii server network.
         /// </summary>
-        /// <param name="tcpListener"></param>
+        /// <param name="transport">The ascii transport to base this on.</param>
         /// <returns></returns>
+        IModbusServerNetwork CreateServerNetwork(IModbusAsciiTransport transport);
+
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateServerNetwork instead.")]
         IModbusSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener);
 
         /// <summary>
-        /// Creates a UDP modbus slave network.
+        /// Create a server network based on TCP.
+        /// </summary>
+        /// <param name="tcpListener"></param>
+        /// <returns></returns>
+        IModbusServerNetwork CreateServerNetwork(TcpListener tcpListener);
+
+
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateServerNetwork instead.")]
+        IModbusSlaveNetwork CreateSlaveNetwork(UdpClient client);
+        /// <summary>
+        /// Creates a UDP modbus server network.
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        IModbusSlaveNetwork CreateSlaveNetwork(UdpClient client);
+        IModbusServerNetwork CreateServerNetwork(UdpClient client);
+
 
         #endregion
 
         #region Transport
 
         /// <summary>
-        /// Creates an RTU transpoort. 
+        /// Creates an RTU transport. 
         /// </summary>
         /// <param name="streamResource"></param>
         /// <returns></returns>

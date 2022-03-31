@@ -1,4 +1,5 @@
-﻿using NModbus.Data;
+﻿using System;
+using NModbus.Data;
 using NModbus.Message;
 
 namespace NModbus.Device.MessageHandlers
@@ -25,7 +26,12 @@ namespace NModbus.Device.MessageHandlers
             return frameStart[2] + 1;
         }
 
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use Handle with IServerDataStore parameter instead.")]
         protected override IModbusMessage Handle(ReadCoilsInputsRequest request, ISlaveDataStore dataStore)
+        {
+            return Handle(request, dataStore as IServerDataStore);
+        }
+        protected override IModbusMessage Handle(ReadCoilsInputsRequest request, IServerDataStore dataStore)
         {
             bool[] discretes = dataStore.CoilDiscretes.ReadPoints(request.StartAddress, request.NumberOfPoints);
 
@@ -33,7 +39,7 @@ namespace NModbus.Device.MessageHandlers
 
             return new ReadCoilsInputsResponse(
                 request.FunctionCode, 
-                request.SlaveAddress, 
+                request.ServerAddress, 
                 data.ByteCount, data);
         }
     }

@@ -13,8 +13,8 @@ namespace NModbus.UnitTests
         [Fact]
         public void EmptyConstructor()
         {
-            var e = new SlaveException();
-            Assert.Equal($"Exception of type '{typeof(SlaveException).FullName}' was thrown.", e.Message);
+            var e = new ServerException();
+            Assert.Equal($"Exception of type '{typeof(ServerException).FullName}' was thrown.", e.Message);
             Assert.Equal(0, e.SlaveAddress);
             Assert.Equal(0, e.FunctionCode);
             Assert.Equal(0, e.SlaveExceptionCode);
@@ -24,7 +24,7 @@ namespace NModbus.UnitTests
         [Fact]
         public void ConstructorWithMessage()
         {
-            var e = new SlaveException("Hello World");
+            var e = new ServerException("Hello World");
             Assert.Equal("Hello World", e.Message);
             Assert.Equal(0, e.SlaveAddress);
             Assert.Equal(0, e.FunctionCode);
@@ -36,7 +36,7 @@ namespace NModbus.UnitTests
         public void ConstructorWithMessageAndInnerException()
         {
             var inner = new IOException("Bar");
-            var e = new SlaveException("Foo", inner);
+            var e = new ServerException("Foo", inner);
             Assert.Equal("Foo", e.Message);
             Assert.Same(inner, e.InnerException);
             Assert.Equal(0, e.SlaveAddress);
@@ -47,8 +47,8 @@ namespace NModbus.UnitTests
         [Fact]
         public void ConstructorWithSlaveExceptionResponse()
         {
-            var response = new SlaveExceptionResponse(12, ModbusFunctionCodes.ReadCoils, 1);
-            var e = new SlaveException(response);
+            var response = new ServerExceptionResponse(12, ModbusFunctionCodes.ReadCoils, 1);
+            var e = new ServerException(response);
 
             Assert.Equal(12, e.SlaveAddress);
             Assert.Equal(ModbusFunctionCodes.ReadCoils, e.FunctionCode);
@@ -56,16 +56,16 @@ namespace NModbus.UnitTests
             Assert.Null(e.InnerException);
 
             Assert.Equal(
-                $@"Exception of type '{typeof(SlaveException).FullName}' was thrown.{Environment.NewLine}Function Code: {response.FunctionCode}{Environment.NewLine}Exception Code: {response.SlaveExceptionCode} - {Resources.IllegalFunction}",
+                $@"Exception of type '{typeof(ServerException).FullName}' was thrown.{Environment.NewLine}Function Code: {response.FunctionCode}{Environment.NewLine}Exception Code: {response.SlaveExceptionCode} - {Resources.IllegalFunction}",
                 e.Message);
         }
 
         [Fact]
         public void ConstructorWithCustomMessageAndSlaveExceptionResponse()
         {
-            var response = new SlaveExceptionResponse(12, ModbusFunctionCodes.ReadCoils, 2);
+            var response = new ServerExceptionResponse(12, ModbusFunctionCodes.ReadCoils, 2);
             string customMessage = "custom message";
-            var e = new SlaveException(customMessage, response);
+            var e = new ServerException(customMessage, response);
 
             Assert.Equal(12, e.SlaveAddress);
             Assert.Equal(ModbusFunctionCodes.ReadCoils, e.FunctionCode);
@@ -82,14 +82,14 @@ namespace NModbus.UnitTests
         public void Serializable()
         {
             var formatter = new BinaryFormatter();
-            var e = new SlaveException(new SlaveExceptionResponse(1, 2, 3));
+            var e = new ServerException(new ServerExceptionResponse(1, 2, 3));
 
             using (var stream = new MemoryStream())
             {
                 formatter.Serialize(stream, e);
                 stream.Position = 0;
 
-                var e2 = (SlaveException)formatter.Deserialize(stream);
+                var e2 = (ServerException)formatter.Deserialize(stream);
                 Assert.NotNull(e2);
                 Assert.Equal(1, e2.SlaveAddress);
                 Assert.Equal(2, e2.FunctionCode);

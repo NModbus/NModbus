@@ -11,8 +11,8 @@ namespace NModbus.Message
         {
         }
 
-        public ReadCoilsInputsResponse(byte functionCode, byte slaveAddress, byte byteCount, DiscreteCollection data)
-            : base(slaveAddress, functionCode)
+        public ReadCoilsInputsResponse(byte functionCode, byte serverAddress, byte byteCount, DiscreteCollection data)
+            : base(serverAddress, functionCode)
         {
             ByteCount = byteCount;
             Data = data;

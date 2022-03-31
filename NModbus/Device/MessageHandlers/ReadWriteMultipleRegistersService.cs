@@ -27,7 +27,13 @@ namespace NModbus.Device.MessageHandlers
             throw new NotSupportedException();
         }
 
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use Handle with IServerDataStore parameter instead.")]
         protected override IModbusMessage Handle(ReadWriteMultipleRegistersRequest request, ISlaveDataStore dataStore)
+        {
+            return Handle(request, dataStore as IServerDataStore);
+        }
+
+        protected override IModbusMessage Handle(ReadWriteMultipleRegistersRequest request, IServerDataStore dataStore)
         {
             ushort[] pointsToWrite = request.WriteRequest.Data
                 .ToArray();
@@ -41,7 +47,7 @@ namespace NModbus.Device.MessageHandlers
 
             return new ReadHoldingInputRegistersResponse(
                 request.FunctionCode,
-                request.SlaveAddress,
+                request.ServerAddress,
                 data);
         }
     }

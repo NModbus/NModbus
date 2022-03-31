@@ -9,8 +9,8 @@ namespace NModbus.Message
         {
         }
 
-        internal AbstractModbusMessageWithData(byte slaveAddress, byte functionCode)
-            : base(slaveAddress, functionCode)
+        internal AbstractModbusMessageWithData(byte serverAddress, byte functionCode)
+            : base(serverAddress, functionCode)
         {
         }
 

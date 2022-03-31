@@ -20,7 +20,13 @@ namespace NModbus.Device
 
         public abstract IModbusMessage CreateRequest(byte[] frame);
 
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use HandleServerRequest instead.")]
         public IModbusMessage HandleSlaveRequest(IModbusMessage request, ISlaveDataStore dataStore)
+        {
+            return HandleServerRequest(request, dataStore as IServerDataStore);
+        }
+
+        public IModbusMessage HandleServerRequest(IModbusMessage request, IServerDataStore dataStore)
         {
             //Attempt to cast the message
             TRequest typedRequest = request as TRequest;
@@ -35,8 +41,10 @@ namespace NModbus.Device
         public abstract int GetRtuRequestBytesToRead(byte[] frameStart);
 
         public abstract int GetRtuResponseBytesToRead(byte[] frameStart);
-       
+
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use Handle with IServerDataStore parameter instead.")]
         protected abstract IModbusMessage Handle(TRequest request, ISlaveDataStore dataStore);
+        protected abstract IModbusMessage Handle(TRequest request, IServerDataStore dataStore);
 
         protected static T CreateModbusMessage<T>(byte[] frame)
             where T : IModbusMessage, new()

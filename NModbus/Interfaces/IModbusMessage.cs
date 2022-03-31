@@ -1,9 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NModbus
 {
     /// <summary>
-    ///     A message built by the master (client) that initiates a Modbus transaction.
+    ///     A message built by the client that initiates a Modbus transaction.
     /// </summary>
     public interface IModbusMessage
     {
@@ -15,10 +16,15 @@ namespace NModbus
         /// <summary>
         ///     Address of the slave (server).
         /// </summary>
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use ServerAddress instead.")]
         byte SlaveAddress { get; set; }
+        /// <summary>
+        ///     Address of the server.
+        /// </summary>
+        byte ServerAddress { get; set; }
 
         /// <summary>
-        ///     Composition of the slave address and protocol data unit.
+        ///     Composition of the server address and protocol data unit.
         /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
         byte[] MessageFrame { get; }

@@ -9,12 +9,18 @@ namespace NModbus.Device
 {
     using Extensions;
 
-    internal class ModbusSerialSlaveNetwork : ModbusSlaveNetwork
+    [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use ModbusSerialServerNetwork instead.")]
+    internal class ModbusSerialSlaveNetwork : ModbusSerialServerNetwork
+    {
+        public ModbusSerialSlaveNetwork(IModbusSerialTransport transport, IModbusFactory modbusFactory, IModbusLogger logger) : base(transport, modbusFactory, logger) { }
+    }
+
+    internal class ModbusSerialServerNetwork : ModbusServerNetwork
     {
         private readonly IModbusSerialTransport _serialTransport;
         private readonly IModbusFactory _modbusFactory;
 
-        public ModbusSerialSlaveNetwork(IModbusSerialTransport transport, IModbusFactory modbusFactory, IModbusLogger logger) 
+        public ModbusSerialServerNetwork(IModbusSerialTransport transport, IModbusFactory modbusFactory, IModbusLogger logger) 
             : base(transport, modbusFactory, logger)
         {
             _serialTransport = transport ?? throw new ArgumentNullException(nameof(transport));

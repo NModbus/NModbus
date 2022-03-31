@@ -20,9 +20,9 @@ namespace NModbus.Message
         /// <summary>
         ///     Abstract Modbus message.
         /// </summary>
-        internal AbstractModbusMessage(byte slaveAddress, byte functionCode)
+        internal AbstractModbusMessage(byte serverAddress, byte functionCode)
         {
-            _messageImpl = new ModbusMessageImpl(slaveAddress, functionCode);
+            _messageImpl = new ModbusMessageImpl(serverAddress, functionCode);
         }
 
         public ushort TransactionId
@@ -37,11 +37,18 @@ namespace NModbus.Message
             set => _messageImpl.FunctionCode = value;
         }
 
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use ServerAddress instead.")]
         public byte SlaveAddress
         {
-            get => _messageImpl.SlaveAddress;
-            set => _messageImpl.SlaveAddress = value;
+            get => ServerAddress;
+            set => ServerAddress = value;
         }
+        public byte ServerAddress
+        {
+            get => _messageImpl.ServerAddress;
+            set => _messageImpl.ServerAddress = value;
+        }
+        
 
         public byte[] MessageFrame => _messageImpl.MessageFrame;
 

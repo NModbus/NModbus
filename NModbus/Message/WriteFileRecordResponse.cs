@@ -12,8 +12,8 @@ namespace NModbus.Message
         {
         }
 
-        public WriteFileRecordResponse(byte slaveAddress)
-            : base(slaveAddress, ModbusFunctionCodes.WriteFileRecord)
+        public WriteFileRecordResponse(byte serverAddress)
+            : base(serverAddress, ModbusFunctionCodes.WriteFileRecord)
         {
         }
 

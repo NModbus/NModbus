@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NModbus.Message;
 
 namespace NModbus.Device.MessageHandlers
@@ -25,7 +26,13 @@ namespace NModbus.Device.MessageHandlers
             return 4;
         }
 
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use Handle with IServerDataStore parameter instead.")]
         protected override IModbusMessage Handle(WriteMultipleCoilsRequest request, ISlaveDataStore dataStore)
+        {
+            return Handle(request, dataStore as IServerDataStore);
+        }
+
+        protected override IModbusMessage Handle(WriteMultipleCoilsRequest request, IServerDataStore dataStore)
         {
             bool[] points = request.Data
                 .Take(request.NumberOfPoints)
@@ -34,7 +41,7 @@ namespace NModbus.Device.MessageHandlers
             dataStore.CoilDiscretes.WritePoints(request.StartAddress, points);
 
             return new WriteMultipleCoilsResponse(
-               request.SlaveAddress,
+               request.ServerAddress,
                request.StartAddress,
                request.NumberOfPoints);
         }

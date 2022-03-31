@@ -20,9 +20,9 @@ namespace NModbus.Message
         {
         }
 
-        public ModbusMessageImpl(byte slaveAddress, byte functionCode)
+        public ModbusMessageImpl(byte serverAddress, byte functionCode)
         {
-            SlaveAddress = slaveAddress;
+            ServerAddress = serverAddress;
             FunctionCode = functionCode;
         }
 
@@ -36,7 +36,13 @@ namespace NModbus.Message
 
         public ushort? NumberOfPoints { get; set; }
 
-        public byte SlaveAddress { get; set; }
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use ServerAddress instead.")]
+        public byte SlaveAddress
+        {
+            get => ServerAddress;
+            set => ServerAddress = value;
+        }
+        public byte ServerAddress { get; set; }
 
         public ushort? StartAddress { get; set; }
 
@@ -51,7 +57,7 @@ namespace NModbus.Message
                 var pdu = ProtocolDataUnit;
                 var frame = new MemoryStream(1 + pdu.Length);
 
-                frame.WriteByte(SlaveAddress);
+                frame.WriteByte(ServerAddress);
                 frame.Write(pdu, 0, pdu.Length);
 
                 return frame.ToArray();
@@ -113,7 +119,7 @@ namespace NModbus.Message
                 throw new FormatException(msg);
             }
 
-            SlaveAddress = frame[0];
+            ServerAddress = frame[0];
             FunctionCode = frame[1];
         }
     }

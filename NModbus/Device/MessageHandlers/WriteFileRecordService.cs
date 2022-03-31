@@ -30,7 +30,12 @@ namespace NModbus.Device.MessageHandlers
             return frameStart[2] + 1;
         }
 
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use Handle with IServerDataStore parameter instead.")]
         protected override IModbusMessage Handle(WriteFileRecordRequest request, ISlaveDataStore dataStore)
+        {
+            throw new NotImplementedException("WriteFileRecordService::Handle");
+        }
+        protected override IModbusMessage Handle(WriteFileRecordRequest request, IServerDataStore dataStore)
         {
             throw new NotImplementedException("WriteFileRecordService::Handle");
         }

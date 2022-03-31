@@ -82,7 +82,7 @@ namespace NModbus.IO
             stream.WriteByte(0);
             stream.WriteByte(0);
             stream.Write(length, 0, length.Length);
-            stream.WriteByte(message.SlaveAddress);
+            stream.WriteByte(message.ServerAddress);
 
             return stream.ToArray();
         }

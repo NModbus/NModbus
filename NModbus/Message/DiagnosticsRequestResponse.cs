@@ -14,8 +14,8 @@ namespace NModbus.Message
         {
         }
 
-        public DiagnosticsRequestResponse(ushort subFunctionCode, byte slaveAddress, RegisterCollection data)
-            : base(slaveAddress, ModbusFunctionCodes.Diagnostics)
+        public DiagnosticsRequestResponse(ushort subFunctionCode, byte serverAddress, RegisterCollection data)
+            : base(serverAddress, ModbusFunctionCodes.Diagnostics)
         {
             SubFunctionCode = subFunctionCode;
             Data = data;

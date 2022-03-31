@@ -172,9 +172,9 @@ namespace NModbus.UnitTests.IO
                 .Returns(new byte[] { crc[1] });
 
             var response = transport.ReadResponse<ReadCoilsInputsResponse>();
-            Assert.IsType<SlaveExceptionResponse>(response);
+            Assert.IsType<ServerExceptionResponse>(response);
 
-            var expectedResponse = new SlaveExceptionResponse(0x01, 0x81, 0x02);
+            var expectedResponse = new ServerExceptionResponse(0x01, 0x81, 0x02);
             Assert.Equal(expectedResponse.MessageFrame, response.MessageFrame);
 
             mock.VerifyAll();

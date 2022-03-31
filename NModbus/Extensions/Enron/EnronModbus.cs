@@ -13,27 +13,27 @@ namespace NModbus.Extensions.Enron
         /// <summary>
         ///     Read contiguous block of 32 bit holding registers.
         /// </summary>
-        /// <param name="master">The Modbus master.</param>
-        /// <param name="slaveAddress">Address of device to read values from.</param>
+        /// <param name="client">The Modbus client.</param>
+        /// <param name="serverAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
         /// <param name="numberOfPoints">Number of holding registers to read.</param>
         /// <returns>Holding registers status</returns>
         public static uint[] ReadHoldingRegisters32(
-            this IModbusMaster master,
-            byte slaveAddress,
+            this IModbusClient client,
+            byte serverAddress,
             ushort startAddress,
             ushort numberOfPoints)
         {
-            if (master == null)
+            if (client == null)
             {
-                throw new ArgumentNullException(nameof(master));
+                throw new ArgumentNullException(nameof(client));
             }
 
             ValidateNumberOfPoints(numberOfPoints, 62);
 
             // read 16 bit chunks and perform conversion
-            var rawRegisters = master.ReadHoldingRegisters(
-                slaveAddress,
+            var rawRegisters = client.ReadHoldingRegisters(
+                serverAddress,
                 startAddress,
                 (ushort)(numberOfPoints * 2));
 
@@ -43,26 +43,26 @@ namespace NModbus.Extensions.Enron
         /// <summary>
         ///     Read contiguous block of 32 bit input registers.
         /// </summary>
-        /// <param name="master">The Modbus master.</param>
-        /// <param name="slaveAddress">Address of device to read values from.</param>
+        /// <param name="client">The Modbus client.</param>
+        /// <param name="serverAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
         /// <param name="numberOfPoints">Number of holding registers to read.</param>
         /// <returns>Input registers status</returns>
         public static uint[] ReadInputRegisters32(
-            this IModbusMaster master,
-            byte slaveAddress,
+            this IModbusClient client,
+            byte serverAddress,
             ushort startAddress,
             ushort numberOfPoints)
         {
-            if (master == null)
+            if (client == null)
             {
-                throw new ArgumentNullException(nameof(master));
+                throw new ArgumentNullException(nameof(client));
             }
 
             ValidateNumberOfPoints(numberOfPoints, 62);
 
-            var rawRegisters = master.ReadInputRegisters(
-                slaveAddress,
+            var rawRegisters = client.ReadInputRegisters(
+                serverAddress,
                 startAddress,
                 (ushort)(numberOfPoints * 2));
 
@@ -72,40 +72,40 @@ namespace NModbus.Extensions.Enron
         /// <summary>
         ///     Write a single 16 bit holding register.
         /// </summary>
-        /// <param name="master">The Modbus master.</param>
-        /// <param name="slaveAddress">Address of the device to write to.</param>
+        /// <param name="client">The Modbus client.</param>
+        /// <param name="serverAddress">Address of the device to write to.</param>
         /// <param name="registerAddress">Address to write.</param>
         /// <param name="value">Value to write.</param>
         public static void WriteSingleRegister32(
-            this IModbusMaster master,
-            byte slaveAddress,
+            this IModbusClient client,
+            byte serverAddress,
             ushort registerAddress,
             uint value)
         {
-            if (master == null)
+            if (client == null)
             {
-                throw new ArgumentNullException(nameof(master));
+                throw new ArgumentNullException(nameof(client));
             }
 
-            master.WriteMultipleRegisters32(slaveAddress, registerAddress, new[] { value });
+            client.WriteMultipleRegisters32(serverAddress, registerAddress, new[] { value });
         }
 
         /// <summary>
         ///     Write a block of contiguous 32 bit holding registers.
         /// </summary>
-        /// <param name="master">The Modbus master.</param>
-        /// <param name="slaveAddress">Address of the device to write to.</param>
+        /// <param name="client">The Modbus client.</param>
+        /// <param name="serverAddress">Address of the device to write to.</param>
         /// <param name="startAddress">Address to begin writing values.</param>
         /// <param name="data">Values to write.</param>
         public static void WriteMultipleRegisters32(
-            this IModbusMaster master,
-            byte slaveAddress,
+            this IModbusClient client,
+            byte serverAddress,
             ushort startAddress,
             uint[] data)
         {
-            if (master == null)
+            if (client == null)
             {
-                throw new ArgumentNullException(nameof(master));
+                throw new ArgumentNullException(nameof(client));
             }
 
             if (data == null)
@@ -118,7 +118,7 @@ namespace NModbus.Extensions.Enron
                 throw new ArgumentException("The length of argument data must be between 1 and 61 inclusive.");
             }
 
-            master.WriteMultipleRegisters(slaveAddress, startAddress, Convert(data).ToArray());
+            client.WriteMultipleRegisters(serverAddress, startAddress, Convert(data).ToArray());
         }
 
         /// <summary>

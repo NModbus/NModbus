@@ -1,12 +1,21 @@
-﻿namespace NModbus
+﻿using System;
+
+namespace NModbus
 {
+
     /// <summary>
     ///     Modbus Serial Master device.
     /// </summary>
-    public interface IModbusSerialMaster : IModbusMaster
+    [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use IModbusSerialClient instead.")]
+    public interface IModbusSerialMaster : IModbusSerialClient, IModbusMaster { }
+
+    /// <summary>
+    ///     Modbus Serial Client device.
+    /// </summary>
+    public interface IModbusSerialClient : IModbusClient
     {
         /// <summary>
-        ///     Transport for used by this master.
+        ///     Transport for used by this client.
         /// </summary>
         new IModbusSerialTransport Transport { get; }
 
@@ -16,9 +25,9 @@
         ///     NModbus only supports looping back one ushort value, this is a
         ///     limitation of the "Best Effort" implementation of the RTU protocol.
         /// </summary>
-        /// <param name="slaveAddress">Address of device to test.</param>
+        /// <param name="serverAddress">Address of device to test.</param>
         /// <param name="data">Data to return.</param>
-        /// <returns>Return true if slave device echoed data.</returns>
-        bool ReturnQueryData(byte slaveAddress, ushort data);
+        /// <returns>Return true if server device echoed data.</returns>
+        bool ReturnQueryData(byte serverAddress, ushort data);
     }
 }

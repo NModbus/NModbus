@@ -1,4 +1,5 @@
-﻿using NModbus.Message;
+﻿using System;
+using NModbus.Message;
 
 namespace NModbus
 {
@@ -19,13 +20,16 @@ namespace NModbus
         /// <returns></returns>
         IModbusMessage CreateRequest(byte[] frame);
 
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use HandleServerRequest instead.")]
+        IModbusMessage HandleSlaveRequest(IModbusMessage request, ISlaveDataStore dataStore);
+
         /// <summary>
-        /// Handle a slave request.
+        /// Handle a server request.
         /// </summary>
         /// <param name="request"></param>
         /// <param name="dataStore"></param>
         /// <returns></returns>
-        IModbusMessage HandleSlaveRequest(IModbusMessage request, ISlaveDataStore dataStore);
+        IModbusMessage HandleServerRequest(IModbusMessage request, IServerDataStore dataStore);
 
         /// <summary>
         /// Gets the number of bytes to read for a request

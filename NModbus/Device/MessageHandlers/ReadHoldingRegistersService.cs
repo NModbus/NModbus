@@ -1,4 +1,5 @@
-﻿using NModbus.Data;
+﻿using System;
+using NModbus.Data;
 using NModbus.Message;
 
 namespace NModbus.Device.MessageHandlers
@@ -25,13 +26,18 @@ namespace NModbus.Device.MessageHandlers
             return frameStart[2] + 1;
         }
 
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use Handle with IServerDataStore parameter instead.")]
         protected override IModbusMessage Handle(ReadHoldingInputRegistersRequest request, ISlaveDataStore dataStore)
+        {
+            return Handle(request, dataStore as IServerDataStore);
+        }
+        protected override IModbusMessage Handle(ReadHoldingInputRegistersRequest request, IServerDataStore dataStore)
         {
             ushort[] registers = dataStore.HoldingRegisters.ReadPoints(request.StartAddress, request.NumberOfPoints);
 
             RegisterCollection data = new RegisterCollection(registers);
 
-            return new ReadHoldingInputRegistersResponse(request.FunctionCode, request.SlaveAddress, data);
+            return new ReadHoldingInputRegistersResponse(request.FunctionCode, request.ServerAddress, data);
         }
     }
 }

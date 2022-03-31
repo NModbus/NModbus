@@ -9,16 +9,16 @@
   /// </summary>
   public class RegisterFunctions
   {
-    public static byte[][] ReadRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints, IModbusMaster master, uint wordSize, Func<byte[], byte[]> endianConverter, bool wordSwap = false)
+    public static byte[][] ReadRegisters(byte serverAddress, ushort startAddress, ushort numberOfPoints, IModbusClient client, uint wordSize, Func<byte[], byte[]> endianConverter, bool wordSwap = false)
     {
       var registerMultiplier = RegisterFunctions.GetRegisterMultiplier(wordSize);
       var registersToRead = (ushort)(numberOfPoints * registerMultiplier);
-      var values = master.ReadHoldingRegisters(slaveAddress, startAddress, registersToRead);
+      var values = client.ReadHoldingRegisters(serverAddress, startAddress, registersToRead);
       if (wordSwap) Array.Reverse(values);
       return RegisterFunctions.ConvertRegistersToValues(values, registerMultiplier).Select(endianConverter).ToArray();
     }
 
-    public static void WriteRegistersFunc(byte slaveAddress, ushort startAddress, byte[][] data, IModbusMaster master, uint wordSize, Func<byte[], byte[]> endianConverter, bool wordSwap = false)
+    public static void WriteRegistersFunc(byte serverAddress, ushort startAddress, byte[][] data, IModbusClient server, uint wordSize, Func<byte[], byte[]> endianConverter, bool wordSwap = false)
     {
       var wordByteArraySize = RegisterFunctions.GetRegisterMultiplier(wordSize) * 2;
       if (data.Any(e => e.Length != wordByteArraySize))
@@ -28,7 +28,7 @@
       var dataCorrectEndian = data.Select(endianConverter).ToArray();
       var registerValues = RegisterFunctions.ConvertValuesToRegisters(dataCorrectEndian);
       if (wordSwap) Array.Reverse(registerValues);
-      master.WriteMultipleRegisters(slaveAddress, startAddress, registerValues);
+      server.WriteMultipleRegisters(serverAddress, startAddress, registerValues);
     }
 
 

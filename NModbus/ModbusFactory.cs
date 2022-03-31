@@ -34,7 +34,7 @@ namespace NModbus
         private readonly IDictionary<byte, IModbusFunctionService> _functionServices;
 
         /// <summary>
-        /// Create a factory which uses the built in standard slave function handlers.
+        /// Create a factory which uses the built in standard server function handlers.
         /// </summary>
         public ModbusFactory()
         {
@@ -80,32 +80,42 @@ namespace NModbus
             }
         }
 
-        public IModbusSlave CreateSlave(byte unitId, ISlaveDataStore dataStore = null)
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateServer instead.")]
+        public IModbusSlave CreateSlave(byte unitId, ISlaveDataStore dataStore = null) { return (IModbusSlave) CreateServer(unitId, dataStore); }
+        public IModbusServer CreateServer(byte unitId, IServerDataStore dataStore = null)
         {
             if (dataStore == null)
-                dataStore = new DefaultSlaveDataStore();
+                dataStore = new DefaultServerDataStore();
 
-            return new ModbusSlave(unitId, dataStore, GetAllFunctionServices());
+            return new ModbusServer(unitId, dataStore, GetAllFunctionServices());
         }
 
-        public IModbusSlaveNetwork CreateSlaveNetwork(IModbusRtuTransport transport)
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateServerNetwork instead.")]
+        public IModbusSlaveNetwork CreateSlaveNetwork(IModbusRtuTransport transport) { return (IModbusSlaveNetwork) CreateServerNetwork(transport); }
+        public IModbusServerNetwork CreateServerNetwork(IModbusRtuTransport transport)
         {
-            return new ModbusSerialSlaveNetwork(transport, this, Logger);
+            return new ModbusSerialServerNetwork(transport, this, Logger);
         }
 
-        public IModbusSlaveNetwork CreateSlaveNetwork(IModbusAsciiTransport transport)
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateServerNetwork instead.")]
+        public IModbusSlaveNetwork CreateSlaveNetwork(IModbusAsciiTransport transport) { return (IModbusSlaveNetwork) CreateServerNetwork(transport); }
+        public IModbusServerNetwork CreateServerNetwork(IModbusAsciiTransport transport)
         {
-            return new ModbusSerialSlaveNetwork(transport, this, Logger);
+            return new ModbusSerialServerNetwork(transport, this, Logger);
         }
 
-        public IModbusSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener)
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateServerNetwork instead.")]
+        public IModbusSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener) { return (IModbusSlaveNetwork) CreateServerNetwork(tcpListener); }
+        public IModbusServerNetwork CreateServerNetwork(TcpListener tcpListener)
         {
-            return new ModbusTcpSlaveNetwork(tcpListener, this, Logger);
+            return new ModbusTcpServerNetwork(tcpListener, this, Logger);
         }
 
-        public IModbusSlaveNetwork CreateSlaveNetwork(UdpClient client)
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateServerNetwork instead.")]
+        public IModbusSlaveNetwork CreateSlaveNetwork(UdpClient client) { return (IModbusSlaveNetwork)CreateServerNetwork(client); }
+        public IModbusServerNetwork CreateServerNetwork(UdpClient client)
         {
-            return new ModbusUdpSlaveNetwork(client, this, Logger);
+            return new ModbusUdpServerNetwork(client, this, Logger);
         }
 
         public IModbusRtuTransport CreateRtuTransport(IStreamResource streamResource)
@@ -127,36 +137,44 @@ namespace NModbus
                 .ToArray();
         }
 
-        public IModbusSerialMaster CreateMaster(IModbusSerialTransport transport)
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateClient instead.")]
+        public IModbusSerialMaster CreateMaster(IModbusSerialTransport transport) { return (IModbusSerialMaster) CreateClient(transport); }
+        public IModbusSerialClient CreateClient(IModbusSerialTransport transport)
         {
-            return new ModbusSerialMaster(transport);
+            return new ModbusSerialClient(transport);
         }
 
-        public IModbusMaster CreateMaster(UdpClient client)
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateClient instead.")]
+        public IModbusMaster CreateMaster(UdpClient client) { return (IModbusMaster) CreateClient(client); }
+        public IModbusClient CreateClient(UdpClient client)
         {
             var adapter = new UdpClientAdapter(client);
 
             var transport = new ModbusIpTransport(adapter, this, Logger);
 
-            return new ModbusIpMaster(transport);
+            return new ModbusIpClient(transport);
         }
 
-        public IModbusMaster CreateMaster(TcpClient client)
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateClient instead.")]
+        public IModbusMaster CreateMaster(TcpClient client) { return (IModbusMaster) CreateClient(client); }
+        public IModbusClient CreateClient(TcpClient client)
         {
             var adapter = new TcpClientAdapter(client);
 
             var transport = new ModbusIpTransport(adapter, this, Logger);
 
-            return new ModbusIpMaster(transport);
+            return new ModbusIpClient(transport);
         }
 
-        public IModbusMaster CreateMaster(Socket client)
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use CreateClient instead.")]
+        public IModbusMaster CreateMaster(Socket client) { return (IModbusMaster) CreateClient(client); }
+        public IModbusClient CreateClient(Socket client)
         {
             var adapter = new SocketAdapter(client);
 
             var transport = new ModbusRtuTransport(adapter, this, Logger);
 
-            return new ModbusSerialMaster(transport);
+            return new ModbusSerialClient(transport);
         }
 
         public IModbusFunctionService GetFunctionService(byte functionCode)

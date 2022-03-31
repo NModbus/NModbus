@@ -119,9 +119,9 @@ namespace NModbus.UnitTests.IO
             var transport = mock.Object;
 
             mock.Setup(t => t.Write(It.IsNotNull<IModbusMessage>()));
-            mock.Setup(t => t.ReadResponse<ReadCoilsInputsResponse>()).Throws<SlaveException>();
+            mock.Setup(t => t.ReadResponse<ReadCoilsInputsResponse>()).Throws<ServerException>();
 
-            Assert.Throws<SlaveException>(() => transport.UnicastMessage<ReadCoilsInputsResponse>(request));
+            Assert.Throws<ServerException>(() => transport.UnicastMessage<ReadCoilsInputsResponse>(request));
 
             mock.VerifyAll();
         }
@@ -148,7 +148,7 @@ namespace NModbus.UnitTests.IO
                     if (callsCount < transport.Retries + 1)
                     {
                         ++callsCount;
-                        return new SlaveExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, SlaveExceptionCodes.Acknowledge);
+                        return new ServerExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, SlaveExceptionCodes.Acknowledge);
                     }
 
                     return new ReadHoldingInputRegistersResponse(ModbusFunctionCodes.ReadHoldingRegisters, 1, new RegisterCollection(1));
@@ -188,7 +188,7 @@ namespace NModbus.UnitTests.IO
                 {
                     if (readResponseCallsCount == 0)
                     {
-                        return new SlaveExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, SlaveExceptionCodes.SlaveDeviceBusy);
+                        return new ServerExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, SlaveExceptionCodes.SlaveDeviceBusy);
                     }
                     else
                     {
@@ -233,7 +233,7 @@ namespace NModbus.UnitTests.IO
                 {
                     if (readResponseCallsCount < transport.Retries)
                     {
-                        return new SlaveExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, SlaveExceptionCodes.SlaveDeviceBusy);
+                        return new ServerExceptionResponse(1, ModbusFunctionCodes.ReadHoldingRegisters + Modbus.ExceptionOffset, SlaveExceptionCodes.SlaveDeviceBusy);
                     }
 
                     return new ReadHoldingInputRegistersResponse(ModbusFunctionCodes.ReadHoldingRegisters, 1, new RegisterCollection(1));
@@ -400,7 +400,7 @@ namespace NModbus.UnitTests.IO
             byte[] frame = { 2, 129, 2 };
             byte lrc = ModbusUtility.CalculateLrc(frame);
             var message = transport.CreateResponse<ReadCoilsInputsResponse>(Enumerable.Concat(frame, new byte[] { lrc }).ToArray());
-            Assert.IsType<SlaveExceptionResponse>(message);
+            Assert.IsType<ServerExceptionResponse>(message);
         }
 
         [Fact]

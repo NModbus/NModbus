@@ -5,14 +5,14 @@ using NModbus;
 namespace Samples
 {
 
-    public class SlaveStorage : ISlaveDataStore
+    public class ServerStorage : IServerDataStore
     {
         private readonly SparsePointSource<bool> _coilDiscretes;
         private readonly SparsePointSource<bool> _coilInputs;
         private readonly SparsePointSource<ushort> _holdingRegisters;
         private readonly SparsePointSource<ushort> _inputRegisters;
 
-        public SlaveStorage()
+        public ServerStorage()
         {
             _coilDiscretes = new SparsePointSource<bool>();
             _coilInputs = new SparsePointSource<bool>();
@@ -40,22 +40,22 @@ namespace Samples
             get { return _inputRegisters; }
         }
 
-        IPointSource<bool> ISlaveDataStore.CoilDiscretes
+        IPointSource<bool> IServerDataStore.CoilDiscretes
         {
             get { return _coilDiscretes; }
         }
 
-        IPointSource<bool> ISlaveDataStore.CoilInputs
+        IPointSource<bool> IServerDataStore.CoilInputs
         {
             get { return _coilInputs; }
         }
 
-        IPointSource<ushort> ISlaveDataStore.HoldingRegisters
+        IPointSource<ushort> IServerDataStore.HoldingRegisters
         {
             get { return _holdingRegisters; }
         }
 
-        IPointSource<ushort> ISlaveDataStore.InputRegisters
+        IPointSource<ushort> IServerDataStore.InputRegisters
         {
             get { return _inputRegisters; }
         }

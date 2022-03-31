@@ -95,9 +95,9 @@ namespace NModbus.UnitTests.Message
         [Fact]
         public void CreateModbusMessageSlaveExceptionResponse()
         {
-            SlaveExceptionResponse response =
-                ModbusMessageFactory.CreateModbusMessage<SlaveExceptionResponse>(new byte[] { 11, 129, 2 });
-            SlaveExceptionResponse expectedException = new SlaveExceptionResponse(11,
+            ServerExceptionResponse response =
+                ModbusMessageFactory.CreateModbusMessage<ServerExceptionResponse>(new byte[] { 11, 129, 2 });
+            ServerExceptionResponse expectedException = new ServerExceptionResponse(11,
                 ModbusFunctionCodes.ReadCoils + Modbus.ExceptionOffset, 2);
             Assert.Equal(expectedException.FunctionCode, response.FunctionCode);
             Assert.Equal(expectedException.SlaveAddress, response.SlaveAddress);
@@ -109,13 +109,13 @@ namespace NModbus.UnitTests.Message
         public void CreateModbusMessageSlaveExceptionResponseWithInvalidFunctionCode()
         {
             Assert.Throws<FormatException>(() =>
-                ModbusMessageFactory.CreateModbusMessage<SlaveExceptionResponse>(new byte[] { 11, 128, 2 }));
+                ModbusMessageFactory.CreateModbusMessage<ServerExceptionResponse>(new byte[] { 11, 128, 2 }));
         }
 
         [Fact]
         public void CreateModbusMessageSlaveExceptionResponseWithInvalidFrameSize()
         {
-            Assert.Throws<FormatException>(() => ModbusMessageFactory.CreateModbusMessage<SlaveExceptionResponse>(new byte[] { 11, 128 }));
+            Assert.Throws<FormatException>(() => ModbusMessageFactory.CreateModbusMessage<ServerExceptionResponse>(new byte[] { 11, 128 }));
         }
 
         [Fact]
@@ -239,12 +239,10 @@ namespace NModbus.UnitTests.Message
         [Fact]
         public void CreateModbusMessageReadWriteMultipleRegistersRequest()
         {
-            ReadWriteMultipleRegistersRequest request =
-                ModbusMessageFactory.CreateModbusMessage<ReadWriteMultipleRegistersRequest>(new byte[]
-                { 0x05, 0x17, 0x00, 0x03, 0x00, 0x06, 0x00, 0x0e, 0x00, 0x03, 0x06, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff });
-            RegisterCollection writeCollection = new RegisterCollection(255, 255, 255);
-            ReadWriteMultipleRegistersRequest expectedRequest = new ReadWriteMultipleRegistersRequest(5, 3, 6, 14,
-                writeCollection);
+            var request = ModbusMessageFactory.CreateModbusMessage<ReadWriteMultipleRegistersRequest>(
+                new byte[] { 0x05, 0x17, 0x00, 0x03, 0x00, 0x06, 0x00, 0x0e, 0x00, 0x03, 0x06, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff });
+            var writeCollection = new RegisterCollection(255, 255, 255);
+            var expectedRequest = new ReadWriteMultipleRegistersRequest(5, 3, 6, 14, writeCollection);
             ModbusMessageFixture.AssertModbusMessagePropertiesAreEqual(expectedRequest, request);
         }
 

@@ -30,23 +30,23 @@ namespace Samples
 
             try
             {
-                ModbusSocketSerialMasterReadRegisters();
-                ModbusSocketSerialMasterWriteRegisters();
-                ModbusSocketSerialMasterReadRegisters();
+                ModbusSocketSerialClientReadRegisters();
+                ModbusSocketSerialClientWriteRegisters();
+                ModbusSocketSerialClientReadRegisters();
                 await Task.Run(() => { });
-                //ModbusTcpMasterReadInputs();
+                //ModbusTcpClientReadInputs();
                 //SimplePerfTest();
-                //ModbusSerialRtuMasterWriteRegisters();
-                //ModbusSerialAsciiMasterReadRegisters();
-                //ModbusTcpMasterReadInputs();
-                //StartModbusAsciiSlave();
-                //ModbusTcpMasterReadInputsFromModbusSlave();
-                //ModbusSerialAsciiMasterReadRegistersFromModbusSlave();
-                //StartModbusTcpSlave();
-                //StartModbusUdpSlave();
-                //StartModbusAsciiSlave();
-                //await StartModbusSerialRtuSlaveNetwork(cts.Token);
-                //await StartModbusSerialRtuSlaveWithCustomMessage(cts.Token);
+                //ModbusSerialRtuClientWriteRegisters();
+                //ModbusSerialAsciiClientReadRegisters();
+                //ModbusTcpClientReadInputs();
+                //StartModbusAsciiServer();
+                //ModbusTcpClientReadInputsFromModbusServer();
+                //ModbusSerialAsciiClientReadRegistersFromModbusServer();
+                //StartModbusTcpServer();
+                //StartModbusUdpServer();
+                //StartModbusAsciiServer();
+                //await StartModbusSerialRtuServerNetwork(cts.Token);
+                //await StartModbusSerialRtuServerWithCustomMessage(cts.Token);
             }
 
             catch (Exception e)
@@ -61,9 +61,9 @@ namespace Samples
         }
 
         /// <summary>
-        ///     Simple Modbus serial RTU master write holding registers example.
+        ///     Simple Modbus serial RTU client write holding registers example.
         /// </summary>
-        public static void ModbusSerialRtuMasterWriteRegisters()
+        public static void ModbusSerialRtuClientWriteRegisters()
         {
             using (SerialPort port = new SerialPort(PrimarySerialPortName))
             {
@@ -75,20 +75,20 @@ namespace Samples
                 port.Open();
 
                 var factory = new ModbusFactory();
-                IModbusMaster master = factory.CreateRtuMaster(port);
+                IModbusClient client = factory.CreateRtuClient(port);
 
-                byte slaveId = 1;
+                byte serverId = 1;
                 ushort startAddress = 100;
                 ushort[] registers = new ushort[] { 1, 2, 3 };
 
                 // write three registers
-                master.WriteMultipleRegisters(slaveId, startAddress, registers);
+                client.WriteMultipleRegisters(serverId, startAddress, registers);
             }
         }
         /// <summary>
         /// Simple write to socket connector sending RTU messages
         /// </summary>
-        public static void ModbusSocketSerialMasterWriteRegisters()
+        public static void ModbusSocketSerialClientWriteRegisters()
         {
 
 
@@ -101,20 +101,20 @@ namespace Samples
                 sock.Connect(serverFullAddr);
 
                 var factory = new ModbusFactory();
-                IModbusMaster master = factory.CreateMaster(sock);
+                IModbusClient client = factory.CreateClient(sock);
 
-                byte slaveId = 1;
+                byte serverId = 1;
                 ushort startAddress = 100;
                 ushort[] registers = new ushort[] { 10, 20, 30 };
 
                 // write three registers
-                master.WriteMultipleRegisters(slaveId, startAddress, registers);
+                client.WriteMultipleRegisters(serverId, startAddress, registers);
             }
         }
         /// <summary>
         /// Simple Read registers using socket and expecting RTU fromatted response messages.
         /// </summary>
-        public static void ModbusSocketSerialMasterReadRegisters()
+        public static void ModbusSocketSerialClientReadRegisters()
         {
 
 
@@ -127,11 +127,11 @@ namespace Samples
                 sock.Connect(serverFullAddr);
 
                 var factory = new ModbusFactory();
-                IModbusMaster master = factory.CreateMaster(sock);
+                IModbusClient client = factory.CreateClient(sock);
 
-                byte slaveId = 1;
+                byte serverId = 1;
                 ushort startAddress = 100;
-                ushort[] registers = master.ReadHoldingRegisters(slaveId, startAddress, 3);
+                ushort[] registers = client.ReadHoldingRegisters(serverId, startAddress, 3);
                 for (int i = 0; i < 3; i++)
                 {
                     Console.WriteLine($"Input {(startAddress + i)}={registers[i]}");
@@ -140,9 +140,9 @@ namespace Samples
             }
         }
         /// <summary>
-        ///     Simple Modbus serial ASCII master read holding registers example.
+        ///     Simple Modbus serial ASCII client read holding registers example.
         /// </summary>
-        public static void ModbusSerialAsciiMasterReadRegisters()
+        public static void ModbusSerialAsciiClientReadRegisters()
         {
             using (SerialPort port = new SerialPort(PrimarySerialPortName))
             {
@@ -154,14 +154,14 @@ namespace Samples
                 port.Open();
 
                 var factory = new ModbusFactory();
-                IModbusSerialMaster master = factory.CreateAsciiMaster(port);
+                IModbusSerialClient client = factory.CreateAsciiClient(port);
 
-                byte slaveId = 1;
+                byte serverId = 1;
                 ushort startAddress = 1;
                 ushort numRegisters = 5;
 
                 // read five registers		
-                ushort[] registers = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
+                ushort[] registers = client.ReadHoldingRegisters(serverId, startAddress, numRegisters);
 
                 for (int i = 0; i < numRegisters; i++)
                 {
@@ -178,19 +178,19 @@ namespace Samples
         }
 
         /// <summary>
-        ///     Simple Modbus TCP master read inputs example.
+        ///     Simple Modbus TCP client read inputs example.
         /// </summary>
-        public static void ModbusTcpMasterReadInputs()
+        public static void ModbusTcpClientReadInputs()
         {
-            using (TcpClient client = new TcpClient("127.0.0.1", 502))
+            using (TcpClient tcpClient = new TcpClient("127.0.0.1", 502))
             {
                 var factory = new ModbusFactory();
-                IModbusMaster master = factory.CreateMaster(client);
+                IModbusClient client = factory.CreateClient(tcpClient);
 
                 // read five input values
                 ushort startAddress = 100;
                 ushort numInputs = 5;
-                bool[] inputs = master.ReadInputs(0, startAddress, numInputs);
+                bool[] inputs = client.ReadInputs(0, startAddress, numInputs);
 
                 for (int i = 0; i < numInputs; i++)
                 {
@@ -207,77 +207,77 @@ namespace Samples
         }
 
         /// <summary>
-        ///     Simple Modbus UDP master write coils example.
+        ///     Simple Modbus UDP client write coils example.
         /// </summary>
-        public static void ModbusUdpMasterWriteCoils()
+        public static void ModbusUdpClientWriteCoils()
         {
-            using (UdpClient client = new UdpClient())
+            using (UdpClient udpClient = new UdpClient())
             {
                 IPEndPoint endPoint = new IPEndPoint(new IPAddress(new byte[] { 127, 0, 0, 1 }), 502);
-                client.Connect(endPoint);
+                udpClient.Connect(endPoint);
 
                 var factory = new ModbusFactory();
 
-                var master = factory.CreateMaster(client);
+                var client = factory.CreateClient(udpClient);
 
                 ushort startAddress = 1;
 
                 // write three coils
-                master.WriteMultipleCoils(0, startAddress, new bool[] { true, false, true });
+                client.WriteMultipleCoils(0, startAddress, new bool[] { true, false, true });
             }
         }
 
         /// <summary>
-        ///     Simple Modbus serial ASCII slave example.
+        ///     Simple Modbus serial ASCII server example.
         /// </summary>
-        public static void StartModbusSerialAsciiSlave()
+        public static void StartModbusSerialAsciiServer()
         {
-            using (SerialPort slavePort = new SerialPort(PrimarySerialPortName))
+            using (SerialPort serverPort = new SerialPort(PrimarySerialPortName))
             {
                 // configure serial port
-                slavePort.BaudRate = 9600;
-                slavePort.DataBits = 8;
-                slavePort.Parity = Parity.None;
-                slavePort.StopBits = StopBits.One;
-                slavePort.Open();
+                serverPort.BaudRate = 9600;
+                serverPort.DataBits = 8;
+                serverPort.Parity = Parity.None;
+                serverPort.StopBits = StopBits.One;
+                serverPort.Open();
 
                 var factory = new ModbusFactory();
-                IModbusSlaveNetwork slaveNetwork = factory.CreateAsciiSlaveNetwork(slavePort);
+                IModbusServerNetwork serverNetwork = factory.CreateAsciiServerNetwork(serverPort);
 
-                IModbusSlave slave1 = factory.CreateSlave(1);
-                IModbusSlave slave2 = factory.CreateSlave(2);
+                IModbusServer server1 = factory.CreateServer(1);
+                IModbusServer server2 = factory.CreateServer(2);
 
-                slaveNetwork.AddSlave(slave1);
-                slaveNetwork.AddSlave(slave2);
+                serverNetwork.AddServer(server1);
+                serverNetwork.AddServer(server2);
 
-                slaveNetwork.ListenAsync().GetAwaiter().GetResult();
+                serverNetwork.ListenAsync().GetAwaiter().GetResult();
             }
         }
 
         /// <summary>
-        ///     Simple Modbus serial RTU slave example.
+        ///     Simple Modbus serial RTU server example.
         /// </summary>
-        public static void StartModbusSerialRtuSlave()
+        public static void StartModbusSerialRtuServer()
         {
-            using (SerialPort slavePort = new SerialPort(PrimarySerialPortName))
+            using (SerialPort serverPort = new SerialPort(PrimarySerialPortName))
             {
                 // configure serial port
-                slavePort.BaudRate = 9600;
-                slavePort.DataBits = 8;
-                slavePort.Parity = Parity.None;
-                slavePort.StopBits = StopBits.One;
-                slavePort.Open();
+                serverPort.BaudRate = 9600;
+                serverPort.DataBits = 8;
+                serverPort.Parity = Parity.None;
+                serverPort.StopBits = StopBits.One;
+                serverPort.Open();
 
                 var factory = new ModbusFactory();
-                var slaveNetwork = factory.CreateRtuSlaveNetwork(slavePort);
+                var serverNetwork = factory.CreateRtuServerNetwork(serverPort);
 
-                IModbusSlave slave1 = factory.CreateSlave(1);
-                IModbusSlave slave2 = factory.CreateSlave(2);
+                IModbusServer server1 = factory.CreateServer(1);
+                IModbusServer server2 = factory.CreateServer(2);
 
-                slaveNetwork.AddSlave(slave1);
-                slaveNetwork.AddSlave(slave2);
+                serverNetwork.AddServer(server1);
+                serverNetwork.AddServer(server2);
 
-                slaveNetwork.ListenAsync().GetAwaiter().GetResult();
+                serverNetwork.ListenAsync().GetAwaiter().GetResult();
             }
         }
 
@@ -285,7 +285,14 @@ namespace Samples
         {
             public byte FunctionCode { get; set; }
 
-            public byte SlaveAddress { get; set; }
+
+            [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use ServerAddress instead.")]
+            public byte SlaveAddress
+            {
+                get => ServerAddress;
+                set => ServerAddress = value;
+            }
+            public byte ServerAddress { get; set; }
 
             public byte[] MessageFrame { get; private set; }
 
@@ -295,7 +302,7 @@ namespace Samples
 
             public void Initialize(byte[] frame)
             {
-                SlaveAddress = frame[0];
+                ServerAddress = frame[0];
                 FunctionCode = frame[1];
 
                 MessageFrame = frame
@@ -312,7 +319,13 @@ namespace Samples
         {
             public byte FunctionCode { get; set; }
 
-            public byte SlaveAddress { get; set; }
+            [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use ServerAddress instead.")]
+            public byte SlaveAddress
+            {
+                get => ServerAddress;
+                set => ServerAddress = value;
+            }
+            public byte ServerAddress { get; set; }
 
             public byte[] MessageFrame { get; private set; }
 
@@ -322,7 +335,7 @@ namespace Samples
 
             public void Initialize(byte[] frame)
             {
-                SlaveAddress = frame[0];
+                ServerAddress = frame[0];
                 FunctionCode = frame[1];
 
                 MessageFrame = frame
@@ -350,7 +363,13 @@ namespace Samples
                 return request;
             }
 
+            [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use HandleServerRequest instead.")]
             public IModbusMessage HandleSlaveRequest(IModbusMessage request, ISlaveDataStore dataStore)
+            {
+                return HandleServerRequest(request, dataStore);
+            }
+
+            public IModbusMessage HandleServerRequest(IModbusMessage request, IServerDataStore dataStore)
             {
                 Console.WriteLine("HMI Buffer Message Receieved");
 
@@ -378,20 +397,20 @@ namespace Samples
 
         
         /// <summary>
-        /// Simple Modbus serial RTU slave example.
+        /// Simple Modbus serial RTU server example.
         /// </summary>
-        public static async Task StartModbusSerialRtuSlaveWithCustomMessage(CancellationToken cancellationToken)
+        public static async Task StartModbusSerialRtuServerWithCustomMessage(CancellationToken cancellationToken)
         {
-            using (SerialPort slavePort = new SerialPort(PrimarySerialPortName))
+            using (SerialPort serverPort = new SerialPort(PrimarySerialPortName))
             {
                 // configure serial port
-                slavePort.BaudRate = 57600;
-                slavePort.DataBits = 8;
-                slavePort.Parity = Parity.Even;
-                slavePort.StopBits = StopBits.One;
-                slavePort.Open();
+                serverPort.BaudRate = 57600;
+                serverPort.DataBits = 8;
+                serverPort.Parity = Parity.Even;
+                serverPort.StopBits = StopBits.One;
+                serverPort.Open();
 
-                var adapter = new SerialPortAdapter(slavePort);
+                var adapter = new SerialPortAdapter(serverPort);
 
                 var functionServices = new IModbusFunctionService[]
                 {
@@ -400,145 +419,145 @@ namespace Samples
 
                 var factory = new ModbusFactory(functionServices, true, new ConsoleModbusLogger(LoggingLevel.Debug));
 
-                // create modbus slave
-                var slaveNetwork = factory.CreateRtuSlaveNetwork(adapter);
+                // create modbus server
+                var serverNetwork = factory.CreateRtuServerNetwork(adapter);
 
-                var acTechDataStore = new SlaveStorage();
+                var acTechDataStore = new ServerStorage();
 
                 acTechDataStore.InputRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"ACTECH Input registers: {args.Operation} starting at {args.StartingAddress}");
                 acTechDataStore.HoldingRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"ACTECH Holding registers: {args.Operation} starting at {args.StartingAddress}");
 
-                var danfossStore = new SlaveStorage();
+                var danfossStore = new ServerStorage();
 
                 danfossStore.InputRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"DANFOSS Input registers: {args.Operation} starting at {args.StartingAddress}");
                 danfossStore.HoldingRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"DANFOSS Holding registers: {args.Operation} starting at {args.StartingAddress}");
 
-                IModbusSlave actechSlave = factory.CreateSlave(21, acTechDataStore);
-                IModbusSlave danfossSlave = factory.CreateSlave(1, danfossStore);
+                IModbusServer actechServer = factory.CreateServer(21, acTechDataStore);
+                IModbusServer danfossServer = factory.CreateServer(1, danfossStore);
 
-                slaveNetwork.AddSlave(actechSlave);
-                slaveNetwork.AddSlave(danfossSlave);
+                serverNetwork.AddServer(actechServer);
+                serverNetwork.AddServer(danfossServer);
 
-                await slaveNetwork.ListenAsync(cancellationToken);
+                await serverNetwork.ListenAsync(cancellationToken);
             }
         }
 
-        public static async Task StartModbusSerialRtuSlaveNetwork(CancellationToken cancellationToken)
+        public static async Task StartModbusSerialRtuServerNetwork(CancellationToken cancellationToken)
         {
-            using (SerialPort slavePort = new SerialPort(PrimarySerialPortName))
+            using (SerialPort serverPort = new SerialPort(PrimarySerialPortName))
             {
                 // configure serial port
-                slavePort.BaudRate = 57600;
-                slavePort.DataBits = 8;
-                slavePort.Parity = Parity.Even;
-                slavePort.StopBits = StopBits.One;
-                slavePort.Open();
+                serverPort.BaudRate = 57600;
+                serverPort.DataBits = 8;
+                serverPort.Parity = Parity.Even;
+                serverPort.StopBits = StopBits.One;
+                serverPort.Open();
 
                 IModbusFactory factory = new ModbusFactory();
-                IModbusSlaveNetwork modbusSlaveNetwork = factory.CreateRtuSlaveNetwork(slavePort);
+                IModbusServerNetwork modbusServerNetwork = factory.CreateRtuServerNetwork(serverPort);
 
-                slavePort.ReadTimeout = 50;
-                slavePort.WriteTimeout = 500;
+                serverPort.ReadTimeout = 50;
+                serverPort.WriteTimeout = 500;
 
-                var acTechDataStore = new SlaveStorage();
+                var acTechDataStore = new ServerStorage();
 
                 //acTechDataStore.CoilDiscretes.StorageOperationOccurred += (sender, args) => Console.WriteLine($"Coil discretes: {args.Operation} starting at {args.StartingAddress}");
                 //acTechDataStore.CoilInputs.StorageOperationOccurred += (sender, args) => Console.WriteLine($"Coil  inputs: {args.Operation} starting at {args.StartingAddress}");
                 acTechDataStore.InputRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"ACTECH Input registers: {args.Operation} starting at {args.StartingAddress}");
                 acTechDataStore.HoldingRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"ACTECH Holding registers: {args.Operation} starting at {args.StartingAddress}");
 
-                var casHmiDataStore = new SlaveStorage();
+                var casHmiDataStore = new ServerStorage();
 
                 casHmiDataStore.InputRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"CASHMI Input registers: {args.Operation} starting at {args.StartingAddress}");
                 casHmiDataStore.HoldingRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"CASHMI Holding registers: {args.Operation} starting at {args.StartingAddress}");
 
-                var danfossStore = new SlaveStorage();
+                var danfossStore = new ServerStorage();
 
                 danfossStore.InputRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"DANFOSS Input registers: {args.Operation} starting at {args.StartingAddress}");
                 danfossStore.HoldingRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"DANFOSS Holding registers: {args.Operation} starting at {args.StartingAddress}");
 
-                IModbusSlave slave1 = factory.CreateSlave(21, acTechDataStore);
-                IModbusSlave slave2 = factory.CreateSlave(55, casHmiDataStore);
+                IModbusServer server1 = factory.CreateServer(21, acTechDataStore);
+                IModbusServer server2 = factory.CreateServer(55, casHmiDataStore);
 
-                IModbusSlave slave3 = factory.CreateSlave(1, danfossStore);
+                IModbusServer server3 = factory.CreateServer(1, danfossStore);
 
-                modbusSlaveNetwork.AddSlave(slave1);
-                //modbusSlaveNetwork.AddSlave(slave2);
-                modbusSlaveNetwork.AddSlave(slave2);
-                modbusSlaveNetwork.AddSlave(slave3);
+                modbusServerNetwork.AddServer(server1);
+                //modbusServerNetwork.AddServer(server2);
+                modbusServerNetwork.AddServer(server2);
+                modbusServerNetwork.AddServer(server3);
 
-                await modbusSlaveNetwork.ListenAsync(cancellationToken);
+                await modbusServerNetwork.ListenAsync(cancellationToken);
 
                 await Task.Delay(1, cancellationToken);
             }
         }
 
-        public static async Task StartModbusSerialRtuSlaveWithCustomStore()
+        public static async Task StartModbusSerialRtuServerWithCustomStore()
         {
-            using (SerialPort slavePort = new SerialPort(PrimarySerialPortName))
+            using (SerialPort serverPort = new SerialPort(PrimarySerialPortName))
             {
                 // configure serial port
-                slavePort.BaudRate = 9600;
-                slavePort.DataBits = 8;
-                slavePort.Parity = Parity.None;
-                slavePort.StopBits = StopBits.One;
-                slavePort.Open();
+                serverPort.BaudRate = 9600;
+                serverPort.DataBits = 8;
+                serverPort.Parity = Parity.None;
+                serverPort.StopBits = StopBits.One;
+                serverPort.Open();
 
                 var factory = new ModbusFactory();
-                var slaveNetwork = factory.CreateRtuSlaveNetwork(slavePort);
+                var serverNetwork = factory.CreateRtuServerNetwork(serverPort);
 
-                var dataStore = new SlaveStorage();
+                var dataStore = new ServerStorage();
 
                 dataStore.CoilDiscretes.StorageOperationOccurred += (sender, args) => Console.WriteLine($"Coil discretes: {args.Operation} starting at {args.StartingAddress}");
                 dataStore.CoilInputs.StorageOperationOccurred += (sender, args) => Console.WriteLine($"Coil inputs: {args.Operation} starting at {args.StartingAddress}");
                 dataStore.InputRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"Input registers: {args.Operation} starting at {args.StartingAddress}");
                 dataStore.HoldingRegisters.StorageOperationOccurred += (sender, args) => Console.WriteLine($"Holding registers: {args.Operation} starting at {args.StartingAddress}");
 
-                IModbusSlave slave1 = factory.CreateSlave(1, dataStore);
+                IModbusServer server1 = factory.CreateServer(1, dataStore);
 
-                slaveNetwork.AddSlave(slave1);
+                serverNetwork.AddServer(server1);
 
-                await slaveNetwork.ListenAsync();
+                await serverNetwork.ListenAsync();
             }
         }
 
         /// <summary>
-        ///     Simple Modbus serial USB ASCII slave example.
+        ///     Simple Modbus serial USB ASCII server example.
         /// </summary>
-        public static void StartModbusSerialUsbAsciiSlave()
+        public static void StartModbusSerialUsbAsciiServer()
         {
             // TODO
         }
 
         /// <summary>
-        ///     Simple Modbus serial USB RTU slave example.
+        ///     Simple Modbus serial USB RTU server example.
         /// </summary>
-        public static void StartModbusSerialUsbRtuSlave()
+        public static void StartModbusSerialUsbRtuServer()
         {
             // TODO
         }
 
         /// <summary>
-        ///     Simple Modbus TCP slave example.
+        ///     Simple Modbus TCP server example.
         /// </summary>
-        public static void StartModbusTcpSlave()
+        public static void StartModbusTcpServer()
         {
             int port = 502;
             IPAddress address = new IPAddress(new byte[] { 127, 0, 0, 1 });
 
-            // create and start the TCP slave
-            TcpListener slaveTcpListener = new TcpListener(address, port);
-            slaveTcpListener.Start();
+            // create and start the TCP server
+            TcpListener serverTcpListener = new TcpListener(address, port);
+            serverTcpListener.Start();
 
             IModbusFactory factory = new ModbusFactory();
 
-            IModbusSlaveNetwork network = factory.CreateSlaveNetwork(slaveTcpListener);
+            IModbusServerNetwork network = factory.CreateServerNetwork(serverTcpListener);
 
-            IModbusSlave slave1 = factory.CreateSlave(1);
-            IModbusSlave slave2 = factory.CreateSlave(2);
+            IModbusServer server1 = factory.CreateServer(1);
+            IModbusServer server2 = factory.CreateServer(2);
 
-            network.AddSlave(slave1);
-            network.AddSlave(slave2);
+            network.AddServer(server1);
+            network.AddServer(server2);
 
             network.ListenAsync().GetAwaiter().GetResult();
 
@@ -547,20 +566,20 @@ namespace Samples
         }
 
         /// <summary>
-        ///     Simple Modbus UDP slave example.
+        ///     Simple Modbus UDP server example.
         /// </summary>
-        public static void StartModbusUdpSlave()
+        public static void StartModbusUdpServer()
         {
             using (UdpClient client = new UdpClient(502))
             {
                 var factory = new ModbusFactory();
-                IModbusSlaveNetwork network = factory.CreateSlaveNetwork(client);
+                IModbusServerNetwork network = factory.CreateServerNetwork(client);
 
-                IModbusSlave slave1 = factory.CreateSlave(1);
-                IModbusSlave slave2 = factory.CreateSlave(2);
+                IModbusServer server1 = factory.CreateServer(1);
+                IModbusServer server2 = factory.CreateServer(2);
 
-                network.AddSlave(slave1);
-                network.AddSlave(slave2);
+                network.AddServer(server1);
+                network.AddServer(server2);
 
                 network.ListenAsync().GetAwaiter().GetResult();
 
@@ -570,36 +589,36 @@ namespace Samples
         }
 
         /// <summary>
-        ///     Modbus TCP master and slave example.
+        ///     Modbus TCP client and server example.
         /// </summary>
-        public static void ModbusTcpMasterReadInputsFromModbusSlave()
+        public static void ModbusTcpClientReadInputsFromModbusServer()
         {
-            byte slaveId = 1;
+            byte serverId = 1;
             int port = 502;
             IPAddress address = new IPAddress(new byte[] { 127, 0, 0, 1 });
 
-            // create and start the TCP slave
-            TcpListener slaveTcpListener = new TcpListener(address, port);
-            slaveTcpListener.Start();
+            // create and start the TCP server
+            TcpListener serverTcpListener = new TcpListener(address, port);
+            serverTcpListener.Start();
 
             var factory = new ModbusFactory();
-            var network = factory.CreateSlaveNetwork(slaveTcpListener);
+            var network = factory.CreateServerNetwork(serverTcpListener);
 
-            IModbusSlave slave = factory.CreateSlave(slaveId);
+            IModbusServer server = factory.CreateServer(serverId);
 
-            network.AddSlave(slave);
+            network.AddServer(server);
 
             var listenTask = network.ListenAsync();
 
-            // create the master
-            TcpClient masterTcpClient = new TcpClient(address.ToString(), port);
-            IModbusMaster master = factory.CreateMaster(masterTcpClient);
+            // create the client
+            TcpClient clientTcpClient = new TcpClient(address.ToString(), port);
+            IModbusClient client = factory.CreateClient(clientTcpClient);
 
             ushort numInputs = 5;
             ushort startAddress = 100;
 
             // read five register values
-            ushort[] inputs = master.ReadInputRegisters(0, startAddress, numInputs);
+            ushort[] inputs = client.ReadInputRegisters(0, startAddress, numInputs);
 
             for (int i = 0; i < numInputs; i++)
             {
@@ -607,8 +626,8 @@ namespace Samples
             }
 
             // clean up
-            masterTcpClient.Close();
-            slaveTcpListener.Stop();
+            clientTcpClient.Close();
+            serverTcpListener.Stop();
 
             // output
             // Register 100=0
@@ -619,38 +638,38 @@ namespace Samples
         }
 
         /// <summary>
-        ///     Modbus serial ASCII master and slave example.
+        ///     Modbus serial ASCII client and server example.
         /// </summary>
-        public static void ModbusSerialAsciiMasterReadRegistersFromModbusSlave()
+        public static void ModbusSerialAsciiClientReadRegistersFromModbusServer()
         {
-            using (SerialPort masterPort = new SerialPort(PrimarySerialPortName))
-            using (SerialPort slavePort = new SerialPort(SecondarySerialPortName))
+            using (SerialPort clientPort = new SerialPort(PrimarySerialPortName))
+            using (SerialPort serverPort = new SerialPort(SecondarySerialPortName))
             {
                 // configure serial ports
-                masterPort.BaudRate = slavePort.BaudRate = 9600;
-                masterPort.DataBits = slavePort.DataBits = 8;
-                masterPort.Parity = slavePort.Parity = Parity.None;
-                masterPort.StopBits = slavePort.StopBits = StopBits.One;
-                masterPort.Open();
-                slavePort.Open();
+                clientPort.BaudRate = serverPort.BaudRate = 9600;
+                clientPort.DataBits = serverPort.DataBits = 8;
+                clientPort.Parity = serverPort.Parity = Parity.None;
+                clientPort.StopBits = serverPort.StopBits = StopBits.One;
+                clientPort.Open();
+                serverPort.Open();
 
-                // create modbus slave on seperate thread
-                byte slaveId = 1;
+                // create modbus server on seperate thread
+                byte serverId = 1;
                 var factory = new ModbusFactory();
-                var transport = factory.CreateAsciiTransport(slavePort);
-                var network = factory.CreateSlaveNetwork(transport);
-                var slave = factory.CreateSlave(slaveId);
-                network.AddSlave(slave);
+                var transport = factory.CreateAsciiTransport(serverPort);
+                var network = factory.CreateServerNetwork(transport);
+                var server = factory.CreateServer(serverId);
+                network.AddServer(server);
 
                 var listenTask = network.ListenAsync();
 
-                var masterTransport = factory.CreateAsciiTransport(masterPort);
-                IModbusSerialMaster master = factory.CreateMaster(masterTransport);
+                var clientTransport = factory.CreateAsciiTransport(clientPort);
+                IModbusSerialClient client = factory.CreateClient(clientTransport);
 
-                master.Transport.Retries = 5;
+                client.Transport.Retries = 5;
                 ushort startAddress = 100;
                 ushort numRegisters = 5;
-                ushort[] registers = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
+                ushort[] registers = client.ReadHoldingRegisters(serverId, startAddress, numRegisters);
 
                 for (int i = 0; i < numRegisters; i++)
                     Console.WriteLine($"Register {(startAddress + i)}={registers[i]}");
@@ -680,9 +699,9 @@ namespace Samples
 
                 var factory = new ModbusFactory();
                 IModbusRtuTransport transport = factory.CreateRtuTransport(port);
-                IModbusSerialMaster master = factory.CreateMaster(transport);
+                IModbusSerialClient client = factory.CreateClient(transport);
 
-                byte slaveId = 1;
+                byte serverId = 1;
                 ushort startAddress = 1008;
                 uint largeValue = UInt16.MaxValue + 5;
 
@@ -690,10 +709,10 @@ namespace Samples
                 ushort highOrderValue = BitConverter.ToUInt16(BitConverter.GetBytes(largeValue), 2);
 
                 // write large value in two 16 bit chunks
-                master.WriteMultipleRegisters(slaveId, startAddress, new ushort[] { lowOrderValue, highOrderValue });
+                client.WriteMultipleRegisters(serverId, startAddress, new ushort[] { lowOrderValue, highOrderValue });
 
                 // read large value in two 16 bit chunks and perform conversion
-                ushort[] registers = master.ReadHoldingRegisters(slaveId, startAddress, 2);
+                ushort[] registers = client.ReadHoldingRegisters(serverId, startAddress, 2);
                 uint value = ModbusUtility.GetUInt32(registers[1], registers[0]);
             }
         }

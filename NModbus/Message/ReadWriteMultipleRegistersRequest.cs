@@ -16,21 +16,21 @@ namespace NModbus.Message
         }
 
         public ReadWriteMultipleRegistersRequest(
-            byte slaveAddress,
+            byte serverAddress,
             ushort startReadAddress,
             ushort numberOfPointsToRead,
             ushort startWriteAddress,
             RegisterCollection writeData)
-            : base(slaveAddress, ModbusFunctionCodes.ReadWriteMultipleRegisters)
+            : base(serverAddress, ModbusFunctionCodes.ReadWriteMultipleRegisters)
         {
             _readRequest = new ReadHoldingInputRegistersRequest(
                 ModbusFunctionCodes.ReadHoldingRegisters,
-                slaveAddress,
+                serverAddress,
                 startReadAddress,
                 numberOfPointsToRead);
 
             _writeRequest = new WriteMultipleRegistersRequest(
-                slaveAddress,
+                serverAddress,
                 startWriteAddress,
                 writeData);
 
@@ -101,7 +101,7 @@ namespace NModbus.Message
             byte[] readFrame = new byte[2 + 4];
             byte[] writeFrame = new byte[frame.Length - 6 + 2];
 
-            readFrame[0] = writeFrame[0] = SlaveAddress;
+            readFrame[0] = writeFrame[0] = ServerAddress;
             readFrame[1] = writeFrame[1] = FunctionCode;
 
             Buffer.BlockCopy(frame, 2, readFrame, 2, 4);

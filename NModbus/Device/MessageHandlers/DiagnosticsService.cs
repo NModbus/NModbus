@@ -1,4 +1,6 @@
-﻿namespace NModbus.Device.MessageHandlers
+﻿using System;
+
+namespace NModbus.Device.MessageHandlers
 {
     using Message;
 
@@ -24,7 +26,12 @@
             return 4;
         }
 
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use Handle with IServerDataStore parameter instead.")]
         protected override IModbusMessage Handle(IModbusMessage request, ISlaveDataStore dataStore)
+        {
+            return Handle(request, dataStore as IServerDataStore);
+        }
+        protected override IModbusMessage Handle(IModbusMessage request, IServerDataStore dataStore)
         {
             return request;
         }

@@ -7,14 +7,20 @@ using NModbus.Message;
 
 namespace NModbus.Device 
 {
-    internal class ModbusSlave : IModbusSlave
+    [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use ModbusServer instead.")]
+    internal class ModbusSlave : ModbusServer, IModbusSlave
+    {
+        public ModbusSlave(byte unitId, ISlaveDataStore dataStore, IEnumerable<IModbusFunctionService> handlers) : base(unitId, dataStore, handlers) { }
+    }
+
+    internal class ModbusServer : IModbusServer
     {
         private readonly byte _unitId;
-        private readonly ISlaveDataStore _dataStore;
+        private readonly IServerDataStore _dataStore;
 
         private readonly IDictionary<byte, IModbusFunctionService> _handlers;
 
-        public ModbusSlave(byte unitId, ISlaveDataStore dataStore, IEnumerable<IModbusFunctionService> handlers)
+        public ModbusServer(byte unitId, IServerDataStore dataStore, IEnumerable<IModbusFunctionService> handlers)
         {
             if (dataStore == null) throw new ArgumentNullException(nameof(dataStore));
             if (handlers == null) throw new ArgumentNullException(nameof(handlers));
@@ -26,7 +32,7 @@ namespace NModbus.Device
 
         public byte UnitId => _unitId;
 
-        public ISlaveDataStore DataStore => _dataStore;
+        public IServerDataStore DataStore => _dataStore;
 
         public IModbusMessage ApplyRequest(IModbusMessage request)
         {
@@ -40,17 +46,17 @@ namespace NModbus.Device
                 //Check to see if we found a handler for this function code.
                 if (handler == null)
                 {
-                    throw new InvalidModbusRequestException(SlaveExceptionCodes.IllegalFunction);
+                    throw new InvalidModbusRequestException(ServerExceptionCodes.IllegalFunction);
                 }
 
                 //Process the request
-                response = handler.HandleSlaveRequest(request, DataStore);
+                response = handler.HandleServerRequest(request, DataStore);
             }
             catch (InvalidModbusRequestException ex)
             {
-                // Catches the exception for an illegal function or a custom exception from the ModbusSlaveRequestReceived event.
-                response = new SlaveExceptionResponse(
-                    request.SlaveAddress,
+                // Catches the exception for an illegal function or a custom exception from the ModbusServerRequestReceived event.
+                response = new ServerExceptionResponse(
+                    request.ServerAddress,
                     (byte) (Modbus.ExceptionOffset + request.FunctionCode),
                     ex.ExceptionCode);
             }
@@ -58,9 +64,9 @@ namespace NModbus.Device
             catch (Exception ex)
             {
                 //Okay - this is no beuno.
-                response = new SlaveExceptionResponse(request.SlaveAddress,
+                response = new ServerExceptionResponse(request.ServerAddress,
                     (byte) (Modbus.ExceptionOffset + request.FunctionCode),
-                    SlaveExceptionCodes.SlaveDeviceFailure);
+                    ServerExceptionCodes.ServerDeviceFailure);
 
                 //Give the consumer a chance at seeing what the *(&& happened.
                 Trace.WriteLine(ex.ToString());
@@ -69,9 +75,9 @@ namespace NModbus.Device
             catch (Exception)
             {
                 //Okay - this is no beuno.
-                response = new SlaveExceptionResponse(request.SlaveAddress,
+                response = new ServerExceptionResponse(request.ServerAddress,
                     (byte)(Modbus.ExceptionOffset + request.FunctionCode),
-                    SlaveExceptionCodes.SlaveDeviceFailure);
+                    ServerExceptionCodes.ServerDeviceFailure);
             }
 #endif
 

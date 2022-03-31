@@ -52,14 +52,21 @@ namespace NModbus.IO
         /// </summary>
         public uint RetryOnOldResponseThreshold { get; set; }
 
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use ServerBusyUsesRetryCount instead.")]
+        public bool SlaveBusyUsesRetryCount
+        {
+            get => ServerBusyUsesRetryCount;
+            set => ServerBusyUsesRetryCount = value;
+        }
+
         /// <summary>
-        /// If set, Slave Busy exception causes retry count to be used.  If false, Slave Busy will cause infinite retries
+        /// If set, Server Busy exception causes retry count to be used.  If false, Server Busy will cause infinite retries
         /// </summary>
-        public bool SlaveBusyUsesRetryCount { get; set; }
+        public bool ServerBusyUsesRetryCount { get; set; }
 
         /// <summary>
         ///     Gets or sets the number of milliseconds the tranport will wait before retrying a message after receiving
-        ///     an ACKNOWLEGE or SLAVE DEVICE BUSY slave exception response.
+        ///     an ACKNOWLEGE or SLAVE DEVICE BUSY server exception response.
         /// </summary>
         public int WaitToRetryMilliseconds
         {
@@ -135,21 +142,21 @@ namespace NModbus.IO
                         {
                             readAgain = false;
                             response = ReadResponse<T>();
-                            var exceptionResponse = response as SlaveExceptionResponse;
+                            var exceptionResponse = response as ServerExceptionResponse;
 
                             if (exceptionResponse != null)
                             {
-                                // if SlaveExceptionCode == ACKNOWLEDGE we retry reading the response without resubmitting request
-                                readAgain = exceptionResponse.SlaveExceptionCode == SlaveExceptionCodes.Acknowledge;
+                                // if ServerExceptionCode == ACKNOWLEDGE we retry reading the response without resubmitting request
+                                readAgain = exceptionResponse.ServerExceptionCode == ServerExceptionCodes.Acknowledge;
 
                                 if (readAgain)
                                 {
-                                    Logger.Debug($"Received ACKNOWLEDGE slave exception response, waiting {_waitToRetryMilliseconds} milliseconds and retrying to read response.");
+                                    Logger.Debug($"Received ACKNOWLEDGE server exception response, waiting {_waitToRetryMilliseconds} milliseconds and retrying to read response.");
                                     Sleep(WaitToRetryMilliseconds);
                                 }
                                 else
                                 {
-                                    throw new SlaveException(exceptionResponse);
+                                    throw new ServerException(exceptionResponse);
                                 }
                             }
                             else if (ShouldRetryResponse(message, response))
@@ -163,14 +170,14 @@ namespace NModbus.IO
                     ValidateResponse(message, response);
                     success = true;
                 }
-                catch (SlaveException se)
+                catch (ServerException se)
                 {
-                    if (se.SlaveExceptionCode != SlaveExceptionCodes.SlaveDeviceBusy)
+                    if (se.ServerExceptionCode != ServerExceptionCodes.ServerDeviceBusy)
                     {
                         throw;
                     }
 
-                    if (SlaveBusyUsesRetryCount && attempt++ > _retries)
+                    if (ServerBusyUsesRetryCount && attempt++ > _retries)
                     {
                         throw;
                     }
@@ -216,10 +223,10 @@ namespace NModbus.IO
             byte functionCode = frame[1];
             IModbusMessage response;
 
-            // check for slave exception response else create message from frame
+            // check for server exception response else create message from frame
             if (functionCode > Modbus.ExceptionOffset)
             {
-                response = ModbusMessageFactory.CreateModbusMessage<SlaveExceptionResponse>(frame);
+                response = ModbusMessageFactory.CreateModbusMessage<ServerExceptionResponse>(frame);
             }
             else
             {
@@ -231,16 +238,16 @@ namespace NModbus.IO
 
         public void ValidateResponse(IModbusMessage request, IModbusMessage response)
         {
-            // always check the function code and slave address, regardless of transport protocol
+            // always check the function code and server address, regardless of transport protocol
             if (request.FunctionCode != response.FunctionCode)
             {
                 string msg = $"Received response with unexpected Function Code. Expected {request.FunctionCode}, received {response.FunctionCode}.";
                 throw new IOException(msg);
             }
 
-            if (request.SlaveAddress != response.SlaveAddress)
+            if (request.ServerAddress != response.ServerAddress)
             {
-                string msg = $"Response slave address does not match request. Expected {request.SlaveAddress}, received {response.SlaveAddress}.";
+                string msg = $"Response server address does not match request. Expected {request.ServerAddress}, received {response.ServerAddress}.";
                 throw new IOException(msg);
             }
 
@@ -266,7 +273,7 @@ namespace NModbus.IO
                 return false;
             }
 
-            if (request.SlaveAddress != response.SlaveAddress)
+            if (request.ServerAddress != response.ServerAddress)
             {
                 return false;
             }

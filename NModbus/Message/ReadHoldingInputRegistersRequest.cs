@@ -11,8 +11,8 @@ namespace NModbus.Message
         {
         }
 
-        public ReadHoldingInputRegistersRequest(byte functionCode, byte slaveAddress, ushort startAddress, ushort numberOfPoints)
-            : base(slaveAddress, functionCode)
+        public ReadHoldingInputRegistersRequest(byte functionCode, byte serverAddress, ushort startAddress, ushort numberOfPoints)
+            : base(serverAddress, functionCode)
         {
             StartAddress = startAddress;
             NumberOfPoints = numberOfPoints;

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NModbus.Message;
 
 namespace NModbus.Device.MessageHandlers
@@ -25,7 +26,12 @@ namespace NModbus.Device.MessageHandlers
             return 4;
         }
 
+        [Obsolete("Master/Slave terminology is deprecated and replaced with Client/Server. Use Handle with IServerDataStore parameter instead.")]
         protected override IModbusMessage Handle(WriteSingleRegisterRequestResponse request, ISlaveDataStore dataStore)
+        {
+            return Handle(request, dataStore as IServerDataStore);
+        }
+        protected override IModbusMessage Handle(WriteSingleRegisterRequestResponse request, IServerDataStore dataStore)
         {
             ushort[] points = request.Data
                 .ToArray();
