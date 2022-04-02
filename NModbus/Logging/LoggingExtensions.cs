@@ -85,34 +85,49 @@ namespace NModbus.Logging
 
         #region Frame logging
 
-        private static void LogFrame(this IModbusLogger logger, string validPrefix, string invalidPrefix, byte[] frame)
+        private static void LogFrame(this IModbusLogger logger, string validPrefix, string invalidPrefix, byte[] frame, bool checkCrc)
         {
             if (logger.ShouldLog(LoggingLevel.Trace))
             {
                 if (logger.ShouldLog(LoggingLevel.Trace))
                 {
-                    string prefix = frame.DoesCrcMatch() ? validPrefix : invalidPrefix;
+                    string prefix = checkCrc && frame.DoesCrcMatch() || !checkCrc ? validPrefix : invalidPrefix;
 
                     logger.Trace($"{prefix}: {string.Join(" ", frame.Select(b => b.ToString("X2")))}");
                 }
             }
         }
 
-        internal static void LogFrameTx(this IModbusLogger logger, byte[] frame)
+        internal static void LogFrameTx(this IModbusLogger logger, byte[] frame, bool checkCrc = true)
         {
-            logger.LogFrame("TX", "tx", frame);
-        }
-
-        internal static void LogFrameRx(this IModbusLogger logger, byte[] frame)
-        {
-            logger.LogFrame("RX", "rx", frame);
-        }
-
-        internal static void LogFrameIgnoreRx(this IModbusLogger logger, byte[] frame)
-        {
-            logger.LogFrame("IR", "ir", frame);
-        }
-
-        #endregion  
+            logger.LogFrame("TX", "tx", frame, checkCrc);
     }
+
+        internal static void LogFrameRx(this IModbusLogger logger, byte[] frame, bool checkCrc = true)
+        {
+            logger.LogFrame("RX", "rx", frame, checkCrc);
+        }
+
+        internal static void LogFrameIgnoreRx(this IModbusLogger logger, byte[] frame, bool checkCrc = true)
+    {
+            logger.LogFrame("IR", "ir", frame, checkCrc);
+    }
+
+        internal static void LogFrameTx(this IModbusLogger logger, string prefix, byte[] frame, bool checkCrc = true)
+    {
+            logger.LogFrame($"TX {prefix}", $"tx {prefix}", frame, checkCrc);
+    }
+
+        internal static void LogFrameRx(this IModbusLogger logger, string prefix, byte[] frame, bool checkCrc = true)
+    {
+            logger.LogFrame($"RX {prefix}", $"rx {prefix}", frame, checkCrc);
+    }
+
+    internal static void LogFrameIgnoreRx(this IModbusLogger logger, string prefix, byte[] frame, bool checkCrc = true)
+    {
+            logger.LogFrame($"IR {prefix}", $"it {prefix}", frame, checkCrc);
+    }
+
+    #endregion
+  }
 }
