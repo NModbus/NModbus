@@ -59,6 +59,15 @@ namespace NModbus
         ushort[] ReadHoldingRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
 
         /// <summary>
+        ///    Reads contiguous block of holding registers with 32 bit register size.
+        /// </summary>
+        /// <param name="slaveAddress">Address of device to read values from.</param>
+        /// <param name="startAddress">Address to begin reading.</param>
+        /// <param name="numberOfPoints">Number of holding registers to read.</param>
+        /// <returns>Holding registers status.</returns>
+        uint[] ReadHoldingRegisters32(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
+
+        /// <summary>
         ///    Asynchronously reads contiguous block of holding registers.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
@@ -66,6 +75,15 @@ namespace NModbus
         /// <param name="numberOfPoints">Number of holding registers to read.</param>
         /// <returns>A task that represents the asynchronous read operation.</returns>
         Task<ushort[]> ReadHoldingRegistersAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
+
+        /// <summary>
+        ///    Asynchronously reads contiguous block of holding registers.
+        /// </summary>
+        /// <param name="slaveAddress">Address of device to read values from.</param>
+        /// <param name="startAddress">Address to begin reading.</param>
+        /// <param name="numberOfPoints">Number of holding registers to read.</param>
+        /// <returns>A task that represents the asynchronous read operation.</returns>
+        Task<uint[]> ReadHoldingRegisters32Async(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
 
         /// <summary>
         ///    Reads contiguous block of input registers.
@@ -76,6 +94,15 @@ namespace NModbus
         /// <returns>Input registers status.</returns>
         ushort[] ReadInputRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
 
+		    /// <summary>
+		    ///    Reads contiguous block of input registers with 32 bit register size.
+		    /// </summary>
+		    /// <param name="slaveAddress">Address of device to read values from.</param>
+		    /// <param name="startAddress">Address to begin reading.</param>
+		    /// <param name="numberOfPoints">Number of holding registers to read.</param>
+		    /// <returns>Input registers status.</returns>
+				uint[] ReadInputRegisters32(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
+
         /// <summary>
         ///    Asynchronously reads contiguous block of input registers.
         /// </summary>
@@ -84,6 +111,15 @@ namespace NModbus
         /// <param name="numberOfPoints">Number of holding registers to read.</param>
         /// <returns>A task that represents the asynchronous read operation.</returns>
         Task<ushort[]> ReadInputRegistersAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
+
+		    /// <summary>
+				///    Asynchronously reads contiguous block of input registers with 32 bit register size.
+		    /// </summary>
+		    /// <param name="slaveAddress">Address of device to read values from.</param>
+		    /// <param name="startAddress">Address to begin reading.</param>
+		    /// <param name="numberOfPoints">Number of holding registers to read.</param>
+		    /// <returns>A task that represents the asynchronous read operation.</returns>
+		    Task<uint[]> ReadInputRegisters32Async(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
 
         /// <summary>
         ///    Writes a single coil value.

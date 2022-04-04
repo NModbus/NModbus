@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using NModbus;
+using NModbus.Extensions.Enron;
 using NModbus.Serial;
 using NModbus.Utility;
 
@@ -30,15 +31,16 @@ namespace Samples
 
             try
             {
-                ModbusSocketSerialMasterReadRegisters();
-                ModbusSocketSerialMasterWriteRegisters();
-                ModbusSocketSerialMasterReadRegisters();
+                //ModbusSocketSerialMasterReadRegisters();
+                //ModbusSocketSerialMasterWriteRegisters();
+                //ModbusSocketSerialMasterReadRegisters();
                 await Task.Run(() => { });
-                //ModbusTcpMasterReadInputs();
-                //SimplePerfTest();
-                //ModbusSerialRtuMasterWriteRegisters();
-                //ModbusSerialAsciiMasterReadRegisters();
-                //ModbusTcpMasterReadInputs();
+				        //ModbusTcpMasterReadInputs();
+				        //SimplePerfTest();
+				        //ModbusSerialRtuMasterWriteRegisters();
+				        //ModbusSerialAsciiMasterReadRegisters();
+				        //ModbusTcpMasterReadInputs();
+								ModbusTcpMasterReadHoldingRegisters32();
                 //StartModbusAsciiSlave();
                 //ModbusTcpMasterReadInputsFromModbusSlave();
                 //ModbusSerialAsciiMasterReadRegistersFromModbusSlave();
@@ -136,9 +138,9 @@ namespace Samples
                 {
                     Console.WriteLine($"Input {(startAddress + i)}={registers[i]}");
                 }
-
             }
         }
+
         /// <summary>
         ///     Simple Modbus serial ASCII master read holding registers example.
         /// </summary>
@@ -205,6 +207,32 @@ namespace Samples
             // Input 103=0
             // Input 104=0
         }
+
+        /// <summary>
+        ///     Simple Modbus TCP master read inputs example.
+        /// </summary>
+        public static void ModbusTcpMasterReadHoldingRegisters32()
+        {
+            using (TcpClient client = new TcpClient("10.16.12.50", 502))
+            {
+                var factory = new ModbusFactory();
+                IModbusMaster master = factory.CreateMaster(client);
+
+
+								byte slaveId = 1;
+								ushort startAddress = 7165;
+                ushort numInputs = 5;
+								UInt32 www = 0x42c80083;
+
+								master.WriteSingleRegister32(slaveId, startAddress, www);
+								uint[] registers = master.ReadHoldingRegisters32(slaveId, startAddress, numInputs);
+
+				        for (int i = 0; i < numInputs; i++)
+				        {
+									Console.WriteLine($"Input {(startAddress + i)}={registers[i]}");
+				        }
+						}
+				}
 
         /// <summary>
         ///     Simple Modbus UDP master write coils example.

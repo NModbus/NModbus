@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NModbus.Utility;
 
 namespace NModbus.Extensions.Enron
 {
@@ -10,66 +9,7 @@ namespace NModbus.Extensions.Enron
     /// </summary>
     public static class EnronModbus
     {
-        /// <summary>
-        ///     Read contiguous block of 32 bit holding registers.
-        /// </summary>
-        /// <param name="master">The Modbus master.</param>
-        /// <param name="slaveAddress">Address of device to read values from.</param>
-        /// <param name="startAddress">Address to begin reading.</param>
-        /// <param name="numberOfPoints">Number of holding registers to read.</param>
-        /// <returns>Holding registers status</returns>
-        public static uint[] ReadHoldingRegisters32(
-            this IModbusMaster master,
-            byte slaveAddress,
-            ushort startAddress,
-            ushort numberOfPoints)
-        {
-            if (master == null)
-            {
-                throw new ArgumentNullException(nameof(master));
-            }
-
-            ValidateNumberOfPoints(numberOfPoints, 62);
-
-            // read 16 bit chunks and perform conversion
-            var rawRegisters = master.ReadHoldingRegisters(
-                slaveAddress,
-                startAddress,
-                (ushort)(numberOfPoints * 2));
-
-            return Convert(rawRegisters).ToArray();
-        }
-
-        /// <summary>
-        ///     Read contiguous block of 32 bit input registers.
-        /// </summary>
-        /// <param name="master">The Modbus master.</param>
-        /// <param name="slaveAddress">Address of device to read values from.</param>
-        /// <param name="startAddress">Address to begin reading.</param>
-        /// <param name="numberOfPoints">Number of holding registers to read.</param>
-        /// <returns>Input registers status</returns>
-        public static uint[] ReadInputRegisters32(
-            this IModbusMaster master,
-            byte slaveAddress,
-            ushort startAddress,
-            ushort numberOfPoints)
-        {
-            if (master == null)
-            {
-                throw new ArgumentNullException(nameof(master));
-            }
-
-            ValidateNumberOfPoints(numberOfPoints, 62);
-
-            var rawRegisters = master.ReadInputRegisters(
-                slaveAddress,
-                startAddress,
-                (ushort)(numberOfPoints * 2));
-
-            return Convert(rawRegisters).ToArray();
-        }
-
-        /// <summary>
+			/// <summary>
         ///     Write a single 16 bit holding register.
         /// </summary>
         /// <param name="master">The Modbus master.</param>
@@ -129,31 +69,10 @@ namespace NModbus.Extensions.Enron
             foreach (var register in registers)
             {
                 // low order value
-                yield return BitConverter.ToUInt16(BitConverter.GetBytes(register), 0);
+                yield return BitConverter.ToUInt16(BitConverter.GetBytes(register), 2);
 
                 // high order value
-                yield return BitConverter.ToUInt16(BitConverter.GetBytes(register), 2);
-            }
-        }
-
-        /// <summary>
-        ///     Convert the 16 bit registers to 32 bit registers.
-        /// </summary>
-        private static IEnumerable<uint> Convert(ushort[] registers)
-        {
-            for (int i = 0; i < registers.Length; i++)
-            {
-                yield return ModbusUtility.GetUInt32(registers[i + 1], registers[i]);
-                i++;
-            }
-        }
-
-        private static void ValidateNumberOfPoints(ushort numberOfPoints, ushort maxNumberOfPoints)
-        {
-            if (numberOfPoints < 1 || numberOfPoints > maxNumberOfPoints)
-            {
-                string msg = $"Argument numberOfPoints must be between 1 and {maxNumberOfPoints} inclusive.";
-                throw new ArgumentException(msg);
+                yield return BitConverter.ToUInt16(BitConverter.GetBytes(register), 0);
             }
         }
     }
