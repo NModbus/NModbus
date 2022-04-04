@@ -48,7 +48,7 @@ namespace NModbus.Message
             return msg;
         }
 
-        public virtual void ValidateResponse(IModbusMessage response)
+        public void ValidateResponse(IModbusMessage response)
         {
             var typedResponse = response as ReadHoldingInputRegistersResponse;
             Debug.Assert(typedResponse != null, "Argument response should be of type ReadHoldingInputRegistersResponse.");
