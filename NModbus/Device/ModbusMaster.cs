@@ -117,26 +117,6 @@ namespace NModbus.Device
             return PerformReadRegisters(request);
         }
 
-				/// <summary>
-				///    Reads contiguous block of holding registers.
-				/// </summary>
-				/// <param name="slaveAddress">Address of device to read values from.</param>
-				/// <param name="startAddress">Address to begin reading.</param>
-				/// <param name="numberOfPoints">Number of holding registers to read.</param>
-				/// <returns>Holding registers status.</returns>
-				public uint[] ReadHoldingRegisters32(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
-        {
-            ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 62);
-
-            var request = new ReadHoldingInputRegisters32Request(
-                ModbusFunctionCodes.ReadHoldingRegisters,
-                slaveAddress,
-                startAddress,
-                numberOfPoints);
-
-            return PerformReadRegisters(request);
-        }
-
         /// <summary>
         ///    Asynchronously reads contiguous block of holding registers.
         /// </summary>
@@ -149,26 +129,6 @@ namespace NModbus.Device
             ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 125);
 
             var request = new ReadHoldingInputRegistersRequest(
-                ModbusFunctionCodes.ReadHoldingRegisters,
-                slaveAddress,
-                startAddress,
-                numberOfPoints);
-
-            return PerformReadRegistersAsync(request);
-        }
-
-        /// <summary>
-        ///    Asynchronously reads contiguous block of holding registers.
-        /// </summary>
-        /// <param name="slaveAddress">Address of device to read values from.</param>
-        /// <param name="startAddress">Address to begin reading.</param>
-        /// <param name="numberOfPoints">Number of holding registers to read.</param>
-        /// <returns>A task that represents the asynchronous read operation.</returns>
-        public Task<uint[]> ReadHoldingRegisters32Async(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
-        {
-            ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 125);
-
-            var request = new ReadHoldingInputRegisters32Request(
                 ModbusFunctionCodes.ReadHoldingRegisters,
                 slaveAddress,
                 startAddress,
@@ -197,26 +157,6 @@ namespace NModbus.Device
             return PerformReadRegisters(request);
         }
 
-		    /// <summary>
-				///    Reads contiguous block of input registers with 32 bit register size.
-		    /// </summary>
-		    /// <param name="slaveAddress">Address of device to read values from.</param>
-		    /// <param name="startAddress">Address to begin reading.</param>
-		    /// <param name="numberOfPoints">Number of holding registers to read.</param>
-		    /// <returns>Input registers status.</returns>
-				public uint[] ReadInputRegisters32(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
-        {
-            ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 62);
-
-            var request = new ReadHoldingInputRegisters32Request(
-                ModbusFunctionCodes.ReadInputRegisters,
-                slaveAddress,
-                startAddress,
-                numberOfPoints);
-
-            return PerformReadRegisters(request);
-        }
-
         /// <summary>
         ///    Asynchronously reads contiguous block of input registers.
         /// </summary>
@@ -229,26 +169,6 @@ namespace NModbus.Device
             ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 125);
 
             var request = new ReadHoldingInputRegistersRequest(
-                ModbusFunctionCodes.ReadInputRegisters,
-                slaveAddress,
-                startAddress,
-                numberOfPoints);
-
-            return PerformReadRegistersAsync(request);
-        }
-
-		    /// <summary>
-		    ///    Asynchronously reads contiguous block of input registers with 32 bit register size.
-		    /// </summary>
-		    /// <param name="slaveAddress">Address of device to read values from.</param>
-		    /// <param name="startAddress">Address to begin reading.</param>
-		    /// <param name="numberOfPoints">Number of holding registers to read.</param>
-		    /// <returns>A task that represents the asynchronous read operation.</returns>
-		    public Task<uint[]> ReadInputRegisters32Async(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
-        {
-            ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 125);
-
-            var request = new ReadHoldingInputRegisters32Request(
                 ModbusFunctionCodes.ReadInputRegisters,
                 slaveAddress,
                 startAddress,
@@ -533,33 +453,10 @@ namespace NModbus.Device
             return response.Data.Take(request.NumberOfPoints).ToArray();
         }
 
-        private uint[] PerformReadRegisters(ReadHoldingInputRegisters32Request request)
-        {
-            ReadHoldingInputRegistersResponse response =
-                Transport.UnicastMessage<ReadHoldingInputRegistersResponse>(request);
-
-						uint[] registers = new uint[request.NumberOfPoints];
-
-            if (response.Data is IModbusMessageDataCollection data)
-			      {
-							for (int i = 0; i < response.Data.ByteCount; i += 4)
-							{
-								registers[i / 4] = (uint) (data.NetworkBytes[i + 0] << 24 | data.NetworkBytes[i + 1] << 16 | data.NetworkBytes[i + 2] << 8 | data.NetworkBytes[i + 3]);
-							}
-			      }
-
-						return registers.Take(request.NumberOfPoints).ToArray();
-				}
-
         private Task<ushort[]> PerformReadRegistersAsync(ReadHoldingInputRegistersRequest request)
         {
             return Task.Factory.StartNew(() => PerformReadRegisters(request));
     }
-
-				private Task<uint[]> PerformReadRegistersAsync(ReadHoldingInputRegisters32Request request)
-				{
-					return Task.Factory.StartNew(() => PerformReadRegisters(request));
-				}
 
     private ushort[] PerformReadRegisters(ReadWriteMultipleRegistersRequest request)
         {
