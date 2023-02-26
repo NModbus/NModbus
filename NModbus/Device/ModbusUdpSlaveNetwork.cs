@@ -44,7 +44,7 @@ namespace NModbus.Device
 
                     Debug.WriteLine($"Read Frame completed {frame.Length} bytes");
 
-                    Logger.LogFrameRx(frame);
+                    Logger.LogFrameRx(frame, false);
 
                     IModbusMessage request = ModbusFactory.CreateModbusRequest(frame.Slice(6, frame.Length - 6).ToArray());
                     request.TransactionId = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(frame, 0));
@@ -59,7 +59,7 @@ namespace NModbus.Device
                         // write response
                         byte[] responseFrame = Transport.BuildMessageFrame(response);
 
-                        Logger.LogFrameTx(frame);
+                        Logger.LogFrameTx(frame, false);
 
                         await _udpClient.SendAsync(responseFrame, responseFrame.Length, masterEndPoint)
                             .ConfigureAwait(false);

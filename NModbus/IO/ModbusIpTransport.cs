@@ -67,7 +67,7 @@ namespace NModbus.IO
 
             logger.Debug($"PDU: {frameLength}");
             var frame = mbapHeader.Concat(messageFrame).ToArray();
-            logger.LogFrameRx(frame);
+            logger.LogFrameRx(frame, false);
 
       return frame;
         }
@@ -129,7 +129,7 @@ namespace NModbus.IO
             message.TransactionId = GetNewTransactionId();
             byte[] frame = BuildMessageFrame(message);
 
-            Logger.LogFrameTx(frame);
+            Logger.LogFrameTx(frame, false);
 
             StreamResource.Write(frame, 0, frame.Length);
         }

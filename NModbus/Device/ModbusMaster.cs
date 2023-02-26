@@ -456,9 +456,9 @@ namespace NModbus.Device
         private Task<ushort[]> PerformReadRegistersAsync(ReadHoldingInputRegistersRequest request)
         {
             return Task.Factory.StartNew(() => PerformReadRegisters(request));
-        }
+    }
 
-        private ushort[] PerformReadRegisters(ReadWriteMultipleRegistersRequest request)
+    private ushort[] PerformReadRegisters(ReadWriteMultipleRegistersRequest request)
         {
             ReadHoldingInputRegistersResponse response =
                 Transport.UnicastMessage<ReadHoldingInputRegistersResponse>(request);
