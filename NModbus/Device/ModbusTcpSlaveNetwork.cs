@@ -18,7 +18,7 @@ namespace NModbus.Device
     /// <summary>
     ///     Modbus TCP slave device.
     /// </summary>
-    internal class ModbusTcpSlaveNetwork : ModbusSlaveNetwork, IModbusTcpSlaveNetwork
+    internal class ModbusTcpSlaveNetwork : ModbusSlaveNetwork
     {
         private const int TimeWaitResponse = 1000;
         private readonly object _serverLock = new object();
