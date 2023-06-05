@@ -186,7 +186,7 @@ namespace NModbus.IO
                     {
                         throw;
                     }
-                    else if (e is FormatException ||
+                    if (e is FormatException ||
                         e is NotImplementedException ||
                         e is TimeoutException ||
                         e is IOException)
