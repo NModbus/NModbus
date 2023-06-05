@@ -181,7 +181,8 @@ namespace NModbus.IO
                 }
                 catch (Exception e)
                 {
-                    if (e is SocketException || e.InnerException is SocketException)
+                    if ((e is SocketException socketException && socketException.SocketErrorCode != SocketError.TimedOut)
+                        || (e.InnerException is SocketException innerSocketException && innerSocketException.SocketErrorCode != SocketError.TimedOut))
                     {
                         throw;
                     }
