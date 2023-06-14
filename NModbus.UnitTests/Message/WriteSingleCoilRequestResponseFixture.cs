@@ -11,7 +11,7 @@ namespace NModbus.UnitTests.Message
             WriteSingleCoilRequestResponse request = new WriteSingleCoilRequestResponse(11, 5, true);
             Assert.Equal(11, request.SlaveAddress);
             Assert.Equal(5, request.StartAddress);
-            Assert.Equal(1, request.Data.Count);
+            Assert.Single(request.Data);
             Assert.Equal(Modbus.CoilOn, request.Data[0]);
         }
 
