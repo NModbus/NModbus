@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using Moq;
 using NModbus.Data;
 using NModbus.IO;
@@ -249,6 +250,30 @@ namespace NModbus.UnitTests.IO
             Assert.Equal(transport.Retries + 1, writeCallsCount);
             Assert.Equal(transport.Retries + 1, readResponseCallsCount);
             Assert.Equal(expectedResponse.MessageFrame, response.MessageFrame);
+
+            mock.VerifyAll();
+        }
+
+        [Fact]
+        public void UnicastMessage_SocketTimeout()
+        {
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadInputs, 2, 3, 4);
+            var mock = new Mock<ModbusTransport>(new ModbusFactory(), NullModbusLogger.Instance) { CallBase = true };
+            var transport = mock.Object;
+            int writeCallsCount = 0;
+            int readResponseCallsCount = 0;
+
+            mock.Setup(t => t.Write(It.IsNotNull<IModbusMessage>()))
+                .Callback(() => ++writeCallsCount);
+
+            var exception = new IOException("Timeout ..", new SocketException((int)SocketError.TimedOut));
+            mock.Setup(t => t.ReadResponse<ReadCoilsInputsResponse>())
+                .Callback(() => ++readResponseCallsCount)
+                .Throws(exception);
+
+            Assert.Throws<IOException>(() => transport.UnicastMessage<ReadCoilsInputsResponse>(request));
+            Assert.Equal(Modbus.DefaultRetries + 1, writeCallsCount);
+            Assert.Equal(Modbus.DefaultRetries + 1, readResponseCallsCount);
 
             mock.VerifyAll();
         }
