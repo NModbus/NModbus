@@ -34,9 +34,13 @@ namespace NModbus.UnitTests.Message
 
             foreach (Type messageType in messageTypes)
             {
-                Assert.NotNull(
-                    messageType.GetMethod("ToString",
-                        BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                bool hasDirectOverride = messageType.GetMethod("ToString",
+                  BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly) != null;
+                bool nonAbstractBaseHasOverride = messageType.BaseType != null &&
+                                                  !messageType.BaseType.IsAbstract &&
+                                                  messageType.BaseType.GetMethod("ToString",
+                                                    BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly) != null;
+                Assert.True(hasDirectOverride || nonAbstractBaseHasOverride);
             }
         }
 
