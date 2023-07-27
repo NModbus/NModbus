@@ -10,7 +10,7 @@ namespace NModbus.Message
     /// <summary>
     ///     Write Multiple Coils request.
     /// </summary>
-    internal class WriteMultipleCoilsRequest : AbstractModbusMessageWithData<DiscreteCollection>, IModbusRequest
+    public class WriteMultipleCoilsRequest : AbstractModbusMessageWithData<DiscreteCollection>, IModbusRequest
     {
         /// <summary>
         ///     Write Multiple Coils request.

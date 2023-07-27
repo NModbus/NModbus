@@ -3,7 +3,7 @@ using NModbus.Message;
 
 namespace NModbus.Device.MessageHandlers
 {
-    internal class WriteMultipleCoilsService : ModbusFunctionServiceBase<WriteMultipleCoilsRequest>
+    public class WriteMultipleCoilsService : ModbusFunctionServiceBase<WriteMultipleCoilsRequest>
     {
         public WriteMultipleCoilsService() 
             : base(ModbusFunctionCodes.WriteMultipleCoils)

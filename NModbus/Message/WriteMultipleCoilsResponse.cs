@@ -3,7 +3,7 @@ using System.Net;
 
 namespace NModbus.Message
 {
-    internal class WriteMultipleCoilsResponse : AbstractModbusMessage, IModbusMessage
+    public class WriteMultipleCoilsResponse : AbstractModbusMessage, IModbusMessage
     {
         public WriteMultipleCoilsResponse()
         {

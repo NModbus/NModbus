@@ -5,7 +5,7 @@ using System.Net;
 
 namespace NModbus.Message
 {
-    internal class ReadHoldingInputRegistersRequest : AbstractModbusMessage, IModbusRequest
+    public class ReadHoldingInputRegistersRequest : AbstractModbusMessage, IModbusRequest
     {
         public ReadHoldingInputRegistersRequest()
         {

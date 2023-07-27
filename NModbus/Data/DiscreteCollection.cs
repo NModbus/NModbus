@@ -9,7 +9,7 @@ namespace NModbus.Data
     /// <summary>
     ///     Collection of discrete values.
     /// </summary>
-    internal class DiscreteCollection : Collection<bool>, IModbusMessageDataCollection
+    public class DiscreteCollection : Collection<bool>, IModbusMessageDataCollection
     {
         /// <summary>
         ///     Number of bits per byte.

@@ -8,7 +8,7 @@ using NModbus.Unme.Common;
 
 namespace NModbus.Message
 {
-    internal class WriteSingleCoilRequestResponse : AbstractModbusMessageWithData<RegisterCollection>, IModbusRequest
+    public class WriteSingleCoilRequestResponse : AbstractModbusMessageWithData<RegisterCollection>, IModbusRequest
     {
         public WriteSingleCoilRequestResponse()
         {

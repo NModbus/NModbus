@@ -2,7 +2,7 @@
 {
     using Message;
 
-    internal class DiagnosticsService : ModbusFunctionServiceBase<IModbusMessage>
+    public class DiagnosticsService : ModbusFunctionServiceBase<IModbusMessage>
     {
         public DiagnosticsService() 
             : base(ModbusFunctionCodes.Diagnostics)

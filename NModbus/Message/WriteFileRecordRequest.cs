@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace NModbus.Message
 {
-    internal class WriteFileRecordRequest : AbstractModbusMessageWithData<FileRecordCollection>, IModbusRequest
+    public class WriteFileRecordRequest : AbstractModbusMessageWithData<FileRecordCollection>, IModbusRequest
     {
         public WriteFileRecordRequest()
         {
