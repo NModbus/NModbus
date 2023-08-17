@@ -106,6 +106,8 @@ namespace NModbus
         /// <returns></returns>
         IModbusAsciiTransport CreateAsciiTransport(IStreamResource streamResource);
 
+        IModbusTransport CreateIpTransport(IStreamResource streamResource);
+
         #endregion
 
         IModbusLogger Logger { get; }

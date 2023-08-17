@@ -61,6 +61,17 @@ namespace NModbus
 
             return factory.CreateSlaveNetwork(transport);
         }
-           
+
+        /// <summary>
+        /// Creates a TCP or UDP master.
+        /// </summary>
+        /// <param name="factory"></param>
+        /// <param name="streamResource"></param>
+        /// <returns></returns>
+        public static IModbusMaster CreateIpMaster(this IModbusFactory factory, IStreamResource streamResource)
+        {
+            IModbusTransport transport = factory.CreateIpTransport(streamResource);
+            return new ModbusIpMaster(transport);
+        }
     }
 }
