@@ -106,6 +106,11 @@ namespace NModbus
         /// <returns></returns>
         IModbusAsciiTransport CreateAsciiTransport(IStreamResource streamResource);
 
+        /// <summary>
+        /// Creates an IP Transport
+        /// </summary>
+        /// <param name="streamResource"></param>
+        /// <returns></returns>
         IModbusTransport CreateIpTransport(IStreamResource streamResource);
 
         #endregion
