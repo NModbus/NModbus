@@ -16,12 +16,12 @@ jobs:
         run: dotnet restore .
       - name: Build
         run: dotnet build --configuration Release --no-restore .
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: | 
-            6.0.x
-            7.0.x
+      # - name: Setup dotnet
+      #   uses: actions/setup-dotnet@v3
+      #   with:
+      #     dotnet-version: | 
+      #       6.0.x
+      #       7.0.x
       - name: Test
         run: dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage ./ 
       - name: Code Coverage Report
