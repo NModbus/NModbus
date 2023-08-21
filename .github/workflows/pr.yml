@@ -29,25 +29,25 @@ jobs:
       - name: Test
         run: dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage ./ 
 
-      - name: Code Coverage Report
-        uses: irongut/CodeCoverageSummary@v1.3.0
-        with:
-          filename: coverage/**/coverage.cobertura.xml
-          badge: true
-          fail_below_min: false
-          format: markdown
-          hide_branch_rate: false
-          hide_complexity: true
-          indicators: true
-          output: both
-          thresholds: '50 50'
+      # - name: Code Coverage Report
+      #   uses: irongut/CodeCoverageSummary@v1.3.0
+      #   with:
+      #     filename: coverage/**/coverage.cobertura.xml
+      #     badge: true
+      #     fail_below_min: false
+      #     format: markdown
+      #     hide_branch_rate: false
+      #     hide_complexity: true
+      #     indicators: true
+      #     output: both
+      #     thresholds: '50 50'
           
-      - name: Add Coverage PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        if: github.event_name == 'pull_request'
-        with:
-          recreate: true
-          path: code-coverage-results.md
+      # - name: Add Coverage PR Comment
+      #   uses: marocchino/sticky-pull-request-comment@v2
+      #   if: github.event_name == 'pull_request'
+      #   with:
+      #     recreate: true
+      #     path: code-coverage-results.md
 
       # Do a pack (we don't care about the version because we're just going to throw it away)
       # just to make sure the solution is packable. It's unfortunate to make it to a post PR 
