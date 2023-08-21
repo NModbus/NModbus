@@ -9,7 +9,7 @@ jobs:
     # https://github.com/orgs/community/discussions/25253
     runs-on: windows-2019
     timeout-minutes: 15
-    container: mcr.microsoft.com/dotnet/sdk:7.0
+    # container: mcr.microsoft.com/dotnet/sdk:7.0
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
