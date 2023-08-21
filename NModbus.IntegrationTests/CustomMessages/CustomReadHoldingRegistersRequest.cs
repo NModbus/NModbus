@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using Modbus.Message;
+using NModbus;
 
 namespace Modbus.IntegrationTests.CustomMessages
 {

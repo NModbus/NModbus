@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
@@ -18,7 +17,7 @@ namespace NModbus.Device
     /// <summary>
     ///     Modbus TCP slave device.
     /// </summary>
-    internal class ModbusTcpSlaveNetwork : ModbusSlaveNetwork, IModbusTcpSlaveNetwork
+    public class ModbusTcpSlaveNetwork : ModbusSlaveNetwork, IModbusTcpSlaveNetwork
     {
         private const int TimeWaitResponse = 1000;
         private readonly object _serverLock = new object();
@@ -30,7 +29,7 @@ namespace NModbus.Device
 #if TIMER
         private Timer _timer;
 #endif
-        internal ModbusTcpSlaveNetwork(TcpListener tcpListener, IModbusFactory modbusFactory,  IModbusLogger logger)
+        public ModbusTcpSlaveNetwork(TcpListener tcpListener, IModbusFactory modbusFactory,  IModbusLogger logger)
             : base(new EmptyTransport(modbusFactory), modbusFactory, logger)
         {
             if (tcpListener == null)
@@ -127,6 +126,10 @@ namespace NModbus.Device
                         masterConnection.ModbusMasterTcpConnectionClosed += OnMasterConnectionClosedHandler;
                         _masters.TryAdd(client.Client.RemoteEndPoint.ToString(), masterConnection);
                     }
+                }
+                catch (ObjectDisposedException) when (cancellationToken.IsCancellationRequested)
+                { 
+                    //Swallow this
                 }
                 catch (InvalidOperationException)
                 {

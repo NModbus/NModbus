@@ -9,7 +9,7 @@ namespace NModbus.UnitTests.Device
 {
     public class ModbusMasterFixture
     {
-        private static IStreamResource StreamRsource => new Mock<IStreamResource>(MockBehavior.Strict).Object;
+        //private static IStreamResource StreamRsource => new Mock<IStreamResource>(MockBehavior.Strict).Object;
 
         private static IModbusSerialTransport Transport => new Mock<IModbusSerialTransport>().Object;
 

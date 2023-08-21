@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using NModbus.IO;
 using NModbus.Logging;
-using NModbus.Message;
 using NModbus.Unme.Common;
 
 namespace NModbus.Device
@@ -17,7 +16,7 @@ namespace NModbus.Device
     /// <summary>
     ///     Modbus UDP slave device.
     /// </summary>
-    internal class ModbusUdpSlaveNetwork : ModbusSlaveNetwork
+    public class ModbusUdpSlaveNetwork : ModbusSlaveNetwork
     {
         private readonly UdpClient _udpClient;
 
@@ -32,46 +31,56 @@ namespace NModbus.Device
         /// </summary>
         public override async Task ListenAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            Logger.Information("Start Modbus Udp Server.");
-
-            try
+            using (cancellationToken.Register(() =>
             {
-                while (!cancellationToken.IsCancellationRequested)
+                _udpClient.Dispose();
+            }))
+            {
+                Logger.Information("Start Modbus Udp Server.");
+
+                try
                 {
-                    UdpReceiveResult receiveResult = await _udpClient.ReceiveAsync().ConfigureAwait(false);
-                    IPEndPoint masterEndPoint = receiveResult.RemoteEndPoint;
-                    byte[] frame = receiveResult.Buffer;
-
-                    Debug.WriteLine($"Read Frame completed {frame.Length} bytes");
-
-                    Logger.LogFrameRx(frame);
-
-                    IModbusMessage request = ModbusFactory.CreateModbusRequest(frame.Slice(6, frame.Length - 6).ToArray());
-                    request.TransactionId = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(frame, 0));
-
-                    // perform action and build response
-                    IModbusMessage response = ApplyRequest(request);
-
-                    if (response != null)
+                    while (!cancellationToken.IsCancellationRequested)
                     {
-                        response.TransactionId = request.TransactionId;
+                        UdpReceiveResult receiveResult = await _udpClient.ReceiveAsync().ConfigureAwait(false);
+                        IPEndPoint masterEndPoint = receiveResult.RemoteEndPoint;
+                        byte[] frame = receiveResult.Buffer;
 
-                        // write response
-                        byte[] responseFrame = Transport.BuildMessageFrame(response);
+                        Debug.WriteLine($"Read Frame completed {frame.Length} bytes");
 
-                        Logger.LogFrameTx(frame);
+                        Logger.LogFrameRx(frame);
 
-                        await _udpClient.SendAsync(responseFrame, responseFrame.Length, masterEndPoint)
-                            .ConfigureAwait(false);
+                        IModbusMessage request = ModbusFactory.CreateModbusRequest(frame.Slice(6, frame.Length - 6).ToArray());
+                        request.TransactionId = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(frame, 0));
+
+                        // perform action and build response
+                        IModbusMessage response = ApplyRequest(request);
+
+                        if (response != null)
+                        {
+                            response.TransactionId = request.TransactionId;
+
+                            // write response
+                            byte[] responseFrame = Transport.BuildMessageFrame(response);
+
+                            Logger.LogFrameTx(frame);
+
+                            await _udpClient.SendAsync(responseFrame, responseFrame.Length, masterEndPoint)
+                                .ConfigureAwait(false);
+                        }
                     }
                 }
-            }
-            catch (SocketException se)
-            {
-                // this hapens when slave stops
-                if (se.SocketErrorCode != SocketError.Interrupted)
+                catch( ObjectDisposedException) when (cancellationToken.IsCancellationRequested)
                 {
-                    throw;
+                    // Swallow this error.
+                }
+                catch (SocketException se)
+                {
+                    // this hapens when slave stops
+                    if (se.SocketErrorCode != SocketError.Interrupted)
+                    {
+                        throw;
+                    }
                 }
             }
         }

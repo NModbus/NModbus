@@ -7,7 +7,7 @@ using NModbus.Message;
 
 namespace NModbus.Device 
 {
-    internal class ModbusSlave : IModbusSlave
+    public class ModbusSlave : IModbusSlave
     {
         private readonly byte _unitId;
         private readonly ISlaveDataStore _dataStore;
