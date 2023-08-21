@@ -27,7 +27,7 @@ namespace NModbus.UnitTests.Utility
         {
             var du = DiscriminatedUnion<object, object>.CreateB(null);
             Assert.Equal(DiscriminatedUnionOption.B, du.Option);
-            Assert.Equal(null, du.B);
+            Assert.Null(du.B);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace NModbus.UnitTests.Utility
         public void DiscriminatedUnion_ToString()
         {
             var du = DiscriminatedUnion<string, string>.CreateA("foo");
-            Assert.Equal(du.ToString(), "foo");
+            Assert.Equal("foo", du.ToString());
         }
     }
 }

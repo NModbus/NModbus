@@ -75,7 +75,7 @@ namespace NModbus.UnitTests.Device
         [Fact]
         public void WriteFileRecord()
         {
-            Assert.Throws<ArgumentException>(() => Master.WriteFileRecord(1, 1, 2, null));
+            Assert.Throws<ArgumentNullException>(() => Master.WriteFileRecord(1, 1, 2, null));
 
             // Max message byte size is 256, minus 11 for overhead,
             // 244 data bytes are allowed (must be even), 246 should throw.
