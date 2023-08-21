@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NModbus.Device.MessageHandlers
 {
-    internal class WriteFileRecordService
+    public class WriteFileRecordService
         : ModbusFunctionServiceBase<WriteFileRecordRequest>
     {
         public WriteFileRecordService()

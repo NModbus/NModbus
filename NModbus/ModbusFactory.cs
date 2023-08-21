@@ -118,6 +118,11 @@ namespace NModbus
             return new ModbusAsciiTransport(streamResource, this, Logger);
         }
 
+        public IModbusTransport CreateIpTransport(IStreamResource streamResource)
+        {
+            return new ModbusIpTransport(streamResource, this, Logger);
+        }
+
         public IModbusLogger Logger { get; }
 
         public IModbusFunctionService[] GetAllFunctionServices()

@@ -4,7 +4,7 @@ using System.Net;
 
 namespace NModbus.Message
 {
-    internal class ReadCoilsInputsRequest : AbstractModbusMessage, IModbusRequest
+    public class ReadCoilsInputsRequest : AbstractModbusMessage, IModbusRequest
     {
         public ReadCoilsInputsRequest()
         {

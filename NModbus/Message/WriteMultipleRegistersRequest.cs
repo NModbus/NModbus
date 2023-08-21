@@ -7,7 +7,7 @@ using NModbus.Unme.Common;
 
 namespace NModbus.Message
 {
-    internal class WriteMultipleRegistersRequest : AbstractModbusMessageWithData<RegisterCollection>, IModbusRequest
+    public class WriteMultipleRegistersRequest : AbstractModbusMessageWithData<RegisterCollection>, IModbusRequest
     {
         public WriteMultipleRegistersRequest()
         {

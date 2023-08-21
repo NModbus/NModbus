@@ -3,7 +3,7 @@ using NModbus.Message;
 
 namespace NModbus.Device.MessageHandlers
 {
-    internal class ReadInputsService : ModbusFunctionServiceBase<ReadCoilsInputsRequest>
+    public class ReadInputsService : ModbusFunctionServiceBase<ReadCoilsInputsRequest>
     {
         public ReadInputsService() 
             : base(ModbusFunctionCodes.ReadInputs)

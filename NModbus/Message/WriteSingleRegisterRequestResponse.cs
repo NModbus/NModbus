@@ -7,7 +7,7 @@ using NModbus.Data;
 
 namespace NModbus.Message
 {
-    internal class WriteSingleRegisterRequestResponse : AbstractModbusMessageWithData<RegisterCollection>, IModbusRequest
+    public class WriteSingleRegisterRequestResponse : AbstractModbusMessageWithData<RegisterCollection>, IModbusRequest
     {
         public WriteSingleRegisterRequestResponse()
         {

@@ -5,7 +5,7 @@ using NModbus.Unme.Common;
 
 namespace NModbus.Message
 {
-    internal class ReadHoldingInputRegistersResponse : AbstractModbusMessageWithData<RegisterCollection>, IModbusMessage
+    public class ReadHoldingInputRegistersResponse : AbstractModbusMessageWithData<RegisterCollection>, IModbusMessage
     {
         public ReadHoldingInputRegistersResponse()
         {

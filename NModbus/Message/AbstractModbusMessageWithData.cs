@@ -2,7 +2,7 @@
 
 namespace NModbus.Message
 {
-    internal abstract class AbstractModbusMessageWithData<TData> : AbstractModbusMessage
+    public abstract class AbstractModbusMessageWithData<TData> : AbstractModbusMessage
         where TData : IModbusMessageDataCollection
     {
         internal AbstractModbusMessageWithData()

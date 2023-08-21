@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace NModbus.Data
 {
-    internal class FileRecordCollection : IModbusMessageDataCollection
+    public class FileRecordCollection : IModbusMessageDataCollection
     {
         private IReadOnlyList<byte> networkBytes;
         private IReadOnlyList<byte> dataBytes;

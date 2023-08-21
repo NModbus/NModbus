@@ -2,7 +2,7 @@
 
 namespace NModbus.Device.MessageHandlers
 {
-    internal class WriteSingleCoilService : ModbusFunctionServiceBase<WriteSingleCoilRequestResponse>
+    public class WriteSingleCoilService : ModbusFunctionServiceBase<WriteSingleCoilRequestResponse>
     {
         public WriteSingleCoilService() 
             : base(ModbusFunctionCodes.WriteSingleCoil)

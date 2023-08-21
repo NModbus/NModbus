@@ -5,7 +5,7 @@ namespace NModbus.Message
     /// <summary>
     ///     Abstract Modbus message.
     /// </summary>
-    internal abstract class AbstractModbusMessage
+    public abstract class AbstractModbusMessage
     {
         private readonly ModbusMessageImpl _messageImpl;
 

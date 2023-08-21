@@ -3,7 +3,7 @@ using System.IO;
 
 namespace NModbus.Message
 {
-    internal class ReadHoldingInputRegisters32Request : ReadHoldingInputRegistersRequest
+    public class ReadHoldingInputRegisters32Request : ReadHoldingInputRegistersRequest
     {
         public ReadHoldingInputRegisters32Request()
         {
