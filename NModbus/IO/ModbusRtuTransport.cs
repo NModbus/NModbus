@@ -50,11 +50,18 @@ namespace NModbus.IO
         public virtual byte[] Read(int count)
         {
             byte[] frameBytes = new byte[count];
-            int numBytesRead = 0;
+            int numBytesReadTotal = 0;
 
-            while (numBytesRead != count)
+            while (numBytesReadTotal != count)
             {
-                numBytesRead += StreamResource.Read(frameBytes, numBytesRead, count - numBytesRead);
+                int numBytesRead = StreamResource.Read(frameBytes, numBytesReadTotal, count - numBytesReadTotal);
+                
+                if (numBytesRead == 0)
+                {
+                    throw new IOException("Read resulted in 0 bytes returned.");
+                }
+                
+                numBytesReadTotal += numBytesRead;
             }
 
             return frameBytes;

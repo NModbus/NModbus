@@ -98,7 +98,7 @@ namespace NModbus
             return new ModbusSerialSlaveNetwork(transport, this, Logger);
         }
 
-        public IModbusSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener)
+        public IModbusTcpSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener)
         {
             return new ModbusTcpSlaveNetwork(tcpListener, this, Logger);
         }

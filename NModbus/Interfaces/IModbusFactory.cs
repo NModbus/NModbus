@@ -79,7 +79,7 @@ namespace NModbus
         /// </summary>
         /// <param name="tcpListener"></param>
         /// <returns></returns>
-        IModbusSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener);
+        IModbusTcpSlaveNetwork CreateSlaveNetwork(TcpListener tcpListener);
 
         /// <summary>
         /// Creates a UDP modbus slave network.
