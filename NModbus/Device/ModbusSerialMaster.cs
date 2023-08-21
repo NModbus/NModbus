@@ -7,9 +7,9 @@ namespace NModbus.Device
     /// <summary>
     ///     Modbus serial master device.
     /// </summary>
-    internal class ModbusSerialMaster : ModbusMaster, IModbusSerialMaster
+    public class ModbusSerialMaster : ModbusMaster, IModbusSerialMaster
     {
-        internal ModbusSerialMaster(IModbusSerialTransport transport)
+        public ModbusSerialMaster(IModbusSerialTransport transport)
             : base(transport)
         {
         }

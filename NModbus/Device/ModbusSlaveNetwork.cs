@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NModbus.Extensions;
@@ -10,7 +8,7 @@ using NModbus.Logging;
 
 namespace NModbus.Device
 {
-    internal abstract class ModbusSlaveNetwork : ModbusDevice, IModbusSlaveNetwork
+    public abstract class ModbusSlaveNetwork : ModbusDevice, IModbusSlaveNetwork
     {
         private readonly IModbusLogger _logger;
         private readonly IDictionary<byte, IModbusSlave> _slaves = new ConcurrentDictionary<byte, IModbusSlave>();

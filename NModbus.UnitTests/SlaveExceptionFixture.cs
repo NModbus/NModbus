@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using NModbus.Message;
 using Xunit;
 #if NET46
@@ -13,6 +15,9 @@ namespace NModbus.UnitTests
         [Fact]
         public void EmptyConstructor()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+
             var e = new SlaveException();
             Assert.Equal($"Exception of type '{typeof(SlaveException).FullName}' was thrown.", e.Message);
             Assert.Equal(0, e.SlaveAddress);
@@ -24,6 +29,9 @@ namespace NModbus.UnitTests
         [Fact]
         public void ConstructorWithMessage()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+
             var e = new SlaveException("Hello World");
             Assert.Equal("Hello World", e.Message);
             Assert.Equal(0, e.SlaveAddress);
@@ -47,6 +55,9 @@ namespace NModbus.UnitTests
         [Fact]
         public void ConstructorWithSlaveExceptionResponse()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+
             var response = new SlaveExceptionResponse(12, ModbusFunctionCodes.ReadCoils, 1);
             var e = new SlaveException(response);
 

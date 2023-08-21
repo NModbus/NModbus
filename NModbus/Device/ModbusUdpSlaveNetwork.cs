@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using NModbus.IO;
 using NModbus.Logging;
-using NModbus.Message;
 using NModbus.Unme.Common;
 
 namespace NModbus.Device
@@ -17,7 +16,7 @@ namespace NModbus.Device
     /// <summary>
     ///     Modbus UDP slave device.
     /// </summary>
-    internal class ModbusUdpSlaveNetwork : ModbusSlaveNetwork
+    public class ModbusUdpSlaveNetwork : ModbusSlaveNetwork
     {
         private readonly UdpClient _udpClient;
 
