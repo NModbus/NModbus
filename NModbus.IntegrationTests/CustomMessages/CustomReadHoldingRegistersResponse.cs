@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Modbus.Data;
-using Modbus.Message;
+using NModbus;
+using NModbus.Data;
 
 namespace Modbus.IntegrationTests.CustomMessages
 {

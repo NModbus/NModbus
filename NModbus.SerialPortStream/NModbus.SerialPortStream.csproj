@@ -8,9 +8,9 @@
     <PackageProjectUrl>https://github.com/NModbus/NModbus</PackageProjectUrl>
     <RepositoryUrl>https://github.com/NModbus/NModbus</RepositoryUrl>
     <PackageTags>Modbus SerialPortStream Serial</PackageTags>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-	<NoWarn>1701;1702;1705;1591</NoWarn>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +19,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NModbus\NModbus.csproj" />
+    <None Include="..\LICENSE.txt" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>
