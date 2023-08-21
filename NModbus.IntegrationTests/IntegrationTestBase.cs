@@ -59,7 +59,7 @@ namespace Modbus.IntegrationTests
         {
             using (var cancellationTokenSource = new CancellationTokenSource())
             using (var slaveNetwork = await CreateSlaveNetworkAsync())
-            using (var listenTask = slaveNetwork.ListenAsync(cancellationTokenSource.Token))
+            using (var listenTask = Task.Factory.StartNew(async () => await slaveNetwork.ListenAsync(cancellationTokenSource.Token), TaskCreationOptions.LongRunning))
             using (var master = await CreateMasterAsync())
             {
                 //Create some context
