@@ -6,11 +6,11 @@ namespace NModbus.Device
     /// <summary>
     ///     Modbus device.
     /// </summary>
-    internal abstract class ModbusDevice : IDisposable
+    public abstract class ModbusDevice : IDisposable
     {
         private IModbusTransport _transport;
 
-        internal ModbusDevice(IModbusTransport transport)
+        protected ModbusDevice(IModbusTransport transport)
         {
             _transport = transport;
         }

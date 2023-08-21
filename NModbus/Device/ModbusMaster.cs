@@ -10,9 +10,9 @@ namespace NModbus.Device
 	/// <summary>
 	///     Modbus master device.
 	/// </summary>
-	internal abstract class ModbusMaster : ModbusDevice, IModbusMaster
+	public abstract class ModbusMaster : ModbusDevice, IModbusMaster
 	{
-		internal ModbusMaster(IModbusTransport transport)
+		protected ModbusMaster(IModbusTransport transport)
 				: base(transport)
 		{
 		}

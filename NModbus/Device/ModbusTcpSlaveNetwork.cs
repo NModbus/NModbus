@@ -128,6 +128,10 @@ namespace NModbus.Device
                         _masters.TryAdd(client.Client.RemoteEndPoint.ToString(), masterConnection);
                     }
                 }
+                catch (ObjectDisposedException) when (cancellationToken.IsCancellationRequested)
+                { 
+                    //Swallow this
+                }
                 catch (InvalidOperationException)
                 {
                     // Either Server.Start wasn't called (a bug!)

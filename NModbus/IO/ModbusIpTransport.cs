@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using NModbus.Logging;
-using NModbus.Message;
 using NModbus.Unme.Common;
 
 namespace NModbus.IO
@@ -13,18 +11,18 @@ namespace NModbus.IO
     ///     Transport for Internet protocols.
     ///     Refined Abstraction - http://en.wikipedia.org/wiki/Bridge_Pattern
     /// </summary>
-    internal class ModbusIpTransport : ModbusTransport
+    public class ModbusIpTransport : ModbusTransport
     {
         private static readonly object _transactionIdLock = new object();
         private ushort _transactionId;
 
-        internal ModbusIpTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger)
+        public ModbusIpTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger)
             : base(streamResource, modbusFactory, logger)
         {
             if (streamResource == null) throw new ArgumentNullException(nameof(streamResource));
         }
 
-        internal static byte[] ReadRequestResponse(IStreamResource streamResource, IModbusLogger logger)
+        public static byte[] ReadRequestResponse(IStreamResource streamResource, IModbusLogger logger)
         {
             if (streamResource == null) throw new ArgumentNullException(nameof(streamResource));
             if (logger == null) throw new ArgumentNullException(nameof(logger));
@@ -69,10 +67,10 @@ namespace NModbus.IO
             var frame = mbapHeader.Concat(messageFrame).ToArray();
             logger.LogFrameRx(frame);
 
-      return frame;
+            return frame;
         }
 
-        internal static byte[] GetMbapHeader(IModbusMessage message)
+        public static byte[] GetMbapHeader(IModbusMessage message)
         {
             byte[] transactionId = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)message.TransactionId));
             byte[] length = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)(message.ProtocolDataUnit.Length + 1)));
@@ -90,7 +88,7 @@ namespace NModbus.IO
         /// <summary>
         ///     Create a new transaction ID.
         /// </summary>
-        internal virtual ushort GetNewTransactionId()
+        public virtual ushort GetNewTransactionId()
         {
             lock (_transactionIdLock)
             {
@@ -100,7 +98,7 @@ namespace NModbus.IO
             return _transactionId;
         }
 
-        internal IModbusMessage CreateMessageAndInitializeTransactionId<T>(byte[] fullFrame)
+        public IModbusMessage CreateMessageAndInitializeTransactionId<T>(byte[] fullFrame)
             where T : IModbusMessage, new()
         {
             byte[] mbapHeader = fullFrame.Slice(0, 6).ToArray();

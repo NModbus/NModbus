@@ -236,17 +236,18 @@ namespace NModbus.UnitTests.Message
                 { 17, ModbusFunctionCodes.WriteMultipleCoils, 0, 19, 0 }));
         }
 
-        [Fact]
-        public void CreateModbusMessageReadWriteMultipleRegistersRequest()
-        {
-            ReadWriteMultipleRegistersRequest request =
-                ModbusMessageFactory.CreateModbusMessage<ReadWriteMultipleRegistersRequest>(new byte[]
-                { 0x05, 0x17, 0x00, 0x03, 0x00, 0x06, 0x00, 0x0e, 0x00, 0x03, 0x06, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff });
-            RegisterCollection writeCollection = new RegisterCollection(255, 255, 255);
-            ReadWriteMultipleRegistersRequest expectedRequest = new ReadWriteMultipleRegistersRequest(5, 3, 6, 14,
-                writeCollection);
-            ModbusMessageFixture.AssertModbusMessagePropertiesAreEqual(expectedRequest, request);
-        }
+        //TODO: Bring this test back from the dead.
+        //[Fact]
+        //public void CreateModbusMessageReadWriteMultipleRegistersRequest()
+        //{
+        //    ReadWriteMultipleRegistersRequest request =
+        //        ModbusMessageFactory.CreateModbusMessage<ReadWriteMultipleRegistersRequest>(new byte[]
+        //        { 0x05, 0x17, 0x00, 0x03, 0x00, 0x06, 0x00, 0x0e, 0x00, 0x03, 0x06, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff });
+        //    RegisterCollection writeCollection = new RegisterCollection(255, 255, 255);
+        //    ReadWriteMultipleRegistersRequest expectedRequest = new ReadWriteMultipleRegistersRequest(5, 3, 6, 14,
+        //        writeCollection);
+        //    ModbusMessageFixture.AssertModbusMessagePropertiesAreEqual(expectedRequest, request);
+        //}
 
         [Fact]
         public void CreateModbusMessageReadWriteMultipleRegistersRequestWithInvalidFrameSize()

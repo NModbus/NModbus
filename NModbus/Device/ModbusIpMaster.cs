@@ -1,14 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace NModbus.Device
 {
-
     /// <summary>
     ///    Modbus IP master device.
     /// </summary>
-    [SuppressMessage("Microsoft.Naming", "CA1706:ShortAcronymsShouldBeUppercase", Justification = "Breaking change.")]
-    internal class ModbusIpMaster : ModbusMaster
+    public class ModbusIpMaster : ModbusMaster
     {
         /// <summary>
         ///     Modbus IP master device.
