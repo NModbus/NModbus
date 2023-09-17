@@ -28,6 +28,8 @@ namespace NModbus.SerialPortStream
             set => _serialPortStream.WriteTimeout = value;
         }
 
+        public string Name => _serialPortStream.PortName;
+
         public void DiscardInBuffer()
         {
             _serialPortStream.DiscardInBuffer();

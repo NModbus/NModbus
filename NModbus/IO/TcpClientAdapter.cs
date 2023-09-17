@@ -34,6 +34,8 @@ namespace NModbus.IO
             set => _tcpClient.GetStream().WriteTimeout = value;
         }
 
+        public string Name => _tcpClient?.Client?.RemoteEndPoint.ToString();
+
         public void Write(byte[] buffer, int offset, int size)
         {
             _tcpClient.GetStream().Write(buffer, offset, size);

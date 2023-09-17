@@ -36,7 +36,7 @@ namespace NModbus.Device
         /// Apply the request.
         /// </summary>
         /// <param name="request"></param>
-        protected IModbusMessage ApplyRequest(IModbusMessage request)
+        protected internal IModbusMessage ApplyRequest(IModbusMessage request)
         {
             //Check for broadcast requests
             if (request.SlaveAddress == 0)

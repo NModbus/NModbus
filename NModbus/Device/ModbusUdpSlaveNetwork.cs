@@ -14,26 +14,36 @@ namespace NModbus.Device
     using Extensions;
 
     /// <summary>
-    ///     Modbus UDP slave device.
+    /// Modbus UDP slave device.
     /// </summary>
     public class ModbusUdpSlaveNetwork : ModbusSlaveNetwork
     {
-        private readonly UdpClient _udpClient;
+        protected readonly UdpClient _udpClient;
 
         public ModbusUdpSlaveNetwork(UdpClient udpClient, IModbusFactory modbusFactory, IModbusLogger logger)
-            : base(new ModbusIpTransport(new UdpClientAdapter(udpClient), modbusFactory, logger), modbusFactory, logger)
+            : this(udpClient, modbusFactory, logger, new ModbusIpTransport(new UdpClientAdapter(udpClient), modbusFactory, logger))
+        {
+
+        }
+
+        protected internal ModbusUdpSlaveNetwork(UdpClient udpClient, IModbusFactory modbusFactory, IModbusLogger logger, IModbusTransport transport = null)
+            : base(transport, modbusFactory, logger)
         {
             _udpClient = udpClient;
         }
 
         /// <summary>
-        ///     Start slave listening for requests.
+        /// Start slave listening for requests.
         /// </summary>
         public override async Task ListenAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             using (cancellationToken.Register(() =>
             {
+#if NET45
+                _udpClient.Close();
+#else
                 _udpClient.Dispose();
+#endif
             }))
             {
                 Logger.Information("Start Modbus Udp Server.");
@@ -44,16 +54,16 @@ namespace NModbus.Device
                     {
                         UdpReceiveResult receiveResult = await _udpClient.ReceiveAsync().ConfigureAwait(false);
                         IPEndPoint masterEndPoint = receiveResult.RemoteEndPoint;
+
                         byte[] frame = receiveResult.Buffer;
 
-                        Debug.WriteLine($"Read Frame completed {frame.Length} bytes");
-
+                        Logger.Information($"RX from Master at {masterEndPoint}: {string.Join(", ", frame)}");
                         Logger.LogFrameRx(frame);
 
                         IModbusMessage request = ModbusFactory.CreateModbusRequest(frame.Slice(6, frame.Length - 6).ToArray());
                         request.TransactionId = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(frame, 0));
 
-                        // perform action and build response
+                        // Execute action and build response
                         IModbusMessage response = ApplyRequest(request);
 
                         if (response != null)
@@ -62,7 +72,7 @@ namespace NModbus.Device
 
                             // write response
                             byte[] responseFrame = Transport.BuildMessageFrame(response);
-
+                            Logger.Information($"TX to Master at {masterEndPoint}: {string.Join(", ", responseFrame)}");
                             Logger.LogFrameTx(frame);
 
                             await _udpClient.SendAsync(responseFrame, responseFrame.Length, masterEndPoint)
@@ -70,7 +80,7 @@ namespace NModbus.Device
                         }
                     }
                 }
-                catch( ObjectDisposedException) when (cancellationToken.IsCancellationRequested)
+                catch (ObjectDisposedException) when (cancellationToken.IsCancellationRequested)
                 {
                     // Swallow this error.
                 }

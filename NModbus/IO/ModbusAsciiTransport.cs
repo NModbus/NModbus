@@ -10,9 +10,9 @@ namespace NModbus.IO
     /// <summary>
     ///     Refined Abstraction - http://en.wikipedia.org/wiki/Bridge_Pattern
     /// </summary>
-    internal class ModbusAsciiTransport : ModbusSerialTransport, IModbusAsciiTransport
+    public class ModbusAsciiTransport : ModbusSerialTransport, IModbusAsciiTransport
     {
-        internal ModbusAsciiTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger)
+        public ModbusAsciiTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger)
             : base(streamResource, modbusFactory, logger)
         {
             Debug.Assert(streamResource != null, "Argument streamResource cannot be null.");
