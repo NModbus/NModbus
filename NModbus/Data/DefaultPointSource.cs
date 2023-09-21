@@ -17,7 +17,7 @@ namespace NModbus.Data
 
         public DefaultPointSource()
         {
-            _points = new Lazy<TPoint[]>(() => new TPoint[ushort.MaxValue]);
+            _points = new Lazy<TPoint[]>(() => new TPoint[ushort.MaxValue+1]);
         }
 
         public TPoint[] ReadPoints(ushort startAddress, ushort numberOfPoints)

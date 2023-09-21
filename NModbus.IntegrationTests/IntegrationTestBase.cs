@@ -13,8 +13,11 @@ namespace Modbus.IntegrationTests
         protected virtual IModbusFactory Factory { get; } = new ModbusFactory();
 
         [Theory]
+        [InlineData(0, new ushort[] { 1 })]
         [InlineData(0, new ushort[] { 42, 55, 1000 })]
         [InlineData(22, new ushort[] { 68, 677, 8788, 60000 })]
+        [InlineData(65533, new ushort[] { 1, 2, 3 })]
+        [InlineData(65535, new ushort[] { 12312 })]
         public async Task ReadRegisters(ushort startingAddress, ushort[] values)
         {
             await TestAsync(c =>
