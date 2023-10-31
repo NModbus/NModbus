@@ -55,15 +55,17 @@ namespace NModbus.Message
             {
                 byte[] readPdu = _readRequest.ProtocolDataUnit;
                 byte[] writePdu = _writeRequest.ProtocolDataUnit;
-                var stream = new MemoryStream(readPdu.Length + writePdu.Length);
 
-                stream.WriteByte(FunctionCode);
+                using (var stream = new MemoryStream(readPdu.Length + writePdu.Length))
+                {
+                    stream.WriteByte(FunctionCode);
 
-                // read and write PDUs without function codes
-                stream.Write(readPdu, 1, readPdu.Length - 1);
-                stream.Write(writePdu, 1, writePdu.Length - 1);
+                    // read and write PDUs without function codes
+                    stream.Write(readPdu, 1, readPdu.Length - 1);
+                    stream.Write(writePdu, 1, writePdu.Length - 1);
 
-                return stream.ToArray();
+                    return stream.ToArray();
+                }
             }
         }
 
