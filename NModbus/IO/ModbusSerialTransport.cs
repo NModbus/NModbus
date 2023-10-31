@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using NModbus.Extensions;
 using NModbus.Logging;
 
 namespace NModbus.IO

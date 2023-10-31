@@ -56,6 +56,28 @@ namespace Modbus.IntegrationTests
             });
         }
 
+        [Theory]
+        [InlineData(1000, new ushort[] { 4, 5, 6 }, 2000, new ushort[] { 100, 200, 300, 400 })]
+        [InlineData(500, new ushort[] { 78, 25, 1, 906, 10000 }, 10000, new ushort[] { 4000, 3000, 200 })]
+        [InlineData(10, new ushort[] { 20 }, 30, new ushort[] { 40 })]
+        [InlineData(10, new ushort[] { 20 }, 30, new ushort[] { 40, 41 })]
+        public async Task ReadWriteRegisters(ushort startReadAddress, ushort[] registersToRead, ushort startWriteAddress, ushort[] registersToWrite)
+        {
+            await TestAsync(async c =>
+            {
+                var dataStore = new DefaultSlaveDataStore();
+
+                dataStore.HoldingRegisters.WritePoints(startReadAddress, registersToRead);
+
+                c.SlaveNetwork.AddSlave(Factory.CreateSlave(1, dataStore));
+
+                var registersThatWereRead = await c.Master.ReadWriteMultipleRegistersAsync(1, startReadAddress, (ushort)registersToRead.Length, startWriteAddress, registersToWrite);
+
+                Assert.Equal(registersToRead, registersThatWereRead);
+                Assert.Equal(registersToWrite, dataStore.HoldingRegisters.ReadPoints(startWriteAddress, (ushort)registersToWrite.Length));
+            });
+        }
+
         //TODO: Add way more tests
 
         protected async Task TestAsync(Func<IntegrationTestContext, Task> test)
