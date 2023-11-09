@@ -189,7 +189,8 @@ namespace NModbus.IO
                     if (e is FormatException ||
                         e is NotImplementedException ||
                         e is TimeoutException ||
-                        e is IOException)
+                        e is IOException ||
+                        e is SocketException)
                     {
                         Logger.Error($"{e.GetType().Name}, {(_retries - attempt + 1)} retries remaining - {e}");
 
