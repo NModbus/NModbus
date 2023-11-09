@@ -9,7 +9,7 @@ namespace NModbus.Device
 {
     using Extensions;
 
-    internal class ModbusSerialSlaveNetwork : ModbusSlaveNetwork
+    public class ModbusSerialSlaveNetwork : ModbusSlaveNetwork
     {
         private readonly IModbusSerialTransport _serialTransport;
         private readonly IModbusFactory _modbusFactory;

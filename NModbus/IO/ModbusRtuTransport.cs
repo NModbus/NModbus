@@ -11,13 +11,13 @@ namespace NModbus.IO
     /// <summary>
     ///     Refined Abstraction - http://en.wikipedia.org/wiki/Bridge_Pattern
     /// </summary>
-    internal class ModbusRtuTransport : ModbusSerialTransport, IModbusRtuTransport
+    public class ModbusRtuTransport : ModbusSerialTransport, IModbusRtuTransport
     {
         public const int RequestFrameStartLength = 7;
 
         public const int ResponseFrameStartLength = 4;
 
-        internal ModbusRtuTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger)
+        public ModbusRtuTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger)
             : base(streamResource, modbusFactory, logger)
         {
             if (modbusFactory == null) throw new ArgumentNullException(nameof(modbusFactory));

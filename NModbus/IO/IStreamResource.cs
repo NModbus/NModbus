@@ -9,6 +9,10 @@ namespace NModbus.IO
     public interface IStreamResource : IDisposable
     {
         /// <summary>
+        ///     Name,for example : COM1;192.168.0.1:502
+        /// </summary>
+        string Name { get; }
+        /// <summary>
         ///     Indicates that no timeout should occur.
         /// </summary>
         int InfiniteTimeout { get; }

@@ -15,21 +15,21 @@ namespace NModbus.Device
 #endif
 
     /// <summary>
-    ///     Modbus TCP slave device.
+    /// Modbus TCP slave device.
     /// </summary>
     public class ModbusTcpSlaveNetwork : ModbusSlaveNetwork, IModbusTcpSlaveNetwork
     {
-        private const int TimeWaitResponse = 1000;
-        private readonly object _serverLock = new object();
+        protected const int TimeWaitResponse = 1000;
+        protected readonly object _serverLock = new object();
 
-        private readonly ConcurrentDictionary<string, ModbusMasterTcpConnection> _masters =
+        protected internal readonly ConcurrentDictionary<string, ModbusMasterTcpConnection> _masters =
             new ConcurrentDictionary<string, ModbusMasterTcpConnection>();
 
-        private TcpListener _server;
+        protected TcpListener _server;
 #if TIMER
-        private Timer _timer;
+        protected Timer _timer;
 #endif
-        public ModbusTcpSlaveNetwork(TcpListener tcpListener, IModbusFactory modbusFactory,  IModbusLogger logger)
+        public ModbusTcpSlaveNetwork(TcpListener tcpListener, IModbusFactory modbusFactory, IModbusLogger logger)
             : base(new EmptyTransport(modbusFactory), modbusFactory, logger)
         {
             if (tcpListener == null)
@@ -40,8 +40,9 @@ namespace NModbus.Device
             _server = tcpListener;
         }
 
+
 #if TIMER
-        private ModbusTcpSlave(byte unitId, TcpListener tcpListener, double timeInterval)
+        protected ModbusTcpSlave(byte unitId, TcpListener tcpListener, double timeInterval)
             : base(unitId, new EmptyTransport())
         {
             if (tcpListener == null)
@@ -57,7 +58,7 @@ namespace NModbus.Device
 #endif
 
         /// <summary>
-        ///     Gets the Modbus TCP Masters connected to this Modbus TCP Slave.
+        /// Gets the Modbus TCP Masters connected to this Modbus TCP Slave.
         /// </summary>
         public ReadOnlyCollection<TcpClient> Masters
         {
@@ -68,13 +69,13 @@ namespace NModbus.Device
         }
 
         /// <summary>
-        ///     Gets the server.
+        /// Gets the server.
         /// </summary>
         /// <value>The server.</value>
         /// <remarks>
-        ///     This property is not thread safe, it should only be consumed within a lock.
+        /// This property is not thread safe, it should only be consumed within a lock.
         /// </remarks>
-        private TcpListener Server
+        protected TcpListener Server
         {
             get
             {
@@ -88,7 +89,7 @@ namespace NModbus.Device
         }
 
         ///// <summary>
-        /////     Modbus TCP slave factory method.
+        ///// Modbus TCP slave factory method.
         ///// </summary>
         //public static ModbusTcpSlave CreateTcp(byte unitId, TcpListener tcpListener)
         //{
@@ -97,8 +98,8 @@ namespace NModbus.Device
 
 #if TIMER
         /// <summary>
-        ///     Creates ModbusTcpSlave with timer which polls connected clients every
-        ///     <paramref name="pollInterval"/> milliseconds on that they are connected.
+        /// Creates ModbusTcpSlave with timer which polls connected clients every
+        /// <paramref name="pollInterval"/> milliseconds on that they are connected.
         /// </summary>
         public static ModbusTcpSlave CreateTcp(byte unitId, TcpListener tcpListener, double pollInterval)
         {
@@ -107,7 +108,8 @@ namespace NModbus.Device
 #endif
 
         /// <summary>
-        ///     Start slave listening for requests.
+        /// 启动监听，等待连接获得客户端TcpClient对象
+        /// <para>Start slave listening for requests.</para>
         /// </summary>
         public override async Task ListenAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -128,7 +130,7 @@ namespace NModbus.Device
                     }
                 }
                 catch (ObjectDisposedException) when (cancellationToken.IsCancellationRequested)
-                { 
+                {
                     //Swallow this
                 }
                 catch (InvalidOperationException)
@@ -148,11 +150,11 @@ namespace NModbus.Device
         }
 
         /// <summary>
-        ///     Releases unmanaged and - optionally - managed resources
+        /// Releases unmanaged and - optionally - managed resources
         /// </summary>
         /// <param name="disposing">
-        ///     <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
-        ///     unmanaged resources.
+        /// <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
+        /// unmanaged resources.
         /// </param>
         /// <remarks>Dispose is thread-safe.</remarks>
         protected override void Dispose(bool disposing)
@@ -193,15 +195,15 @@ namespace NModbus.Device
             }
         }
 
-        private static bool IsSocketConnected(Socket socket)
+        protected static bool IsSocketConnected(Socket socket)
         {
             bool poll = socket.Poll(TimeWaitResponse, SelectMode.SelectRead);
-            bool available = (socket.Available == 0);
+            bool available = socket.Available == 0;
             return poll && available;
         }
 
 #if TIMER
-        private void OnTimer(object sender, ElapsedEventArgs e)
+        protected void OnTimer(object sender, ElapsedEventArgs e)
         {
             foreach (var master in _masters.ToList())
             {
@@ -212,7 +214,7 @@ namespace NModbus.Device
             }
         }
 #endif
-        private void OnMasterConnectionClosedHandler(object sender, TcpConnectionEventArgs e)
+        protected void OnMasterConnectionClosedHandler(object sender, TcpConnectionEventArgs e)
         {
             ModbusMasterTcpConnection connection;
 

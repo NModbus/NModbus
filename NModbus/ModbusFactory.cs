@@ -16,7 +16,7 @@ namespace NModbus
         /// <summary>
         /// The "built-in" message handlers.
         /// </summary>
-        private static readonly IModbusFunctionService[] BuiltInFunctionServices = 
+        public static readonly IModbusFunctionService[] BuiltInFunctionServices = 
         {
             new ReadCoilsService(),
             new ReadInputsService(),
@@ -123,7 +123,7 @@ namespace NModbus
             return new ModbusIpTransport(streamResource, this, Logger);
         }
 
-        public IModbusLogger Logger { get; }
+        public IModbusLogger Logger { get; set; }
 
         public IModbusFunctionService[] GetAllFunctionServices()
         {

@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples", "Samples\Samples.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NModbus.SerialPortStream", "NModbus.SerialPortStream\NModbus.SerialPortStream.csproj", "{708692AA-7F52-4A8A-94B0-CB6F60982223}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NModbus.IntegrationTests", "NModbus.IntegrationTests\NModbus.IntegrationTests.csproj", "{1AA055F2-68E1-409F-A744-6081D7A27A57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NModbus.IntegrationTests", "NModbus.IntegrationTests\NModbus.IntegrationTests.csproj", "{1AA055F2-68E1-409F-A744-6081D7A27A57}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "H:\Users\Administrator\Desktop\MLToolkit\ConsoleApp1\ConsoleApp1.csproj", "{5F0BB26E-AB88-4D59-834D-5082653BF24B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -129,6 +131,22 @@ Global
 		{1AA055F2-68E1-409F-A744-6081D7A27A57}.Release|x64.Build.0 = Release|Any CPU
 		{1AA055F2-68E1-409F-A744-6081D7A27A57}.Release|x86.ActiveCfg = Release|Any CPU
 		{1AA055F2-68E1-409F-A744-6081D7A27A57}.Release|x86.Build.0 = Release|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Debug|ARM.Build.0 = Debug|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Debug|x64.Build.0 = Debug|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Debug|x86.Build.0 = Debug|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Release|ARM.Build.0 = Release|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Release|x64.ActiveCfg = Release|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Release|x64.Build.0 = Release|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Release|x86.ActiveCfg = Release|Any CPU
+		{5F0BB26E-AB88-4D59-834D-5082653BF24B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

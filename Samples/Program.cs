@@ -63,6 +63,68 @@ namespace Samples
         }
 
         /// <summary>
+        /// Add Modbus RTU/ASCII OVER TCP/UDP
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        static void Modbus_RTUASCII_OVER_TCPUDP(string[] args)
+        {
+            #region Master
+            //TcpClient Client = new TcpClient("127.0.0.1", 502);
+            //var endpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 502);
+            //UdpClient udpClient = new UdpClient();
+            //SerialPort port = new SerialPort("COM1", 9600, Parity.None, 8, StopBits.One); port.Open();
+            //{
+            //    //IModbusMaster master = NModbus.Serial.ModbusStaticFactory.CreateModbusRtuMaster(port);
+            //    //IModbusMaster master = NModbus.Serial.ModbusStaticFactory.CreateModbusAsciiMaster(port);
+            //    //IModbusMaster master = ModbusStaticFactory.CreateModbusTcpMaster(Client);
+            //    //IModbusMaster master = ModbusStaticFactory.CreateModbusRtuOverTcpMaster(Client);
+            //    //IModbusMaster master = ModbusStaticFactory.CreateModbusUdpMaster(udpClient, endpoint);
+            //    //IModbusMaster master = ModbusStaticFactory.CreateModbusRtuOverUdpMaster(udpClient, endpoint);
+
+
+            //    byte slaveId = 1;
+            //    ushort startAddress = 0;
+            //    ushort[] www = new ushort[9] { 20, 40, 60, 80, 2, 4, 6, 8, 444 };
+            //    ushort numInputs = (ushort)www.Length;
+
+            //    await master.WriteMultipleRegistersAsync(slaveId, startAddress, www);
+            //    ushort[] registers = await master.ReadHoldingRegistersAsync(slaveId, startAddress, numInputs);
+
+            //    for (int i = 0; i < numInputs; i++)
+            //    {
+            //        Console.WriteLine($"register{startAddress + i} = {registers[i]}");
+            //    }
+            //}
+            #endregion
+
+            #region SlaveNetwork
+            //TcpListener Client = new TcpListener(IPAddress.Any, 502);
+            //UdpClient udpClient = new UdpClient(502);
+            //SerialPort port = new SerialPort("COM1", 9600, Parity.None, 8, StopBits.One); port.Open();
+            //{
+            //    //var slaveNetwork = NModbus.Serial.ModbusStaticFactory.CreateModbusRtuSlaveNetwork(port, new ConsoleModbusLogger());
+            //    //var slaveNetwork = NModbus.Serial.ModbusStaticFactory.CreateModbusAsciiSlaveNetwork(port, new ConsoleModbusLogger());
+            //    //var slaveNetwork = ModbusStaticFactory.CreateModbusTcpSlaveNetwork(Client, new ConsoleModbusLogger());
+            //    var slaveNetwork = ModbusStaticFactory.CreateModbusUdpSlaveNetwork(udpClient, new ConsoleModbusLogger());
+            //    //var slaveNetwork = ModbusStaticFactory.CreateModbusRtuOverTcpSlaveNetwork(Client, new ConsoleModbusLogger());
+            //    //var slaveNetwork = ModbusStaticFactory.CreateModbusRtuOverUdpSlaveNetwork(udpClient, new ConsoleModbusLogger());
+            //    //var slaveNetwork = ModbusStaticFactory.CreateModbusAsciiOverTcpSlaveNetwork(Client, new ConsoleModbusLogger());
+            //    //var slaveNetwork = ModbusStaticFactory.CreateModbusAsciiOverUdpSlaveNetwork(udpClient, new ConsoleModbusLogger());
+            //    IModbusSlave slave1 = ModbusStaticFactory.CreateSlave(1);
+            //    IModbusSlave slave2 = ModbusStaticFactory.CreateSlave(2);
+
+            //    slaveNetwork.AddSlave(slave1);
+            //    slaveNetwork.AddSlave(slave2);
+
+            //    slaveNetwork.ListenAsync().GetAwaiter().GetResult();
+            //}
+            #endregion
+
+            Console.ReadLine();
+        }
+
+        /// <summary>
         ///     Simple Modbus serial RTU master write holding registers example.
         /// </summary>
         public static void ModbusSerialRtuMasterWriteRegisters()

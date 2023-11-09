@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using NModbus.Unme.Common;
@@ -17,8 +18,10 @@ namespace NModbus.IO
         private UdpClient _udpClient;
         private readonly byte[] _buffer = new byte[MaxBufferSize];
         private int _bufferOffset;
+        //Slave
+        internal EndPoint _endPoint;
 
-        public UdpClientAdapter(UdpClient udpClient)
+        public UdpClientAdapter(UdpClient udpClient,EndPoint endpoint = null)
         {
             if (udpClient == null)
             {
@@ -26,6 +29,7 @@ namespace NModbus.IO
             }
 
             _udpClient = udpClient;
+            this._endPoint = endpoint?? new IPEndPoint(IPAddress.Any, 502);
         }
 
         public int InfiniteTimeout => Timeout.Infinite;
@@ -41,6 +45,8 @@ namespace NModbus.IO
             get => _udpClient.Client.SendTimeout;
             set => _udpClient.Client.SendTimeout = value;
         }
+
+        public string Name => _endPoint.ToString();
 
         public void DiscardInBuffer()
         {
@@ -84,7 +90,7 @@ namespace NModbus.IO
 
             if (_bufferOffset == 0)
             {
-                _bufferOffset = _udpClient.Client.Receive(_buffer);
+                _bufferOffset = _udpClient.Client.ReceiveFrom(_buffer, ref _endPoint);
             }
 
             if (_bufferOffset < count)
@@ -134,7 +140,7 @@ namespace NModbus.IO
                     "Argument count cannot be greater than the length of buffer minus offset.");
             }
 
-            _udpClient.Client.Send(buffer.Skip(offset).Take(count).ToArray());
+            _udpClient.Client.SendTo(buffer.Skip(offset).Take(count).ToArray(), _endPoint); 
         }
 
         public void Dispose()

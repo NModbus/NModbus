@@ -16,21 +16,27 @@ namespace NModbus.Device
     /// <summary>
     /// Represents an incoming connection from a Modbus master. Contains the slave's logic to process the connection.
     /// </summary>
-    internal class ModbusMasterTcpConnection : ModbusDevice, IDisposable
+    public class ModbusMasterTcpConnection : ModbusDevice, IDisposable
     {
         
-        private readonly TcpClient _client;
-        private readonly string _endPoint;
-        private readonly Stream _stream;
-        private readonly IModbusSlaveNetwork _slaveNetwork;
-        private readonly IModbusFactory _modbusFactory;
-        private readonly Task _requestHandlerTask;
+        protected internal TcpClient _client;
+        protected string _endPoint;
+        protected Stream _stream;
+        protected IModbusSlaveNetwork _slaveNetwork;
+        protected IModbusFactory _modbusFactory;
+        protected Task _requestHandlerTask;
 
         private readonly byte[] _mbapHeader = new byte[6];
-        private byte[] _messageFrame;
+        protected byte[] _messageFrame;
 
         public ModbusMasterTcpConnection(TcpClient client, IModbusSlaveNetwork slaveNetwork, IModbusFactory modbusFactory, IModbusLogger logger)
-            : base(new ModbusIpTransport(new TcpClientAdapter(client), modbusFactory, logger))
+            : this(client, slaveNetwork, modbusFactory, logger, new ModbusIpTransport(new TcpClientAdapter(client), modbusFactory, logger))
+        {
+            //TODO
+        }
+
+        protected internal ModbusMasterTcpConnection(TcpClient client, IModbusSlaveNetwork slaveNetwork, IModbusFactory modbusFactory, IModbusLogger logger, IModbusTransport transport = null)
+            : base(transport)
         {
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _client = client ?? throw new ArgumentNullException(nameof(client));
@@ -64,7 +70,7 @@ namespace NModbus.Device
             base.Dispose(disposing);
         }
 
-        private async Task HandleRequestAsync()
+        protected virtual async Task HandleRequestAsync()
         {
             try
             {

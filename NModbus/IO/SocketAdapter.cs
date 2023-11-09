@@ -32,6 +32,9 @@ namespace NModbus.IO
             get => _socketClient.ReceiveTimeout;
             set => _socketClient.ReceiveTimeout = value;
         }
+
+        public string Name => _socketClient?.RemoteEndPoint.ToString();
+
         public void DiscardInBuffer()
         {
             // socket does not hold buffers.

@@ -2,7 +2,7 @@
 
 namespace NModbus.Device
 {
-    internal class TcpConnectionEventArgs : EventArgs
+    public class TcpConnectionEventArgs : EventArgs
     {
         public TcpConnectionEventArgs(string endPoint)
         {

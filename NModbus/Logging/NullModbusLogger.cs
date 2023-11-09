@@ -1,14 +1,33 @@
-﻿namespace NModbus.Logging
+﻿using System.Threading;
+
+namespace NModbus.Logging
 {
     /// <summary>
     /// Empty logger.
     /// </summary>
     public class NullModbusLogger : IModbusLogger
     {
+        private static object _lock = new object();
+        private static NullModbusLogger _instance = null;
         /// <summary>
         /// Singleton.
         /// </summary>
-        public static NullModbusLogger Instance = new NullModbusLogger();
+        public static NullModbusLogger Instance
+        {
+            get
+            {
+                if (_instance is null)
+                {
+                    Monitor.Enter(_lock);
+                    if (_instance is null)
+                    {
+                        _instance = new NullModbusLogger();
+                    }
+                    Monitor.Exit(_lock);
+                }
+                return _instance;
+            }
+        }
 
         private NullModbusLogger()
         {
