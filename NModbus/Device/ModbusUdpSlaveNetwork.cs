@@ -63,7 +63,7 @@ namespace NModbus.Device
                             // write response
                             byte[] responseFrame = Transport.BuildMessageFrame(response);
 
-                            Logger.LogFrameTx(frame);
+                            Logger.LogFrameTx(responseFrame);
 
                             await _udpClient.SendAsync(responseFrame, responseFrame.Length, masterEndPoint)
                                 .ConfigureAwait(false);
