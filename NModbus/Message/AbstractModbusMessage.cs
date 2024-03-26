@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.IO;
 namespace NModbus.Message
 {
     /// <summary>
