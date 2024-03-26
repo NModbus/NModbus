@@ -24,7 +24,7 @@ namespace NModbus.Device
 		/// <param name="startAddress">Address to begin reading.</param>
 		/// <param name="numberOfPoints">Number of coils to read.</param>
 		/// <returns>Coils status.</returns>
-		public bool[] ReadCoils(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+		public virtual bool[] ReadCoils(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
 		{
 			ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 2000);
 
@@ -44,7 +44,7 @@ namespace NModbus.Device
 		/// <param name="startAddress">Address to begin reading.</param>
 		/// <param name="numberOfPoints">Number of coils to read.</param>
 		/// <returns>A task that represents the asynchronous read operation.</returns>
-		public Task<bool[]> ReadCoilsAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+		public virtual Task<bool[]> ReadCoilsAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
 		{
 			ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 2000);
 
@@ -64,7 +64,7 @@ namespace NModbus.Device
 		/// <param name="startAddress">Address to begin reading.</param>
 		/// <param name="numberOfPoints">Number of discrete inputs to read.</param>
 		/// <returns>Discrete inputs status.</returns>
-		public bool[] ReadInputs(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+		public virtual bool[] ReadInputs(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
 		{
 			ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 2000);
 
@@ -84,7 +84,7 @@ namespace NModbus.Device
 		/// <param name="startAddress">Address to begin reading.</param>
 		/// <param name="numberOfPoints">Number of discrete inputs to read.</param>
 		/// <returns>A task that represents the asynchronous read operation.</returns>
-		public Task<bool[]> ReadInputsAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+		public virtual Task<bool[]> ReadInputsAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
 		{
 			ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 2000);
 
@@ -104,7 +104,7 @@ namespace NModbus.Device
 		/// <param name="startAddress">Address to begin reading.</param>
 		/// <param name="numberOfPoints">Number of holding registers to read.</param>
 		/// <returns>Holding registers status.</returns>
-		public ushort[] ReadHoldingRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+		public virtual ushort[] ReadHoldingRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
 		{
 			ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 125);
 
@@ -124,7 +124,7 @@ namespace NModbus.Device
 		/// <param name="startAddress">Address to begin reading.</param>
 		/// <param name="numberOfPoints">Number of holding registers to read.</param>
 		/// <returns>A task that represents the asynchronous read operation.</returns>
-		public Task<ushort[]> ReadHoldingRegistersAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+		public virtual Task<ushort[]> ReadHoldingRegistersAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
 		{
 			ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 125);
 
@@ -144,7 +144,7 @@ namespace NModbus.Device
 		/// <param name="startAddress">Address to begin reading.</param>
 		/// <param name="numberOfPoints">Number of holding registers to read.</param>
 		/// <returns>Input registers status.</returns>
-		public ushort[] ReadInputRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+		public virtual ushort[] ReadInputRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
 		{
 			ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 125);
 
@@ -164,7 +164,7 @@ namespace NModbus.Device
 		/// <param name="startAddress">Address to begin reading.</param>
 		/// <param name="numberOfPoints">Number of holding registers to read.</param>
 		/// <returns>A task that represents the asynchronous read operation.</returns>
-		public Task<ushort[]> ReadInputRegistersAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+		public virtual Task<ushort[]> ReadInputRegistersAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
 		{
 			ValidateNumberOfPoints("numberOfPoints", numberOfPoints, 125);
 
@@ -183,7 +183,7 @@ namespace NModbus.Device
 		/// <param name="slaveAddress">Address of the device to write to.</param>
 		/// <param name="coilAddress">Address to write value to.</param>
 		/// <param name="value">Value to write.</param>
-		public void WriteSingleCoil(byte slaveAddress, ushort coilAddress, bool value)
+		public virtual void WriteSingleCoil(byte slaveAddress, ushort coilAddress, bool value)
 		{
 			var request = new WriteSingleCoilRequestResponse(slaveAddress, coilAddress, value);
 			Transport.UnicastMessage<WriteSingleCoilRequestResponse>(request);
@@ -196,7 +196,7 @@ namespace NModbus.Device
 		/// <param name="coilAddress">Address to write value to.</param>
 		/// <param name="value">Value to write.</param>
 		/// <returns>A task that represents the asynchronous write operation.</returns>
-		public Task WriteSingleCoilAsync(byte slaveAddress, ushort coilAddress, bool value)
+		public virtual Task WriteSingleCoilAsync(byte slaveAddress, ushort coilAddress, bool value)
 		{
 			var request = new WriteSingleCoilRequestResponse(slaveAddress, coilAddress, value);
 			return PerformWriteRequestAsync<WriteSingleCoilRequestResponse>(request);
@@ -208,7 +208,7 @@ namespace NModbus.Device
 		/// <param name="slaveAddress">Address of the device to write to.</param>
 		/// <param name="registerAddress">Address to write.</param>
 		/// <param name="value">Value to write.</param>
-		public void WriteSingleRegister(byte slaveAddress, ushort registerAddress, ushort value)
+		public virtual void WriteSingleRegister(byte slaveAddress, ushort registerAddress, ushort value)
 		{
 			var request = new WriteSingleRegisterRequestResponse(
 					slaveAddress,
@@ -225,7 +225,7 @@ namespace NModbus.Device
 		/// <param name="registerAddress">Address to write.</param>
 		/// <param name="value">Value to write.</param>
 		/// <returns>A task that represents the asynchronous write operation.</returns>
-		public Task WriteSingleRegisterAsync(byte slaveAddress, ushort registerAddress, ushort value)
+		public virtual Task WriteSingleRegisterAsync(byte slaveAddress, ushort registerAddress, ushort value)
 		{
 			var request = new WriteSingleRegisterRequestResponse(
 					slaveAddress,
@@ -241,7 +241,7 @@ namespace NModbus.Device
 		/// <param name="slaveAddress">Address of the device to write to.</param>
 		/// <param name="startAddress">Address to begin writing values.</param>
 		/// <param name="data">Values to write.</param>
-		public void WriteMultipleRegisters(byte slaveAddress, ushort startAddress, ushort[] data)
+		public virtual void WriteMultipleRegisters(byte slaveAddress, ushort startAddress, ushort[] data)
 		{
 			ValidateData("data", data, 123);
 
@@ -260,7 +260,7 @@ namespace NModbus.Device
 		/// <param name="startAddress">Address to begin writing values.</param>
 		/// <param name="data">Values to write.</param>
 		/// <returns>A task that represents the asynchronous write operation.</returns>
-		public Task WriteMultipleRegistersAsync(byte slaveAddress, ushort startAddress, ushort[] data)
+		public virtual Task WriteMultipleRegistersAsync(byte slaveAddress, ushort startAddress, ushort[] data)
 		{
 			ValidateData("data", data, 123);
 
@@ -278,7 +278,7 @@ namespace NModbus.Device
 		/// <param name="slaveAddress">Address of the device to write to.</param>
 		/// <param name="startAddress">Address to begin writing values.</param>
 		/// <param name="data">Values to write.</param>
-		public void WriteMultipleCoils(byte slaveAddress, ushort startAddress, bool[] data)
+		public virtual void WriteMultipleCoils(byte slaveAddress, ushort startAddress, bool[] data)
 		{
 			ValidateData("data", data, 1968);
 
@@ -297,7 +297,7 @@ namespace NModbus.Device
 		/// <param name="startAddress">Address to begin writing values.</param>
 		/// <param name="data">Values to write.</param>
 		/// <returns>A task that represents the asynchronous write operation.</returns>
-		public Task WriteMultipleCoilsAsync(byte slaveAddress, ushort startAddress, bool[] data)
+		public virtual Task WriteMultipleCoilsAsync(byte slaveAddress, ushort startAddress, bool[] data)
 		{
 			ValidateData("data", data, 1968);
 
@@ -318,7 +318,7 @@ namespace NModbus.Device
 		/// <param name="numberOfPointsToRead">Number of registers to read.</param>
 		/// <param name="startWriteAddress">Address to begin writing (Holding registers are addressed starting at 0).</param>
 		/// <param name="writeData">Register values to write.</param>
-		public ushort[] ReadWriteMultipleRegisters(
+		public virtual ushort[] ReadWriteMultipleRegisters(
 				byte slaveAddress,
 				ushort startReadAddress,
 				ushort numberOfPointsToRead,
@@ -348,7 +348,7 @@ namespace NModbus.Device
 		/// <param name="startWriteAddress">Address to begin writing (Holding registers are addressed starting at 0).</param>
 		/// <param name="writeData">Register values to write.</param>
 		/// <returns>A task that represents the asynchronous operation.</returns>
-		public Task<ushort[]> ReadWriteMultipleRegistersAsync(
+		public virtual Task<ushort[]> ReadWriteMultipleRegistersAsync(
 				byte slaveAddress,
 				ushort startReadAddress,
 				ushort numberOfPointsToRead,
@@ -375,7 +375,7 @@ namespace NModbus.Device
 		/// <param name="fileNumber">The Extended Memory file number</param>
 		/// <param name="startingAddress">The starting register address within the file</param>
 		/// <param name="data">The data to be written</param>
-		public void WriteFileRecord(byte slaveAdress, ushort fileNumber, ushort startingAddress, byte[] data)
+		public virtual void WriteFileRecord(byte slaveAdress, ushort fileNumber, ushort startingAddress, byte[] data)
 		{
 			ValidateMaxData("data", data, 244);
 			var request = new WriteFileRecordRequest(slaveAdress, new FileRecordCollection(
@@ -397,7 +397,7 @@ namespace NModbus.Device
 			return Transport.UnicastMessage<TResponse>(request);
 		}
 
-		private static void ValidateData<T>(string argumentName, T[] data, int maxDataLength)
+		protected static void ValidateData<T>(string argumentName, T[] data, int maxDataLength)
 		{
 			if (data == null)
 			{
@@ -411,7 +411,7 @@ namespace NModbus.Device
 			}
 		}
 
-		private static void ValidateMaxData<T>(string argumentName, T[] data, int maxDataLength)
+        protected static void ValidateMaxData<T>(string argumentName, T[] data, int maxDataLength)
 		{
 			if (data == null)
 			{
@@ -425,7 +425,7 @@ namespace NModbus.Device
 			}
 		}
 
-		private static void ValidateNumberOfPoints(string argumentName, ushort numberOfPoints, ushort maxNumberOfPoints)
+        protected static void ValidateNumberOfPoints(string argumentName, ushort numberOfPoints, ushort maxNumberOfPoints)
 		{
 			if (numberOfPoints < 1 || numberOfPoints > maxNumberOfPoints)
 			{
@@ -434,18 +434,18 @@ namespace NModbus.Device
 			}
 		}
 
-		private bool[] PerformReadDiscretes(ReadCoilsInputsRequest request)
+        protected bool[] PerformReadDiscretes(ReadCoilsInputsRequest request)
 		{
 			ReadCoilsInputsResponse response = Transport.UnicastMessage<ReadCoilsInputsResponse>(request);
 			return response.Data.Take(request.NumberOfPoints).ToArray();
 		}
 
-		private Task<bool[]> PerformReadDiscretesAsync(ReadCoilsInputsRequest request)
+        protected Task<bool[]> PerformReadDiscretesAsync(ReadCoilsInputsRequest request)
 		{
 			return Task.Factory.StartNew(() => PerformReadDiscretes(request));
 		}
 
-		private ushort[] PerformReadRegisters(ReadHoldingInputRegistersRequest request)
+        protected ushort[] PerformReadRegisters(ReadHoldingInputRegistersRequest request)
 		{
 			ReadHoldingInputRegistersResponse response =
 					Transport.UnicastMessage<ReadHoldingInputRegistersResponse>(request);
@@ -453,12 +453,12 @@ namespace NModbus.Device
 			return response.Data.Take(request.NumberOfPoints).ToArray();
 		}
 
-		private Task<ushort[]> PerformReadRegistersAsync(ReadHoldingInputRegistersRequest request)
+        protected Task<ushort[]> PerformReadRegistersAsync(ReadHoldingInputRegistersRequest request)
 		{
 			return Task.Factory.StartNew(() => PerformReadRegisters(request));
 		}
 
-		private ushort[] PerformReadRegisters(ReadWriteMultipleRegistersRequest request)
+        protected ushort[] PerformReadRegisters(ReadWriteMultipleRegistersRequest request)
 		{
 			ReadHoldingInputRegistersResponse response =
 					Transport.UnicastMessage<ReadHoldingInputRegistersResponse>(request);
@@ -466,12 +466,12 @@ namespace NModbus.Device
 			return response.Data.Take(request.ReadRequest.NumberOfPoints).ToArray();
 		}
 
-		private Task<ushort[]> PerformReadRegistersAsync(ReadWriteMultipleRegistersRequest request)
+        protected Task<ushort[]> PerformReadRegistersAsync(ReadWriteMultipleRegistersRequest request)
 		{
 			return Task.Factory.StartNew(() => PerformReadRegisters(request));
 		}
 
-		private Task PerformWriteRequestAsync<T>(IModbusMessage request)
+        protected Task PerformWriteRequestAsync<T>(IModbusMessage request)
 				where T : IModbusMessage, new()
 		{
 			return Task.Factory.StartNew(() => Transport.UnicastMessage<T>(request));
