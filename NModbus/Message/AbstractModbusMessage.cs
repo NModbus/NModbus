@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.IO;
 namespace NModbus.Message
 {
     /// <summary>
@@ -43,7 +43,19 @@ namespace NModbus.Message
             set => _messageImpl.SlaveAddress = value;
         }
 
-        public byte[] MessageFrame => _messageImpl.MessageFrame;
+        public byte[] MessageFrame
+        {
+            get
+            {
+                var pdu = ProtocolDataUnit;
+                var frame = new MemoryStream(1 + pdu.Length);
+
+                frame.WriteByte(SlaveAddress);
+                frame.Write(pdu, 0, pdu.Length);
+
+                return frame.ToArray();
+            }
+        }
 
         public virtual byte[] ProtocolDataUnit => _messageImpl.ProtocolDataUnit;
 
