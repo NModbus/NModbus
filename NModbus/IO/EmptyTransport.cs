@@ -15,7 +15,7 @@ namespace NModbus.IO
             throw new NotImplementedException();
         }
 
-        public override IModbusMessage ReadResponse<T>()
+        public override IModbusMessage ReadResponse<T>(IModbusMessage request)
         {
             throw new NotImplementedException();
         }

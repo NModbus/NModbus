@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -87,18 +88,20 @@ namespace NModbus.IO
             return messageCrc == calculatedCrc;
         }
 
-        public override IModbusMessage ReadResponse<T>()
+        public override IModbusMessage ReadResponse<T>(IModbusMessage request)
         {
-            byte[] frame = ReadResponse();
+            byte[] frame = ReadResponse(request);
 
             Logger.LogFrameRx(frame);
 
             return CreateResponse<T>(frame);
         }
 
-        private byte[] ReadResponse()
+        private byte[] ReadResponse(IModbusMessage request)
         {
-            byte[] frameStart = Read(ResponseFrameStartLength);
+            byte[] frameStart = request != null ? 
+                ReadStartFrameResponse(request) : 
+                Read(ResponseFrameStartLength);
             byte[] frameEnd = Read(ResponseBytesToRead(frameStart));
             byte[] frame = frameStart.Concat(frameEnd).ToArray();
 
@@ -107,7 +110,7 @@ namespace NModbus.IO
 
         public override void IgnoreResponse()
         {
-            byte[] frame = ReadResponse();
+            byte[] frame = ReadResponse(null);
 
             Logger.LogFrameIgnoreRx(frame);
         }
@@ -121,6 +124,72 @@ namespace NModbus.IO
             Logger.LogFrameRx(frame);
 
             return frame;
+        }
+
+        private byte[] ReadStartFrameResponse(IModbusMessage request)
+        {
+            const int HeaderLength = 2;
+            int frameHeadLength = ResponseFrameStartLength;
+            byte functionCode = request.FunctionCode;
+            byte slaveId = request.SlaveAddress;
+            int maxGarbageBytes = 1024;
+
+            byte[] window = new byte[frameHeadLength];
+            int count = 0;
+            int garbageCount = 0;
+
+            while (true)
+            {
+                // Fill the sliding window buffer
+                while (count < frameHeadLength)
+                {
+                    byte[] b = Read(1);
+                    window[count++] = b[0];
+                }
+
+                int headIdx = -1;
+                if (slaveId == 0)
+                {
+                    // Broadcast request: look for [1-247, functionCode] as valid header
+                    for (int i = 0; i <= frameHeadLength - HeaderLength; i++)
+                    {
+                        if (window[i] >= 1 && window[i] <= 247 && window[i + 1] == functionCode)
+                        {
+                            headIdx = i;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    // Exact match: look for [slaveId, functionCode]
+                    if (window[0] == slaveId && window[1] == functionCode)
+                        headIdx = 0;
+                }
+
+                if (headIdx >= 0)
+                {
+                    // Extract the frame header starting from headIdx
+                    byte[] frameHead = new byte[frameHeadLength];
+                    Array.Copy(window, headIdx, frameHead, 0, frameHeadLength - headIdx);
+
+                    // If there was garbage before the header, read extra bytes to complete the header
+                    int bytesNeeded = headIdx;
+                    if (bytesNeeded > 0)
+                    {
+                        byte[] rest = Read(bytesNeeded);
+                        Array.Copy(rest, 0, frameHead, frameHeadLength - bytesNeeded, bytesNeeded);
+                    }
+                    return frameHead;
+                }
+
+                // Slide the window: shift left by one byte, decrease count accordingly
+                Array.Copy(window, 1, window, 0, frameHeadLength - 1);
+                count = frameHeadLength - 1;
+                garbageCount++;
+                if (garbageCount > maxGarbageBytes)
+                    throw new IOException("Too many garbage bytes, failed to find Modbus RTU frame header.");
+            }
         }
     }
 }

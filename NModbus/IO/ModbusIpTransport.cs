@@ -137,7 +137,7 @@ namespace NModbus.IO
             return ReadRequestResponse(StreamResource, Logger);
         }
 
-        public override IModbusMessage ReadResponse<T>()
+        public override IModbusMessage ReadResponse<T>(IModbusMessage request)
         {
             return CreateMessageAndInitializeTransactionId<T>(ReadRequestResponse(StreamResource, Logger));
         }

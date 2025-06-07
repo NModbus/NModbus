@@ -134,7 +134,7 @@ namespace NModbus.IO
                         do
                         {
                             readAgain = false;
-                            response = ReadResponse<T>();
+                            response = ReadResponse<T>(message);
                             var exceptionResponse = response as SlaveExceptionResponse;
 
                             if (exceptionResponse != null)
@@ -231,7 +231,7 @@ namespace NModbus.IO
             return response;
         }
 
-        public void ValidateResponse(IModbusMessage request, IModbusMessage response)
+        public virtual void ValidateResponse(IModbusMessage request, IModbusMessage response)
         {
             // always check the function code and slave address, regardless of transport protocol
             if (request.FunctionCode != response.FunctionCode)
@@ -260,7 +260,7 @@ namespace NModbus.IO
         /// <summary>
         ///     Check whether we need to attempt to read another response before processing it (e.g. response was from previous request)
         /// </summary>
-        public bool ShouldRetryResponse(IModbusMessage request, IModbusMessage response)
+        public virtual bool ShouldRetryResponse(IModbusMessage request, IModbusMessage response)
         {
             // These checks are enforced in ValidateRequest, we don't want to retry for these
             if (request.FunctionCode != response.FunctionCode)
@@ -291,7 +291,7 @@ namespace NModbus.IO
 
         public abstract byte[] ReadRequest();
 
-        public abstract IModbusMessage ReadResponse<T>()
+        public abstract IModbusMessage ReadResponse<T>(IModbusMessage request)
             where T : IModbusMessage, new();
 
         public abstract byte[] BuildMessageFrame(IModbusMessage message);

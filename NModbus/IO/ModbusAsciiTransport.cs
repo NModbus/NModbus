@@ -45,7 +45,7 @@ namespace NModbus.IO
             return ReadRequestResponse();
         }
 
-        public override IModbusMessage ReadResponse<T>()
+        public override IModbusMessage ReadResponse<T>(IModbusMessage request)
         {
             return CreateResponse<T>(ReadRequestResponse());
         }
