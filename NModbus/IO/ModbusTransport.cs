@@ -115,6 +115,19 @@ namespace NModbus.IO
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        ///     Sends a broadcast message (address 0) without reading any response.
+        ///     Per Modbus spec, broadcast writes are processed by all slaves on the network.
+        /// </summary>
+        /// <param name="message">The message to broadcast.</param>
+        public virtual void BroadcastWrite(IModbusMessage message)
+        {
+            lock (_syncLock)
+            {
+                Write(message);
+            }
+        }
+
         public virtual T UnicastMessage<T>(IModbusMessage message)
             where T : IModbusMessage, new()
         {

@@ -19,6 +19,9 @@ namespace NModbus
 
         T UnicastMessage<T>(IModbusMessage message) where T : IModbusMessage, new();
 
+        /// <summary>Sends a broadcast message (address 0) without reading any response.</summary>
+        void BroadcastWrite(IModbusMessage message);
+
         byte[] ReadRequest();
 
         byte[] BuildMessageFrame(IModbusMessage message);
