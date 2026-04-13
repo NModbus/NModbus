@@ -29,6 +29,7 @@ namespace NModbus
             new WriteMultipleRegistersService(),
             new WriteFileRecordService(),
             new ReadWriteMultipleRegistersService(),
+            new ReadDeviceIdentificationService(),
         };
 
         private readonly IDictionary<byte, IModbusFunctionService> _functionServices;

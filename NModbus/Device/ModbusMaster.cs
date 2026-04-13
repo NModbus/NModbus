@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
@@ -395,6 +396,56 @@ namespace NModbus.Device
 				where TResponse : IModbusMessage, new()
 		{
 			return Transport.UnicastMessage<TResponse>(request);
+		}
+
+		/// <summary>
+		///    Reads device identification objects from a Modbus slave
+		///    (function code 0x2B, MEI type 0x0E).
+		/// </summary>
+		/// <param name="slaveAddress">Address of the device to read from.</param>
+		/// <param name="category">The category of identification objects to read.</param>
+		/// <param name="objectId">The first object ID to read.</param>
+		/// <returns>A dictionary mapping object IDs to their string values.</returns>
+		public Dictionary<byte, string> ReadDeviceIdentification(byte slaveAddress,
+			DeviceIdCategory category, byte objectId)
+		{
+			var request = new ReadDeviceIdRequest(slaveAddress, category, objectId);
+			var response = Transport.UnicastMessage<ReadDeviceIdResponse>(request);
+			return response.Objects;
+		}
+
+		/// <summary>
+		///    Asynchronously reads device identification objects from a Modbus slave.
+		/// </summary>
+		/// <param name="slaveAddress">Address of the device to read from.</param>
+		/// <param name="category">The category of identification objects to read.</param>
+		/// <param name="objectId">The first object ID to read.</param>
+		/// <returns>A task containing a dictionary mapping object IDs to their string values.</returns>
+		public Task<Dictionary<byte, string>> ReadDeviceIdentificationAsync(byte slaveAddress,
+			DeviceIdCategory category, byte objectId)
+		{
+			return Task.Run(() => ReadDeviceIdentification(slaveAddress, category, objectId));
+		}
+
+		/// <summary>
+		///    Reads basic device identification (vendor name, product code, revision)
+		///    from a Modbus slave.
+		/// </summary>
+		/// <param name="slaveAddress">Address of the device to read from.</param>
+		/// <returns>A dictionary mapping object IDs to their string values.</returns>
+		public Dictionary<byte, string> ReadBasicDeviceIdentification(byte slaveAddress)
+		{
+			return ReadDeviceIdentification(slaveAddress, DeviceIdCategory.Basic, 0x00);
+		}
+
+		/// <summary>
+		///    Asynchronously reads basic device identification from a Modbus slave.
+		/// </summary>
+		/// <param name="slaveAddress">Address of the device to read from.</param>
+		/// <returns>A task containing a dictionary mapping object IDs to their string values.</returns>
+		public Task<Dictionary<byte, string>> ReadBasicDeviceIdentificationAsync(byte slaveAddress)
+		{
+			return Task.Run(() => ReadBasicDeviceIdentification(slaveAddress));
 		}
 
 		private static void ValidateData<T>(string argumentName, T[] data, int maxDataLength)

@@ -28,5 +28,8 @@
         public const byte WriteFileRecord = 21;
 
         public const byte ReadWriteMultipleRegisters = 23;
+
+        /// <summary>Read Device Identification (MEI type 0x0E).</summary>
+        public const byte ReadDeviceIdentification = 43;
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using NModbus.Data;
 
 namespace NModbus
 {
@@ -202,5 +204,34 @@ namespace NModbus
 		/// <param name="request">The request.</param>
 		TResponse ExecuteCustomMessage<TResponse>(IModbusMessage request)
 				where TResponse : IModbusMessage, new();
+
+		/// <summary>
+		///    Reads device identification objects from a Modbus slave
+		///    (function code 0x2B, MEI type 0x0E).
+		/// </summary>
+		/// <param name="slaveAddress">Address of the device to read from.</param>
+		/// <param name="category">The category of identification objects to read.</param>
+		/// <param name="objectId">The first object ID to read.</param>
+		/// <returns>A dictionary mapping object IDs to their string values.</returns>
+		Dictionary<byte, string> ReadDeviceIdentification(byte slaveAddress,
+			DeviceIdCategory category, byte objectId);
+
+		/// <summary>
+		///    Asynchronously reads device identification objects from a Modbus slave.
+		/// </summary>
+		Task<Dictionary<byte, string>> ReadDeviceIdentificationAsync(byte slaveAddress,
+			DeviceIdCategory category, byte objectId);
+
+		/// <summary>
+		///    Reads basic device identification (vendor name, product code, revision).
+		/// </summary>
+		/// <param name="slaveAddress">Address of the device to read from.</param>
+		/// <returns>A dictionary mapping object IDs to their string values.</returns>
+		Dictionary<byte, string> ReadBasicDeviceIdentification(byte slaveAddress);
+
+		/// <summary>
+		///    Asynchronously reads basic device identification.
+		/// </summary>
+		Task<Dictionary<byte, string>> ReadBasicDeviceIdentificationAsync(byte slaveAddress);
 	}
 }
