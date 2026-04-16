@@ -615,6 +615,8 @@ namespace Samples
 
             IModbusSlave slave = factory.CreateSlave(slaveId);
 
+            slave.DataStore.InputRegisters.WritePoints(100, new ushort[] { 1, 2, 3, 4, 5 });
+
             network.AddSlave(slave);
 
             var listenTask = network.ListenAsync();
@@ -627,7 +629,7 @@ namespace Samples
             ushort startAddress = 100;
 
             // read five register values
-            ushort[] inputs = master.ReadInputRegisters(0, startAddress, numInputs);
+            ushort[] inputs = master.ReadInputRegisters(slaveId, startAddress, numInputs);
 
             for (int i = 0; i < numInputs; i++)
             {
