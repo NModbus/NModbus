@@ -7,7 +7,7 @@ on: [pull_request]
 jobs:
   build:
     # https://github.com/orgs/community/discussions/25253
-    runs-on: windows-2019
+    runs-on: windows-latest
     timeout-minutes: 15
     # container: mcr.microsoft.com/dotnet/sdk:7.0
     steps:
