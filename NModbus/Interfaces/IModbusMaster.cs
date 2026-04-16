@@ -139,6 +139,23 @@ namespace NModbus
 		Task WriteMultipleRegistersAsync(byte slaveAddress, ushort startAddress, ushort[] data);
 
 		/// <summary>
+		///    Sends a broadcast write (slave address 0) of a single holding register.
+		///    No response is read. All slaves on the network process the write.
+		/// </summary>
+		/// <param name="registerAddress">Address to write.</param>
+		/// <param name="value">Value to write.</param>
+		void BroadcastWriteSingleRegister(ushort registerAddress, ushort value);
+
+		/// <summary>
+		///    Asynchronously sends a broadcast write (slave address 0) of a single holding register.
+		///    No response is read. All slaves on the network process the write.
+		/// </summary>
+		/// <param name="registerAddress">Address to write.</param>
+		/// <param name="value">Value to write.</param>
+		/// <returns>A task that represents the asynchronous write operation.</returns>
+		Task BroadcastWriteSingleRegisterAsync(ushort registerAddress, ushort value);
+
+		/// <summary>
 		///    Writes a sequence of coils.
 		/// </summary>
 		/// <param name="slaveAddress">Address of the device to write to.</param>

@@ -237,6 +237,29 @@ namespace NModbus.Device
 		}
 
 		/// <summary>
+		///    Sends a broadcast write (slave address 0) of a single holding register.
+		///    No response is read. All slaves on the network process the write.
+		/// </summary>
+		/// <param name="registerAddress">Address to write.</param>
+		/// <param name="value">Value to write.</param>
+		public void BroadcastWriteSingleRegister(ushort registerAddress, ushort value)
+		{
+			var request = new WriteSingleRegisterRequestResponse(0, registerAddress, value);
+			Transport.BroadcastWrite(request);
+		}
+
+		/// <summary>
+		///    Asynchronously sends a broadcast write (slave address 0) of a single holding register.
+		///    No response is read. All slaves on the network process the write.
+		/// </summary>
+		/// <param name="registerAddress">Address to write.</param>
+		/// <param name="value">Value to write.</param>
+		public Task BroadcastWriteSingleRegisterAsync(ushort registerAddress, ushort value)
+		{
+			return Task.Run(() => BroadcastWriteSingleRegister(registerAddress, value));
+		}
+
+		/// <summary>
 		///     Write a block of 1 to 123 contiguous 16 bit holding registers.
 		/// </summary>
 		/// <param name="slaveAddress">Address of the device to write to.</param>
