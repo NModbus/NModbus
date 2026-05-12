@@ -214,12 +214,19 @@ namespace NModbus.Device
 #endif
         private void OnMasterConnectionClosedHandler(object sender, TcpConnectionEventArgs e)
         {
-            ModbusMasterTcpConnection connection;
-
-            if (!_masters.TryRemove(e.EndPoint, out connection))
+            // Issue #135: detach our handler from the connection so the network
+            // doesn't keep getting called back after the connection is gone, and
+            // so that a re-entrant or double-fired close event can't crash an
+            // event-source thread with ArgumentException.
+            if (sender is ModbusMasterTcpConnection senderConnection)
             {
-                string msg = $"EndPoint {e.EndPoint} cannot be removed, it does not exist.";
-                throw new ArgumentException(msg);
+                senderConnection.ModbusMasterTcpConnectionClosed -= OnMasterConnectionClosedHandler;
+            }
+
+            if (!_masters.TryRemove(e.EndPoint, out ModbusMasterTcpConnection connection))
+            {
+                Logger.Warning($"EndPoint {e.EndPoint} cannot be removed, it does not exist.");
+                return;
             }
 
             connection.Dispose();
