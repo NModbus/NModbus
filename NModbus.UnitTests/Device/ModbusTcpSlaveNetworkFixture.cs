@@ -28,67 +28,69 @@ namespace NModbus.UnitTests.Device
         [Fact]
         public void OnMasterConnectionClosedHandler_UnknownEndPoint_DoesNotThrow()
         {
-            using var listener = new ListenerHandle();
-            using var network = new ModbusTcpSlaveNetwork(listener.Listener, Factory, NullModbusLogger.Instance);
-
-            // Invoke the private handler with an endpoint that was never registered.
-            // Before the fix this threw ArgumentException; after the fix it logs and returns.
-            MethodInfo handler = typeof(ModbusTcpSlaveNetwork).GetMethod(
-                "OnMasterConnectionClosedHandler",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.NotNull(handler);
-
-            object eventArgs = new TcpConnectionEventArgs("127.0.0.1:0");
-
-            Exception captured = null;
-            try
+            using (var listener = new ListenerHandle())
+            using (var network = new ModbusTcpSlaveNetwork(listener.Listener, Factory, NullModbusLogger.Instance))
             {
-                handler.Invoke(network, new[] { (object)null, eventArgs });
-            }
-            catch (TargetInvocationException tie)
-            {
-                captured = tie.InnerException;
-            }
+                // Invoke the private handler with an endpoint that was never registered.
+                // Before the fix this threw ArgumentException; after the fix it logs and returns.
+                MethodInfo handler = typeof(ModbusTcpSlaveNetwork).GetMethod(
+                    "OnMasterConnectionClosedHandler",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.NotNull(handler);
 
-            Assert.Null(captured);
+                object eventArgs = new TcpConnectionEventArgs("127.0.0.1:0");
+
+                Exception captured = null;
+                try
+                {
+                    handler.Invoke(network, new[] { (object)null, eventArgs });
+                }
+                catch (TargetInvocationException tie)
+                {
+                    captured = tie.InnerException;
+                }
+
+                Assert.Null(captured);
+            }
         }
 
         [Fact]
         public async Task ClosingClientConnection_DetachesEventAndRemovesFromMasters()
         {
-            using var listener = new ListenerHandle();
-            using var network = new ModbusTcpSlaveNetwork(listener.Listener, Factory, NullModbusLogger.Instance);
-
-            using var cts = new CancellationTokenSource();
-            Task listenTask = network.ListenAsync(cts.Token);
-
-            using (var client = new TcpClient())
+            using (var listener = new ListenerHandle())
+            using (var network = new ModbusTcpSlaveNetwork(listener.Listener, Factory, NullModbusLogger.Instance))
+            using (var cts = new CancellationTokenSource())
             {
-                await client.ConnectAsync(IPAddress.Loopback, listener.Port).ConfigureAwait(false);
+                Task listenTask = network.ListenAsync(cts.Token);
 
-                // Wait until the slave network registers the connection.
-                IDictionary masters = await WaitForMasterCountAsync(network, expected: 1).ConfigureAwait(false);
-                Assert.Single(masters);
+                using (var client = new TcpClient())
+                {
+                    await client.ConnectAsync(IPAddress.Loopback, listener.Port).ConfigureAwait(false);
 
-                object connection = FirstValue(masters);
-                EventHandler<TcpConnectionEventArgs> beforeSubscribers = GetClosedEventSubscribers(connection);
-                Assert.NotNull(beforeSubscribers);
-                Assert.Single(beforeSubscribers.GetInvocationList());
+                    // Wait until the slave network registers the connection.
+                    IDictionary masters = await WaitForMasterCountAsync(network, expected: 1).ConfigureAwait(false);
+                    Assert.Single(masters);
 
-                // Closing the client triggers HandleRequestAsync's 0-byte path which fires the event.
-                client.Close();
+                    object connection = FirstValue(masters);
+                    EventHandler<TcpConnectionEventArgs> beforeSubscribers = GetClosedEventSubscribers(connection);
+                    Assert.NotNull(beforeSubscribers);
+                    Assert.Single(beforeSubscribers.GetInvocationList());
 
-                masters = await WaitForMasterCountAsync(network, expected: 0).ConfigureAwait(false);
-                Assert.Empty(masters);
+                    // Closing the client triggers HandleRequestAsync's 0-byte path which fires the event.
+                    client.Close();
 
-                EventHandler<TcpConnectionEventArgs> afterSubscribers = GetClosedEventSubscribers(connection);
-                Assert.Null(afterSubscribers);
+                    masters = await WaitForMasterCountAsync(network, expected: 0).ConfigureAwait(false);
+                    Assert.Empty(masters);
+
+                    EventHandler<TcpConnectionEventArgs> afterSubscribers = GetClosedEventSubscribers(connection);
+                    Assert.Null(afterSubscribers);
+                }
+
+                cts.Cancel();
+                try { await listenTask.ConfigureAwait(false); }
+                catch (OperationCanceledException) { /* expected */ }
+                catch (SocketException) { /* AcceptTcpClientAsync may surface this when the listener is stopped */ }
             }
-
-            cts.Cancel();
-            try { await listenTask.ConfigureAwait(false); }
-            catch (OperationCanceledException) { /* expected */ }
-            catch (SocketException) { /* AcceptTcpClientAsync may surface this when the listener is stopped */ }
         }
 
         private static async Task<IDictionary> WaitForMasterCountAsync(ModbusTcpSlaveNetwork network, int expected)
