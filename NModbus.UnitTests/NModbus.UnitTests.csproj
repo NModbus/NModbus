@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net4.6;net6.0;net8.0</TargetFrameworks>
+		<TargetFramework>net4.6</TargetFramework>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<AssemblyName>NModbus.UnitTests</AssemblyName>
 		<PackageId>NModbus.UnitTests</PackageId>
 		<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+		<RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
