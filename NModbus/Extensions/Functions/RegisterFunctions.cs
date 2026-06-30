@@ -67,6 +67,7 @@
 
     public static int[] ByteValueArraysToInts(byte[][] data, bool frontPadding = true)
     {
+      RequireMinimumByteLength(data, 4, nameof(ByteValueArraysToInts));
       return frontPadding
         ? data.Select(e => BitConverter.ToInt32(e, e.Length - 4)).ToArray()
         : data.Select(e => BitConverter.ToInt32(e, 0)).ToArray();
@@ -74,6 +75,7 @@
 
     public static uint[] ByteValueArraysToUInts(byte[][] data, bool frontPadding = true)
     {
+      RequireMinimumByteLength(data, 4, nameof(ByteValueArraysToUInts));
       return frontPadding
         ? data.Select(e => BitConverter.ToUInt32(e, e.Length - 4)).ToArray()
         : data.Select(e => BitConverter.ToUInt32(e, 0)).ToArray();
@@ -81,9 +83,30 @@
 
     public static float[] ByteValueArraysToFloats(byte[][] data, bool frontPadding = true)
     {
+      RequireMinimumByteLength(data, 4, nameof(ByteValueArraysToFloats));
       return frontPadding
         ? data.Select(e => BitConverter.ToSingle(e, e.Length - 4)).ToArray()
         : data.Select(e => BitConverter.ToSingle(e, 0)).ToArray();
+    }
+
+    private static void RequireMinimumByteLength(byte[][] data, int minBytes, string operation)
+    {
+      // Issue #38: previously, supplying byte arrays narrower than the target
+      // numeric type leaked through to BitConverter and raised an opaque
+      // ArgumentOutOfRangeException about "startIndex". Validate up front so
+      // callers configuring ModbusMasterEnhanced with too small a wordSize
+      // see an actionable message instead.
+      if (data == null) throw new ArgumentNullException(nameof(data));
+      for (int i = 0; i < data.Length; i++)
+      {
+        if (data[i] == null || data[i].Length < minBytes)
+        {
+          throw new ArgumentException(
+            $"{operation} requires each byte array to be at least {minBytes} bytes; element {i} has {data[i]?.Length ?? 0}. " +
+            "When using ModbusMasterEnhanced, set wordSize to at least the size of the value being read (e.g. 32 for int/uint/float).",
+            nameof(data));
+        }
+      }
     }
 
 
