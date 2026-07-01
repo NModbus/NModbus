@@ -153,9 +153,15 @@ namespace NModbus.IO
 
         public override bool OnShouldRetryResponse(IModbusMessage request, IModbusMessage response)
         {
-            if (request.TransactionId > response.TransactionId && request.TransactionId - response.TransactionId < RetryOnOldResponseThreshold)
+            // Handle wraparound correctly
+            int idDifference = request.TransactionId - response.TransactionId;
+            if (idDifference < 0)
+                idDifference += ushort.MaxValue;
+
+            if (idDifference > 0 && idDifference < RetryOnOldResponseThreshold)
             {
                 // This response was from a previous request
+                Logger.Trace($"Response was not of expected transaction ID. Expected {request.TransactionId}, received {response.TransactionId}, but below RetryOnOldResponseThreshold {RetryOnOldResponseThreshold}. Retrying request.");
                 return true;
             }
 
