@@ -170,6 +170,48 @@ namespace NModbus.UnitTests.IO
         }
 
         [Fact]
+        public void OnShouldRetryResponse_ReturnsFalse_IfThresholdDisabled_OnWrapAround()
+        {
+            var transport = new ModbusIpTransport(StreamResourceMock, new ModbusFactory(), NullModbusLogger.Instance);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 1);
+            var response = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 1, 1, null);
+
+            request.TransactionId = 0;
+            response.TransactionId = 65535;
+            transport.RetryOnOldResponseThreshold = 0;
+
+            Assert.False(transport.OnShouldRetryResponse(request, response));
+        }
+
+        [Fact]
+        public void OnShouldRetryResponse_ReturnsTrue_IfWithinThreshold_OnWrapAround()
+        {
+            var transport = new ModbusIpTransport(StreamResourceMock, new ModbusFactory(), NullModbusLogger.Instance);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 1);
+            var response = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 1, 1, null);
+
+            response.TransactionId = 65535;
+            request.TransactionId = (ushort)((ushort)response.TransactionId + (ushort)2);
+            transport.RetryOnOldResponseThreshold = 3;
+
+            Assert.True(transport.OnShouldRetryResponse(request, response));
+        }
+
+        [Fact]
+        public void OnShouldRetryResponse_ReturnsFalse_IfOutsideThreshold_OnWrapAround()
+        {
+            var transport = new ModbusIpTransport(StreamResourceMock, new ModbusFactory(), NullModbusLogger.Instance);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 1);
+            var response = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 1, 1, null);
+
+            response.TransactionId = 65535;
+            request.TransactionId = (ushort)((ushort)response.TransactionId + (ushort)4);
+            transport.RetryOnOldResponseThreshold = 3;
+
+            Assert.False(transport.OnShouldRetryResponse(request, response));
+        }
+
+        [Fact]
         public void ValidateResponse_MismatchingTransactionIds()
         {
             var transport = new ModbusIpTransport(StreamResourceMock, new ModbusFactory(), NullModbusLogger.Instance);
