@@ -48,7 +48,11 @@ namespace NModbus.Device
 
                     if (response == null)
                     {
-                        _serialTransport.IgnoreResponse();
+                        // Broadcast requests are never answered, so there is no response to skip.
+                        if (request.SlaveAddress != 0)
+                        {
+                            _serialTransport.IgnoreResponse();
+                        }
                     }
                     else
                     {
