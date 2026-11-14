@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+﻿using NModbus.Logging;
+using System;
+using System.Diagnostics;
 using System.IO;
-using NModbus.Logging;
 
 namespace NModbus.IO
 {
@@ -34,6 +35,12 @@ namespace NModbus.IO
 
         public override void Write(IModbusMessage message)
         {
+            if (message.SlaveAddress > 247)
+            {
+                string msg = $"Slave address must be between 0 and 247 (0 = broadcast, 248-255 are reserved).";
+                throw new ArgumentOutOfRangeException(nameof(message.SlaveAddress), message.SlaveAddress, msg);
+            }
+
             DiscardInBuffer();
 
             byte[] frame = BuildMessageFrame(message);

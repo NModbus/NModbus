@@ -97,5 +97,33 @@ namespace NModbus.UnitTests.IO
             ModbusMessageFixture.AssertModbusMessagePropertiesAreEqual(response, actualResponse);
             mock.VerifyAll();
         }
+
+        /// <summary>
+        ///     Serial line spec allows slave addresses 0-247 on the wire (0 = broadcast).
+        ///     Reserved addresses 248-255 must be rejected before any frame is written.
+        /// </summary>
+        [Theory]
+        [InlineData(248)]  // reserved by the Modbus spec
+        [InlineData(255)]  // out of range
+        public void Write_RejectsReservedSlaveAddress(byte slaveAddress)
+        {
+            var transport = new ModbusAsciiTransport(StreamResource, new ModbusFactory(), NullModbusLogger.Instance);
+            var message = new ReadHoldingInputRegistersRequest(3, slaveAddress, 1, 1);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => transport.Write(message));
+        }
+
+        [Theory]
+        [InlineData(0)]    // broadcast
+        [InlineData(1)]    // lower bound
+        [InlineData(247)]  // upper bound
+        public void Write_AllowsValidSlaveAddress(byte slaveAddress)
+        {
+            var streamResource = new Mock<IStreamResource>();
+            var transport = new ModbusAsciiTransport(streamResource.Object, new ModbusFactory(), NullModbusLogger.Instance);
+            var message = new ReadHoldingInputRegistersRequest(3, slaveAddress, 1, 1);
+
+            transport.Write(message);
+        }
     }
 }

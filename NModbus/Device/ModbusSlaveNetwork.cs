@@ -75,7 +75,7 @@ namespace NModbus.Device
             return null;
         }
 
-        public void AddSlave(IModbusSlave slave)
+        public virtual void AddSlave(IModbusSlave slave)
         {
             if (slave == null) throw new ArgumentNullException(nameof(slave));
 

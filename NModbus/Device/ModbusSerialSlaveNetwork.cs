@@ -79,5 +79,18 @@ namespace NModbus.Device
 
             return Task.FromResult(0);
         }
+
+        public override void AddSlave(IModbusSlave slave)
+        {
+            if (slave == null) throw new ArgumentNullException(nameof(slave));
+
+            if (slave.UnitId < 1 || slave.UnitId > 247)
+            {
+                string msg = $"Invalid slave address {slave.UnitId}. Per the Modbus specification, a slave address must be between 1 and 247 (0 is reserved for broadcast and 248-255 are reserved).";
+                throw new ArgumentOutOfRangeException(nameof(slave.UnitId), slave.UnitId, msg);
+            }
+
+            base.AddSlave(slave);
+        }
     }
 }
