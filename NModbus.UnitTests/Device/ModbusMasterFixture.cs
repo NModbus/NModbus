@@ -1,8 +1,12 @@
-﻿using System;
-using System.Linq;
-using Moq;
+﻿using Moq;
+using NModbus.Data;
 using NModbus.Device;
 using NModbus.IO;
+using NModbus.Logging;
+using NModbus.Message;
+using NModbus.UnitTests.Message;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace NModbus.UnitTests.Device
@@ -80,6 +84,18 @@ namespace NModbus.UnitTests.Device
             // Max message byte size is 256, minus 11 for overhead,
             // 244 data bytes are allowed (must be even), 246 should throw.
             Assert.Throws<ArgumentException>(() => Master.WriteFileRecord(1, 1, 2, Enumerable.Repeat<byte>(1, 246).ToArray()));
+        }
+
+        [Fact]
+        public void BroadcastWriteSingleRegister_SendsFrameWithSlaveAddressZero()
+        {
+            var streamResource = new Mock<IStreamResource>();
+            var transport = new ModbusRtuTransport(streamResource.Object, new ModbusFactory(), NullModbusLogger.Instance);
+            var master = new ModbusSerialMaster(transport);
+
+            master.BroadcastWriteSingleRegister(1, 2);
+
+            streamResource.Verify(s => s.Write(It.Is<byte[]>(frame => frame[0] == 0), 0, It.IsAny<int>()),Times.Once);
         }
     }
 }
