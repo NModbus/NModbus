@@ -1,8 +1,14 @@
 ﻿namespace NModbus
 {
     /// <summary>
-    /// Object simulation of a device memory map.
+    ///  Data store (memory map) for a Modbus slave.
     /// </summary>
+    /// <remarks>
+    ///     You can control the Modbus exception code returned to the master by throwing
+    ///     <see cref="InvalidModbusRequestException"/> from read/write methods, e.g.
+    ///     <c>throw new InvalidModbusRequestException(SlaveExceptionCodes.IllegalDataAddress);</c>.
+    ///     Any other exception type results in a generic Slave Device Failure (code 4) response.
+    /// </remarks>
     public interface ISlaveDataStore
     {
         /// <summary>

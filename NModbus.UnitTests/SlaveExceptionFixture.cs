@@ -4,6 +4,8 @@ using System.IO;
 using System.Threading;
 using NModbus.Message;
 using Xunit;
+using NModbus.Device;
+using NModbus.Data;
 #if NET46
 using System.Runtime.Serialization.Formatters.Binary;
 #endif
@@ -88,6 +90,32 @@ namespace NModbus.UnitTests
                 e.Message);
         }
 
+        [Fact]
+        public void ApplyRequest_ReturnsCustomExceptionCode_WhenDataStoreThrowsInvalidModbusRequestException()
+        {
+            var dataStore = new ThrowingDataStore();
+            var slave = new ModbusSlave(1, dataStore, new ModbusFactory().GetAllFunctionServices());
+            var request = new ReadHoldingInputRegistersRequest(ModbusFunctionCodes.ReadHoldingRegisters, 1, 0, 1);
+
+            var response = slave.ApplyRequest(request) as SlaveExceptionResponse;
+
+            Assert.NotNull(response);
+            Assert.Equal(SlaveExceptionCodes.IllegalDataAddress, response.SlaveExceptionCode);
+        }
+
+        [Fact]
+        public void ApplyRequest_ReturnsSlaveDeviceFailure_WhenDataStoreThrowsUnexpectedException()
+        {
+            var dataStore = new ThrowingDataStore();
+            var slave = new ModbusSlave(1, dataStore, new ModbusFactory().GetAllFunctionServices());
+            var request = new WriteMultipleRegistersRequest(1, 0, new RegisterCollection(new ushort[] { 1 }));
+
+            var response = slave.ApplyRequest(request) as SlaveExceptionResponse;
+
+            Assert.NotNull(response);
+            Assert.Equal(SlaveExceptionCodes.SlaveDeviceFailure, response.SlaveExceptionCode);
+        }
+
 #if NET46
         [Fact]
         public void Serializable()
@@ -108,5 +136,29 @@ namespace NModbus.UnitTests
             }
         }
 #endif
+
+        private class ThrowingDataStore : ISlaveDataStore
+        {
+            public IPointSource<bool> CoilDiscretes { get; } = new PointSource<bool>();
+
+            public IPointSource<bool> CoilInputs { get; } = new PointSource<bool>();
+
+            public IPointSource<ushort> HoldingRegisters { get; } = new ThrowingPointSource<ushort>();
+
+            public IPointSource<ushort> InputRegisters { get; } = new PointSource<ushort>();
+        }
+
+        private class ThrowingPointSource<TPoint> : IPointSource<TPoint>
+        {
+            public TPoint[] ReadPoints(ushort startAddress, ushort numberOfPoints)
+            {
+                throw new InvalidModbusRequestException(SlaveExceptionCodes.IllegalDataAddress);
+            }
+
+            public void WritePoints(ushort startAddress, TPoint[] points)
+            {
+                throw new InvalidOperationException();
+            }
+        }
     }
 }
