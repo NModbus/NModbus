@@ -12,6 +12,11 @@ namespace NModbus
     /// <summary>
     ///     Represents slave errors that occur during communication.
     /// </summary>
+    /// <remarks>
+    ///     This exception is thrown on the <b>master</b> side when an exception response is received.
+    ///     To return a specific exception code from your own slave implementation, throw
+    ///     <see cref="InvalidModbusRequestException"/> instead.
+    /// </remarks>
 #if NET46
     [Serializable]
 #endif
